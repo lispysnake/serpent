@@ -246,5 +246,6 @@ public:
         enforce(p !is null, "Pipeline instance must be valid");
         enforce(!running, "Cannot change pipeline once running");
         _pipeline = p;
+        _pipeline.display = this;
     }
 }

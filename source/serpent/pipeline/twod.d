@@ -32,11 +32,11 @@ final class Pipeline2D : Pipeline
 {
 
 public:
-    final void clear() @safe @nogc nothrow
+    final override void clear() @safe @nogc nothrow
     {
     }
 
-    final void flush() @safe @nogc nothrow
+    final override void flush() @safe @nogc nothrow
     {
     }
 }

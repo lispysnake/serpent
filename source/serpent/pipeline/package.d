@@ -23,6 +23,7 @@
 module serpent.pipeline;
 
 public import serpent.pipeline.twod;
+public import serpent.display;
 
 /**
  * The pipeline abstraction allows us to split our rendering logic from
@@ -30,8 +31,13 @@ public import serpent.pipeline.twod;
  *
  * Internally implementations just use bgfx and render through them.
  */
-interface Pipeline
+abstract class Pipeline
 {
+
+private:
+    Display _display;
+
+public:
 
     /**
      * Clear any drawing
@@ -42,4 +48,20 @@ interface Pipeline
      * Flush any drawing.
      */
     abstract void flush();
+
+    /**
+     * Return the associated display
+     */
+    @property final Display display() @safe @nogc nothrow
+    {
+        return _display;
+    }
+
+    /**
+     * Set the associated display
+     */
+    @property final void display(Display d) @safe @nogc nothrow
+    {
+        this._display = d;
+    }
 }
