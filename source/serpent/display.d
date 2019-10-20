@@ -73,6 +73,13 @@ private:
         SDL_Quit();
     }
 
+    /**
+     * Integrate bgfx with our SDL_Window's native handles.
+     *
+     * We don't do any SDL rendering whether via SDL_Renderer or
+     * OpenGL context. /All/ drawing is performed through the bgfx
+     * library.
+     */
     final void integrateWindowBgfx() @system
     {
         SDL_SysWMinfo wm;
@@ -86,6 +93,7 @@ private:
         bgfx_platform_data_t pd;
         version (Posix)
         {
+            /* X11 displays. Note we need to fix OSX integration separate. */
             pd.ndt = wm.info.x11.display;
             pd.nwh = cast(void*) wm.info.x11.window;
         }
