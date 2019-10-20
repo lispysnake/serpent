@@ -96,7 +96,7 @@ We'll use SDL for our basic windowing, OS integration and input
 handling. This allows consumers to leverage the advanced controller
 support found within SDL (some would say a USP).
 
-#### Newton
+#### Newton (??)
 
 The downfall of many a framework is to needlessly reinvent physics.
 We plan to integrate a proven solution. Currently we're checking
