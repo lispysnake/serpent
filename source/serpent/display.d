@@ -140,11 +140,10 @@ public:
         }
 
         integrateWindowBgfx();
-        bgfx_render_frame(-1);
 
         /* TODO: Init on separate render thread */
         bgfx_init(&b_init);
-        bgfx_reset(width, height, BGFX_RESET_VSYNC, cast(bgfx_texture_format_t) 0);
+        bgfx_reset(width, height, BGFX_RESET_VSYNC, b_init.resolution.format);
         bgfx_set_debug(BGFX_DEBUG_TEXT);
 
         running = true;
@@ -164,8 +163,10 @@ public:
                 }
             }
 
-            /* Debug crap. Draw things. */
+            /* Set up the view */
             bgfx_set_view_rect(0, 0, 0, cast(ushort) width, cast(ushort) height);
+
+            /* Debug crap. Draw things. */
             bgfx_touch(0);
             bgfx_dbg_text_clear(0, false);
             bgfx_dbg_text_printf(2, 1, 0x03, "Hullo, bgfx. :)");
