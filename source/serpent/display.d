@@ -48,7 +48,7 @@ private:
     /**
      * Helper to initialise our dependent systems.
      */
-    void init()
+    final void init() @system
     {
         import std.string : format;
 
@@ -62,7 +62,7 @@ private:
     /**
      * Helper to shutdown our dependent systems.
      */
-    void shutdown()
+    final void shutdown() @system @nogc nothrow
     {
         SDL_Quit();
     }
@@ -77,14 +77,14 @@ public:
      *
      * This will construct a new display with the given width and height.
      */
-    this(int width, int height)
+    final this(int width, int height) @system
     {
         init();
         this.width = width;
         this.height = height;
     }
 
-    ~this()
+    final ~this() @system @nogc nothrow
     {
         shutdown();
     }
