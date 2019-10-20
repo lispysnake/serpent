@@ -69,8 +69,34 @@ private:
      */
     final void shutdown() @system @nogc nothrow
     {
-        bgfx_shutdown();
         SDL_Quit();
+    }
+
+    final void integrateWindowBgfx()
+    {
+        SDL_SysWMinfo wm;
+        SDL_VERSION(&wm.version_);
+
+        if (!SDL_GetWindowWMInfo(window, &wm))
+        {
+            throw new SystemException("Couldn't get Window Info: %s".format(SDL_GetError()));
+        }
+
+        bgfx_platform_data_t pd;
+        version (linux)
+        {
+            pd.ndt = wm.info.x11.display;
+            pd.nwh = cast(void*) wm.info.x11.window;
+        }
+        else
+        {
+            throw new SystemException("Unsupported platform");
+        }
+
+        pd.context = null;
+        pd.backBuffer = null;
+        pd.backBufferDS = null;
+        bgfx_set_platform_data(&pd);
     }
 
 public:
@@ -105,6 +131,7 @@ public:
     final int run() @system
     {
         auto flags = SDL_WINDOW_SHOWN;
+        SDL_Event e;
 
         window = SDL_CreateWindow(toStringz(_title), SDL_WINDOWPOS_UNDEFINED,
                 SDL_WINDOWPOS_UNDEFINED, width, height, flags);
@@ -112,6 +139,44 @@ public:
         {
             throw new SystemException("Couldn't create Window: %s".format(SDL_GetError()));
         }
+
+        integrateWindowBgfx();
+        bgfx_render_frame(-1);
+
+        /* TODO: Init on separate render thread */
+        bgfx_init(&b_init);
+        bgfx_reset(width, height, BGFX_RESET_VSYNC, cast(bgfx_texture_format_t) 0);
+        bgfx_set_debug(BGFX_DEBUG_TEXT);
+
+        running = true;
+
+        while (running)
+        {
+            /* Process events */
+            while (SDL_PollEvent(&e))
+            {
+                switch (e.type)
+                {
+                case SDL_QUIT:
+                    running = false;
+                    break;
+                default:
+                    break;
+                }
+            }
+
+            /* Debug crap. Draw things. */
+            bgfx_set_view_rect(0, 0, 0, cast(ushort) width, cast(ushort) height);
+            bgfx_touch(0);
+            bgfx_dbg_text_clear(0, false);
+            bgfx_dbg_text_printf(2, 1, 0x03, "Hullo, bgfx. :)");
+            bgfx_dbg_text_printf(2, 2, 0x01, "Serpent Game Framework");
+
+            /* Skip frame now */
+            bgfx_frame(false);
+        }
+        bgfx_shutdown();
+
         return 0;
     }
 
