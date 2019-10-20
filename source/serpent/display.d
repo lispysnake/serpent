@@ -56,8 +56,7 @@ private:
      */
     final void init() @system
     {
-        const auto init_flags = SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC;
-        if (SDL_Init(init_flags) != 0)
+        if (SDL_Init(0 | SDL_INIT_GAMECONTROLLER) != 0)
         {
             throw new SystemException("Failed to initialise SDL: %s".format(SDL_GetError()));
         }
