@@ -7,6 +7,17 @@ This is not *exactly* an engine.
 change daily. As such the document provides a rough roadmap and
 vision overview.
 
+## Support Development
+
+This framework is being developed by Lispy Snake for our first games.
+While we would love to develop it full time, basic economics says we
+must reinvest any contract-work revenue to support development in
+any remaining time.
+
+To accelerate development (and time-to-market) for our framework
+and first game, consider buying a [Lifetime License](https://lisypsnake.com/the-game-raiser) from
+us ($20!) to have lifetime access to our games.
+
 ## Building
 
 We build serpent with the `ldc2` (LLVM-based) D compiler. To test the
