@@ -25,6 +25,12 @@ included demo, build the `demo` subcomponent in release mode.
 
     dub build --parallel -c demo -b release --compiler=ldc2
 
+## Modifications
+
+Please note any modifications must be hygienic - compiling with neither
+warning nor error. Additionally you must have run `update_format.sh` to
+ensure consistent code-styling before sending in changes.
+
 ## Design Considerations
 
 Provide the best possible functionality required for simpler 2D games
