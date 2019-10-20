@@ -3,6 +3,10 @@
 A game framework from [Lispy Snake, Ltd.](https://lispysnake.com).
 This is not *exactly* an engine.
 
+**Note**: This is very much a work in progress and will continue to
+change daily. As such the document provides a rough roadmap and
+vision overview.
+
 ## Building
 
 We build serpent with the `ldc2` (LLVM-based) D compiler. To test the
