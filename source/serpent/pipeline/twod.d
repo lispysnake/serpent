@@ -20,13 +20,23 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-import serpent;
+module serpent.pipeline.twod;
+
 import serpent.pipeline;
 
-int main()
+/**
+ * This pipeline is the main point of entry for any 2D-style games reliant
+ * on sprites, etc.
+ */
+final class Pipeline2D : Pipeline
 {
-    auto display = new Display(1366, 768);
-    display.title = "Serpent Demo";
-    display.pipeline = new Pipeline2D();
-    return display.run();
+
+public:
+    final void clear() @safe @nogc nothrow
+    {
+    }
+
+    final void flush() @safe @nogc nothrow
+    {
+    }
 }

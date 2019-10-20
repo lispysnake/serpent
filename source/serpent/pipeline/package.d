@@ -22,6 +22,8 @@
 
 module serpent.pipeline;
 
+public import serpent.pipeline.twod;
+
 /**
  * The pipeline abstraction allows us to split our rendering logic from
  * our display/input management logic.
