@@ -24,11 +24,14 @@
 	},
 	"description": "Serpent Game Framework",
 	"libs": [
-		"SDL2"
+		"SDL2",
+		"bgfxRelease", "bxRelease", "bimgRelease",
 	],
+	"lflags": ["-L../serpent-support/runtime/lib"],
 	"license": "ZLib",
 	"name": "serpent",
 	"subConfigurations": {
+		"bindbc-bgfx": "staticBC",
 		"bindbc-sdl": "staticBC"
 	},
 	"targetType": "none",
