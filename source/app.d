@@ -25,5 +25,6 @@ import serpent;
 int main()
 {
     auto display = new Display(1366, 768);
+    display.title = "Serpent Demo";
     return display.run();
 }
