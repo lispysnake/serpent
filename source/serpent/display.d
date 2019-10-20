@@ -47,7 +47,7 @@ private:
     SDL_Window* window;
     bool running = false;
     string _title = "serpent";
-    bgfx_init_t b_init;
+    bgfx_init_t bInit;
 
 private:
 
@@ -60,7 +60,7 @@ private:
         {
             throw new SystemException("Failed to initialise SDL: %s".format(SDL_GetError()));
         }
-        bgfx_init_ctor(&b_init);
+        bgfx_init_ctor(&bInit);
     }
 
     /**
@@ -142,8 +142,8 @@ public:
         integrateWindowBgfx();
 
         /* TODO: Init on separate render thread */
-        bgfx_init(&b_init);
-        bgfx_reset(width, height, BGFX_RESET_VSYNC, b_init.resolution.format);
+        bgfx_init(&bInit);
+        bgfx_reset(width, height, BGFX_RESET_VSYNC, bInit.resolution.format);
         bgfx_set_debug(BGFX_DEBUG_TEXT);
 
         running = true;
