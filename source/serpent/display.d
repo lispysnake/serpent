@@ -23,6 +23,7 @@
 module serpent.display;
 
 import bindbc.sdl;
+import bindbc.bgfx;
 import std.string : toStringz, format;
 
 import serpent : SystemException;
@@ -46,6 +47,7 @@ private:
     SDL_Window* window;
     bool running = false;
     string _title = "serpent";
+    bgfx_init_t b_init;
 
 private:
 
@@ -59,6 +61,7 @@ private:
         {
             throw new SystemException("Failed to initialise SDL: %s".format(SDL_GetError()));
         }
+        bgfx_init_ctor(&b_init);
     }
 
     /**
@@ -66,6 +69,7 @@ private:
      */
     final void shutdown() @system @nogc nothrow
     {
+        bgfx_shutdown();
         SDL_Quit();
     }
 

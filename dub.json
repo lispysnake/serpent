@@ -26,6 +26,7 @@
 	"libs": [
 		"SDL2",
 		"bgfxRelease", "bxRelease", "bimgRelease",
+		"stdc++", "GL", "x11", "bxRelease",
 	],
 	"lflags": ["-L../serpent-support/runtime/lib"],
 	"license": "ZLib",
