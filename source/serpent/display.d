@@ -143,7 +143,7 @@ private:
         /* Debug crap. Draw things. */
         bgfx_touch(0);
         bgfx_dbg_text_clear(0, false);
-        bgfx_dbg_text_printf(2, 1, 0x03, "Hullo, bgfx. :)");
+        bgfx_dbg_text_printf(2, 1, 0x03, "Hullo, bgfx + SDL. :)");
         bgfx_dbg_text_printf(2, 2, 0x01, "Serpent Game Framework");
         bgfx_dbg_text_printf(2, 8, 0x08, "- Lispy Snake, Ltd");
 
