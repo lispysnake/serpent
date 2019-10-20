@@ -71,7 +71,7 @@ private:
         SDL_Quit();
     }
 
-    final void integrateWindowBgfx()
+    final void integrateWindowBgfx() @system
     {
         SDL_SysWMinfo wm;
         SDL_VERSION(&wm.version_);
@@ -96,6 +96,47 @@ private:
         pd.backBuffer = null;
         pd.backBufferDS = null;
         bgfx_set_platform_data(&pd);
+    }
+
+    /**
+     * Handle any events pending in the queue and appropriately
+     * dispatch them.
+     */
+    final void processEvents() @system @nogc nothrow
+    {
+        SDL_Event event;
+
+        while (SDL_PollEvent(&event))
+        {
+            switch (event.type)
+            {
+            case SDL_QUIT:
+                running = false;
+                break;
+            default:
+                break;
+            }
+        }
+    }
+
+    /**
+     * Perform any required rendering
+     */
+    final void render() @system @nogc nothrow
+    {
+
+        /* Set up the view */
+        bgfx_set_view_rect(0, 0, 0, cast(ushort) width, cast(ushort) height);
+
+        /* Debug crap. Draw things. */
+        bgfx_touch(0);
+        bgfx_dbg_text_clear(0, false);
+        bgfx_dbg_text_printf(2, 1, 0x03, "Hullo, bgfx. :)");
+        bgfx_dbg_text_printf(2, 2, 0x01, "Serpent Game Framework");
+        bgfx_dbg_text_printf(2, 8, 0x08, "- Lispy Snake, Ltd");
+
+        /* Skip frame now */
+        bgfx_frame(false);
     }
 
 public:
@@ -150,32 +191,10 @@ public:
 
         while (running)
         {
-            /* Process events */
-            while (SDL_PollEvent(&e))
-            {
-                switch (e.type)
-                {
-                case SDL_QUIT:
-                    running = false;
-                    break;
-                default:
-                    break;
-                }
-            }
-
-            /* Set up the view */
-            bgfx_set_view_rect(0, 0, 0, cast(ushort) width, cast(ushort) height);
-
-            /* Debug crap. Draw things. */
-            bgfx_touch(0);
-            bgfx_dbg_text_clear(0, false);
-            bgfx_dbg_text_printf(2, 1, 0x03, "Hullo, bgfx. :)");
-            bgfx_dbg_text_printf(2, 2, 0x01, "Serpent Game Framework");
-            bgfx_dbg_text_printf(2, 8, 0x08, "- Lispy Snake, Ltd");
-
-            /* Skip frame now */
-            bgfx_frame(false);
+            processEvents();
+            render();
         }
+
         bgfx_shutdown();
 
         return 0;
