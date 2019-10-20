@@ -33,7 +33,7 @@ abstract class Game
 {
 
 private:
-    Display _display = null;
+    Display _display;
 
 public:
     /**
@@ -49,7 +49,7 @@ public:
      */
     @property final void display(Display d) @safe @nogc nothrow
     {
-        _display = display;
+        _display = d;
     }
 
     /**
@@ -57,6 +57,17 @@ public:
      * point as the Window is up and running. Once this method
      * has returned safely, the window will be shown for the first
      * time.
+     *
+     * At this point we safely have a rendering context and any
+     * loading can begin.
      */
     abstract bool init();
+
+    /**
+     * Implementations should take care to clean up any resources
+     * they've allocated and not rely solely on the destructor.
+     */
+    void shutdown()
+    {
+    }
 }

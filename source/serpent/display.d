@@ -208,10 +208,17 @@ public:
 
         running = true;
 
+        _game.display = this;
+
         /* Init the game instance against our configured display */
         if (!_game.init())
         {
             return 1;
+        }
+
+        scope (exit)
+        {
+            _game.shutdown();
         }
 
         SDL_ShowWindow(window);

@@ -30,9 +30,10 @@ import std.stdio : writeln;
 final class DemoGame : Game
 {
 
-    final override bool init() @safe
+    final override bool init() @system
     {
         writeln("Game Init");
+        display.title = "Running: Serpent Demo";
         return true;
     }
 }
