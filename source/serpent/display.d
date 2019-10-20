@@ -182,7 +182,7 @@ public:
     /**
      * Return the currently set window title
      */
-    @property string title() @nogc @safe nothrow
+    @property final string title() @nogc @safe nothrow
     {
         return _title;
     }
@@ -190,7 +190,7 @@ public:
     /**
      * Set the window title.
      */
-    @property void title(string title) @system nothrow
+    @property final void title(string title) @system nothrow
     {
         this._title = title;
         if (!running)
