@@ -78,7 +78,8 @@ support found within SDL (some would say a USP).
 #### Newton
 
 The downfall of many a framework is to needlessly reinvent physics.
-We plan to integrate a proven solution.
+We plan to integrate a proven solution. Currently we're checking
+some numbers and will revisit physics integration in the near future.
 
 #### OpenAL
 
