@@ -1,4 +1,4 @@
-# serpent
+# Serpent Game Framework
 
 A game framework from [Lispy Snake, Ltd.](https://lispysnake.com).
 This is not *exactly* an engine.
