@@ -14,3 +14,6 @@ serpent-test-*
 *.obj
 *.lst
 dub.selections.json
+
+# Caused by autoformat
+*.d.orig
