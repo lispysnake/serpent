@@ -20,9 +20,14 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-import serpent;
+module serpent;
 
-void main()
+public import serpent.display;
+
+final class SystemException : Exception
 {
-    auto display = new Display(1366, 768);
+    this(string msg, string file = __FILE__, size_t line = __LINE__)
+    {
+        super(msg, file, line);
+    }
 }
