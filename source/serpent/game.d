@@ -20,16 +20,43 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent;
+module serpent.game;
 
-public import serpent.display;
-public import serpent.pipeline;
-public import serpent.game;
+import serpent.display;
 
-final class SystemException : Exception
+/**
+ * The Game interface is used to control lifecycle and entry points,
+ * to make life that bit easier for the end developer. This avoids
+ * ugly C-style func hooks.
+ */
+abstract class Game
 {
-    this(string msg, string file = __FILE__, size_t line = __LINE__)
+
+private:
+    Display _display = null;
+
+public:
+    /**
+     * Get the display associated with this Game
+     */
+    @property final Display display() @safe @nogc nothrow
     {
-        super(msg, file, line);
+        return _display;
     }
+
+    /**
+     * Set the display associated with this Game
+     */
+    @property final void display(Display d) @safe @nogc nothrow
+    {
+        _display = display;
+    }
+
+    /**
+     * Implementations should attempt to init themselves at this
+     * point as the Window is up and running. Once this method
+     * has returned safely, the window will be shown for the first
+     * time.
+     */
+    abstract bool init();
 }

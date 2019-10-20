@@ -29,6 +29,7 @@ import std.exception : enforce;
 
 import serpent : SystemException;
 import serpent.pipeline;
+import serpent.game;
 
 /**
  * The Display handler
@@ -46,11 +47,12 @@ final class Display
 private:
     int height;
     int width;
-    SDL_Window* window;
+    SDL_Window* window = null;
     bool running = false;
     string _title = "serpent";
     bgfx_init_t bInit;
-    Pipeline _pipeline;
+    Pipeline _pipeline = null;
+    Game _game = null;
 
 private:
 
@@ -180,10 +182,11 @@ public:
      */
     final int run() @system
     {
-        auto flags = SDL_WINDOW_SHOWN;
+        auto flags = SDL_WINDOW_HIDDEN;
         SDL_Event e;
 
         enforce(_pipeline !is null, "Cannot run without a valid pipeline!");
+        enforce(_game !is null, "Cannot run without a valid game!");
 
         window = SDL_CreateWindow(toStringz(_title), SDL_WINDOWPOS_UNDEFINED,
                 SDL_WINDOWPOS_UNDEFINED, width, height, flags);
@@ -204,6 +207,14 @@ public:
         bgfx_set_debug(BGFX_DEBUG_TEXT);
 
         running = true;
+
+        /* Init the game instance against our configured display */
+        if (!_game.init())
+        {
+            return 1;
+        }
+
+        SDL_ShowWindow(window);
 
         while (running)
         {
@@ -252,5 +263,24 @@ public:
         enforce(!running, "Cannot change pipeline once running");
         _pipeline = p;
         _pipeline.display = this;
+    }
+
+    /**
+     * Returns the Game for this Display to run
+     */
+    @property final Game game() @nogc @safe nothrow
+    {
+        return _game;
+    }
+
+    /**
+     * Set the Game for this Display to run
+     */
+    @property final void game(Game g) @safe
+    {
+        enforce(g !is null, "Game instance must be valid");
+        enforce(!running, "Cannot change game once running");
+        _game = g;
+        _game.display = this;
     }
 }

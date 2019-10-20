@@ -22,11 +22,26 @@
 
 import serpent;
 import serpent.pipeline;
+import std.stdio : writeln;
+
+/**
+ * Provided merely for demo purposes.
+ */
+final class DemoGame : Game
+{
+
+    final override bool init() @safe
+    {
+        writeln("Game Init");
+        return true;
+    }
+}
 
 int main()
 {
     auto display = new Display(1366, 768);
     display.title = "Serpent Demo";
     display.pipeline = new Pipeline2D();
+    display.game = new DemoGame();
     return display.run();
 }
