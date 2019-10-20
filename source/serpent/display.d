@@ -27,6 +27,7 @@ import bindbc.bgfx;
 import std.string : toStringz, format;
 
 import serpent : SystemException;
+import serpent.pipeline;
 
 /**
  * The Display handler
@@ -48,6 +49,7 @@ private:
     bool running = false;
     string _title = "serpent";
     bgfx_init_t bInit;
+    Pipeline _pipeline;
 
 private:
 
@@ -124,7 +126,6 @@ private:
      */
     final void render() @system @nogc nothrow
     {
-
         /* Set up the view */
         bgfx_set_view_rect(0, 0, 0, cast(ushort) width, cast(ushort) height);
 
@@ -170,8 +171,12 @@ public:
      */
     final int run() @system
     {
+        import std.exception : enforce;
+
         auto flags = SDL_WINDOW_SHOWN;
         SDL_Event e;
+
+        enforce(_pipeline !is null, "Cannot run without a valid pipeline!");
 
         window = SDL_CreateWindow(toStringz(_title), SDL_WINDOWPOS_UNDEFINED,
                 SDL_WINDOWPOS_UNDEFINED, width, height, flags);
@@ -181,6 +186,10 @@ public:
         }
 
         integrateWindowBgfx();
+        scope (exit)
+        {
+            bgfx_shutdown();
+        }
 
         /* TODO: Init on separate render thread */
         bgfx_init(&bInit);
@@ -194,8 +203,6 @@ public:
             processEvents();
             render();
         }
-
-        bgfx_shutdown();
 
         return 0;
     }
@@ -219,5 +226,25 @@ public:
             return;
         }
         SDL_SetWindowTitle(window, toStringz(_title));
+    }
+
+    /**
+     * Return the pipeline associated with this display
+     */
+    @property final Pipeline pipeline() @nogc @safe nothrow
+    {
+        return _pipeline;
+    }
+
+    /**
+     * Set the pipeline to be used.
+     */
+    @property final void pipeline(Pipeline p) @safe
+    {
+        import std.exception;
+
+        enforce(p !is null, "Pipeline instance must be valid");
+        enforce(!running, "Cannot change pipeline once running");
+        _pipeline = p;
     }
 }

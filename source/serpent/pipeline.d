@@ -20,15 +20,24 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent;
+module serpent.pipeline;
 
-public import serpent.display;
-public import serpent.pipeline;
-
-final class SystemException : Exception
+/**
+ * The pipeline abstraction allows us to split our rendering logic from
+ * our display/input management logic.
+ *
+ * Internally implementations just use bgfx and render through them.
+ */
+interface Pipeline
 {
-    this(string msg, string file = __FILE__, size_t line = __LINE__)
-    {
-        super(msg, file, line);
-    }
+
+    /**
+     * Clear any drawing
+     */
+    abstract void clear();
+
+    /**
+     * Flush any drawing.
+     */
+    abstract void flush();
 }
