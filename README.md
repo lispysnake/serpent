@@ -25,6 +25,11 @@ included demo, build the `demo` subcomponent in release mode.
 
     dub build --parallel -c demo -b release --compiler=ldc2
 
+Note you will need to have `serpent-support` built in a directory
+parallel to this checkout. This is a bit janky but we're focusing
+more on code right now than the runtime support project. Building
+it will enable components such as bgfx.
+
 ## Modifications
 
 Please note any modifications must be hygienic - compiling with neither
