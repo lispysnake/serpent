@@ -243,14 +243,15 @@ public:
     /**
      * Set the window title.
      */
-    @property final void title(string title) @system nothrow
+    @property final Display title(string title) @system nothrow
     {
         this._title = title;
         if (!running)
         {
-            return;
+            return this;
         }
         SDL_SetWindowTitle(window, toStringz(_title));
+        return this;
     }
 
     /**
@@ -264,12 +265,13 @@ public:
     /**
      * Set the pipeline to be used.
      */
-    @property final void pipeline(Pipeline p) @safe
+    @property final Display pipeline(Pipeline p) @safe
     {
         enforce(p !is null, "Pipeline instance must be valid");
         enforce(!running, "Cannot change pipeline once running");
         _pipeline = p;
         _pipeline.display = this;
+        return this;
     }
 
     /**
@@ -283,11 +285,12 @@ public:
     /**
      * Set the Game for this Display to run
      */
-    @property final void game(Game g) @safe
+    @property final Display game(Game g) @safe
     {
         enforce(g !is null, "Game instance must be valid");
         enforce(!running, "Cannot change game once running");
         _game = g;
         _game.display = this;
+        return this;
     }
 }

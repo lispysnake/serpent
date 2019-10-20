@@ -40,9 +40,6 @@ final class DemoGame : Game
 
 int main()
 {
-    auto display = new Display(1366, 768);
-    display.title = "Serpent Demo";
-    display.pipeline = new Pipeline2D();
-    display.game = new DemoGame();
-    return display.run();
+    return new Display(1366, 768).title("Serpent Demo").pipeline(new Pipeline2D)
+        .game(new DemoGame).run();
 }
