@@ -15,7 +15,7 @@ must reinvest any contract-work revenue to support development in
 any remaining time.
 
 To accelerate development (and time-to-market) for our framework
-and first game, consider buying a [Lifetime License](https://lisypsnake.com/the-game-raiser) from
+and first game, consider buying a [Lifetime License](https://lispysnake.com/the-game-raiser) from
 us ($20!) to have lifetime access to our games.
 
 ## Building
