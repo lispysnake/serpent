@@ -22,7 +22,8 @@
 
 import serpent;
 
-void main()
+int main()
 {
     auto display = new Display(1366, 768);
+    return display.run();
 }

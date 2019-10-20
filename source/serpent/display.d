@@ -23,6 +23,7 @@
 module serpent.display;
 
 import bindbc.sdl;
+import std.string : toStringz, format;
 
 import serpent : SystemException;
 
@@ -42,6 +43,9 @@ final class Display
 private:
     int height;
     int width;
+    SDL_Window* window;
+    bool running = false;
+    string _title = "serpent";
 
 private:
 
@@ -50,8 +54,6 @@ private:
      */
     final void init() @system
     {
-        import std.string : format;
-
         const auto init_flags = SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC;
         if (SDL_Init(init_flags) != 0)
         {
@@ -86,7 +88,47 @@ public:
 
     final ~this() @system @nogc nothrow
     {
+        if (window)
+        {
+            SDL_DestroyWindow(window);
+        }
         shutdown();
     }
 
+    /**
+     * Bring up windowing resources and start the main game loop.
+     */
+    final int run() @system
+    {
+        auto flags = SDL_WINDOW_SHOWN;
+
+        window = SDL_CreateWindow(toStringz(_title), SDL_WINDOWPOS_UNDEFINED,
+                SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+        if (!window)
+        {
+            throw new SystemException("Couldn't create Window: %s".format(SDL_GetError()));
+        }
+        return 0;
+    }
+
+    /**
+     * Return the currently set window title
+     */
+    @property string title() @nogc @safe nothrow
+    {
+        return _title;
+    }
+
+    /**
+     * Set the window title.
+     */
+    @property void title(string title) @system nothrow
+    {
+        this._title = title;
+        if (!running)
+        {
+            return;
+        }
+        SDL_SetWindowTitle(window, toStringz(_title));
+    }
 }
