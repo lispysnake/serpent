@@ -25,6 +25,7 @@ module serpent.display;
 import bindbc.sdl;
 import bindbc.bgfx;
 import std.string : toStringz, format;
+import std.exception : enforce;
 
 import serpent : SystemException;
 import serpent.pipeline;
@@ -179,8 +180,6 @@ public:
      */
     final int run() @system
     {
-        import std.exception : enforce;
-
         auto flags = SDL_WINDOW_SHOWN;
         SDL_Event e;
 
@@ -249,8 +248,6 @@ public:
      */
     @property final void pipeline(Pipeline p) @safe
     {
-        import std.exception;
-
         enforce(p !is null, "Pipeline instance must be valid");
         enforce(!running, "Cannot change pipeline once running");
         _pipeline = p;
