@@ -3,9 +3,12 @@
 A game framework from [Lispy Snake, Ltd.](https://lispysnake.com).
 This is not *exactly* an engine.
 
-**Note**: This is very much a work in progress and will continue to
+### UNDER DEVELOPMENT
+
+This is very much a work in progress and will continue to
 change daily. As such the document provides a rough roadmap and
-vision overview.
+vision overview. Note this is a restart of efforts after our
+lispysnake2d repo (also public)
 
 ## Support Development
 
