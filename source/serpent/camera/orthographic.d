@@ -60,7 +60,6 @@ public:
      */
     final override void update() @nogc @safe nothrow
     {
-        // TODO: Set aspect ratio correctly from the display width / height
         auto ratio = cast(float) scene.display.width / cast(float) scene.display.height;
         matrix = matrix.orthographic(ratio, -ratio, 1.0f, -1.0f, -1.0f, 1.0f);
     }
