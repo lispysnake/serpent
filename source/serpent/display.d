@@ -278,6 +278,7 @@ public:
     {
         enforce(s.name !in scenes, "Duplicate scene name");
         scenes[s.name] = s;
+        s.display = this;
         if (scenes.length == 2)
         {
             _scene = s;

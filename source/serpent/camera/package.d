@@ -53,6 +53,16 @@ public:
     }
 
     /**
+     * Apply the Camera transformation prior to rendering.
+     */
+    abstract void apply() @nogc nothrow;
+
+    /**
+     * Update Camera for display
+     */
+    abstract void update() @nogc @safe nothrow;
+
+    /**
      * Return the Scene associated with this Camera
      */
     @property final Scene scene() @nogc @safe nothrow
@@ -67,6 +77,7 @@ public:
     {
         enforce(s !is null, "Should not have a null Scene");
         _scene = s;
+        this.update();
     }
 
     /**

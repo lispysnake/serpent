@@ -26,6 +26,7 @@ import std.exception;
 import std.string : format;
 
 import serpent.camera;
+import serpent.display;
 import serpent.entity;
 
 /**
@@ -46,6 +47,7 @@ private:
     Entity3D[] e3d;
     Camera[string] cameras;
     Camera _camera;
+    Display _display;
 
 public:
 
@@ -140,5 +142,22 @@ public:
     {
         enforce(s in cameras, "Cannot set unknown camera");
         _camera = cameras[s];
+    }
+
+    /**
+     * Set the Display for this Scene
+     */
+    @property final void display(Display d) @safe
+    {
+        enforce(d !is null, "Display cannot be null");
+        this._display = d;
+    }
+
+    /**
+     * Return the Display for this scene
+     */
+    @property final Display display() @safe @nogc nothrow
+    {
+        return _display;
     }
 }

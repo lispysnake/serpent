@@ -24,6 +24,7 @@ module serpent.camera.orthographic;
 
 import serpent.camera;
 
+import bindbc.bgfx;
 import gfm.math;
 
 /**
@@ -42,8 +43,25 @@ public:
     this(string name = "default")
     {
         this.name = name;
+    }
 
+    /**
+     * Apply orthographic perspective
+     */
+    final override void apply() @nogc @system nothrow
+    {
+        auto matrix = matrix();
+        auto identity = identity();
+        bgfx_set_view_transform(0, cast(const void*)&identity, cast(const void*)&matrix);
+    }
+
+    /**
+     * Update our matrix based on the display
+     */
+    final override void update() @nogc @safe nothrow
+    {
         // TODO: Set aspect ratio correctly from the display width / height
-        matrix = matrix.orthographic(16.0f / 9.0f, -(16.0f / 9.0f), 1.0f, -1.0f, -1.0f, 1.0f);
+        auto ratio = cast(float) scene.display.width / cast(float) scene.display.height;
+        matrix = matrix.orthographic(ratio, -ratio, 1.0f, -1.0f, -1.0f, 1.0f);
     }
 }
