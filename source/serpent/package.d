@@ -23,7 +23,9 @@
 module serpent;
 
 public import serpent.display;
+public import serpent.entity;
 public import serpent.pipeline;
+public import serpent.scene;
 public import serpent.game;
 
 final class SystemException : Exception
