@@ -62,9 +62,15 @@ public:
         bgfx_touch(0);
     }
 
-    final void render() @nogc @system nothrow
+    /**
+     * Perform any real rendering logic through our Renderer instances
+     */
+    final void render() @system
     {
-
+        foreach (ref r; _renderers)
+        {
+            r.render();
+        }
     }
 
     /**

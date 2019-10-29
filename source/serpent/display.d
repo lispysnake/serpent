@@ -145,7 +145,7 @@ private:
     /**
      * Perform any required rendering
      */
-    final void render() @system @nogc nothrow
+    final void render() @system
     {
         _pipeline.clear();
 
