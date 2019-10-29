@@ -62,6 +62,9 @@ final class SpriteRenderer : Renderer
     {
         import std.stdio;
 
+        float x_offset = 0.0f;
+        float y_offset = 0.0f;
+
         auto ents = pipeline.display.scene.visibleEntities2D();
         foreach (ent; ents)
         {
@@ -71,22 +74,25 @@ final class SpriteRenderer : Renderer
             bgfx_alloc_transient_vertex_buffer(&tvb, maxV, &PosVertex.layout);
 
             PosVertex* vertex = cast(PosVertex*) tvb.data;
-            vertex[0].pos[0] = 0.0f;
-            vertex[0].pos[1] = 0.5f;
+            vertex[0].pos[0] = 0.0f + x_offset;
+            vertex[0].pos[1] = 0.5f + y_offset;
             vertex[0].pos[2] = 0.0f;
 
-            vertex[1].pos[0] = -0.5f;
-            vertex[1].pos[1] = -0.5f;
+            vertex[1].pos[0] = -0.5f + x_offset;
+            vertex[1].pos[1] = -0.5f + y_offset;
             vertex[1].pos[2] = 0.0f;
 
-            vertex[2].pos[0] = 0.5f;
-            vertex[2].pos[1] = -0.5f;
+            vertex[2].pos[0] = 0.5f + x_offset;
+            vertex[2].pos[1] = -0.5f + y_offset;
             vertex[2].pos[2] = 0.0f;
 
             /* Try to draw it */
             bgfx_set_transient_vertex_buffer(0, &tvb, 0, maxV);
             bgfx_set_state(BGFX_STATE_DEFAULT, 0);
             bgfx_submit(0, cast(bgfx_program_handle_t) 0, 0, false);
+
+            x_offset += 0.10;
+            y_offset += 0.15;
 
             writefln("Draw %d entities now", ent.size());
         }
