@@ -42,8 +42,15 @@ abstract class Camera
 private:
     Scene _scene;
     string _name;
+    mat4f _matrix;
+    mat4f _identity;
 
 public:
+
+    this()
+    {
+        _identity = _identity.identity();
+    }
 
     /**
      * Return the Scene associated with this Camera
@@ -77,5 +84,37 @@ public:
     {
         enforce(s !is null, "Camera name cannot be null");
         _name = s;
+    }
+
+    /**
+     * Return the current matrix.
+     */
+    pure @property final mat4f matrix() @nogc @safe nothrow
+    {
+        return _matrix;
+    }
+
+    /**
+     * Set the current matrix.
+     */
+    @property final void matrix(mat4f m) @nogc @safe nothrow
+    {
+        _matrix = m;
+    }
+
+    /**
+     * Return the current identity
+     */
+    pure @property final mat4f identity() @nogc @safe nothrow
+    {
+        return _identity;
+    }
+
+    /**
+     * Set the current identity
+     */
+    @property final void identity(mat4f i) @nogc @safe nothrow
+    {
+        _identity = i;
     }
 }

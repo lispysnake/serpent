@@ -24,6 +24,8 @@ module serpent.camera.orthographic;
 
 import serpent.camera;
 
+import gfm.math;
+
 /**
  * An implementation of the Camera using Orthographic Perspective.
  * This may be used for 2D and 3D games, but is highly recommended
@@ -40,5 +42,8 @@ public:
     this(string name = "default")
     {
         this.name = name;
+
+        // TODO: Set aspect ratio correctly from the display width / height
+        matrix = matrix.orthographic(16.0f / 9.0f, 16.0f / 9.0f, 1.0f, -1.0f, -1.0f, 1.0f);
     }
 }
