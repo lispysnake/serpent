@@ -106,7 +106,7 @@ public:
      * This implementation and any subclasses should now enforce reservation on
      * the underlying storage to prevent unnecessary reallocation.
      */
-    void reserve(uint many)
+    void reserve(uint many) @safe nothrow
     {
         this.positions.reserve(many);
     }
