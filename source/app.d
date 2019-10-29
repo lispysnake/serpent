@@ -66,6 +66,9 @@ public:
             if (i % 2 == 0)
                 e.setFaction(i, Faction.GoodDudes);
         }
+
+        display.scene.addEntity(p);
+        display.scene.addEntity(e);
         return true;
     }
 }
