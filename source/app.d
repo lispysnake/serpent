@@ -40,12 +40,17 @@ final class DemoGame : Game
 private:
     Player p;
     Enemy e;
+    Scene s;
 
 public:
     final override bool init() @system
     {
         writeln("Game Init");
         display.title = "Running: Serpent Demo";
+
+        s = new Scene("sample");
+        display.addScene(s);
+        display.scene = "sample";
 
         /* Create our first player */
         p = new Player();

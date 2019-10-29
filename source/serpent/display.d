@@ -30,6 +30,7 @@ import std.exception : enforce;
 import serpent : SystemException;
 import serpent.pipeline;
 import serpent.game;
+import serpent.scene;
 
 /**
  * The Display handler
@@ -53,6 +54,12 @@ private:
     bgfx_init_t bInit;
     Pipeline _pipeline = null;
     Game _game = null;
+
+    /* Our scenes mapping */
+    Scene[string] scenes;
+
+    /* Active scene */
+    Scene _scene;
 
 private:
 
@@ -233,6 +240,21 @@ public:
     }
 
     /**
+     * Add a scene to the display for rendering.
+     * If no scenes are currently active, this will be set as the
+     * current scene.
+     */
+    final void addScene(Scene s) @safe
+    {
+        enforce(s.name !in scenes, "Duplicate scene name");
+        scenes[s.name] = s;
+        if (_scene is null)
+        {
+            _scene = s;
+        }
+    }
+
+    /**
      * Return the currently set window title
      */
     @property final string title() @nogc @safe nothrow
@@ -292,5 +314,31 @@ public:
         _game = g;
         _game.display = this;
         return this;
+    }
+
+    /**
+     * Returns the current scene.
+     */
+    @property final Scene scene() @nogc @safe nothrow
+    {
+        return _scene;
+    }
+
+    /**
+     * Set the scene to a scene object, that must already be added.
+     */
+    @property final void scene(Scene s) @safe
+    {
+        enforce(s.name in scenes, "Cannot use scene that hasn't been added to Display");
+        _scene = s;
+    }
+
+    /**
+     * Set the scene to the name of a previously added scene.
+     */
+    @property final void scene(string s) @safe
+    {
+        enforce(s in scenes, "Cannot use unknown scene '%s'".format(s));
+        _scene = scenes[s];
     }
 }

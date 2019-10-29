@@ -22,6 +22,8 @@
 
 module serpent.scene;
 
+import std.exception;
+
 enum SceneMode
 {
     TwoDimensional = 2,
@@ -37,10 +39,30 @@ enum SceneMode
  * In our case a Scene maintains the list of entities in their total
  * state along with a set of *renderable* entities for display.
  */
-final class Scene()
+final class Scene
 {
+
+private:
+    string _name;
 
 public:
 
     @disable this();
+
+    /**
+     * Construct a new scene with the given name
+     */
+    this(string name) @safe
+    {
+        enforce(name !is null, "Name must be valid");
+        _name = name;
+    }
+
+    /**
+     * Return the scene name. It cannot be modified after creation
+     */
+    @property final string name() @nogc @safe nothrow
+    {
+        return _name;
+    }
 }
