@@ -31,6 +31,9 @@ import serpent.pipeline;
  *
  * A Sprite is currently considered anything that is an Entity2D.
  * This will change in future to tag various base types.
+ *
+ * TODO: Optimise this into a batching sprite renderer. For now we're
+ * going to be ugly and draw a quad at a time.
  */
 final class SpriteRenderer : Renderer
 {
