@@ -61,6 +61,9 @@ private:
     /* Active scene */
     Scene _scene;
 
+    /* Placeholder scene to prevent bugs */
+    Scene dummyScene;
+
 private:
 
     /**
@@ -149,10 +152,15 @@ private:
 
         /* Debug crap. Draw things. */
         bgfx_touch(0);
-        bgfx_dbg_text_clear(0, false);
-        bgfx_dbg_text_printf(2, 1, 0x03, "Hullo, bgfx + SDL. :)");
-        bgfx_dbg_text_printf(2, 2, 0x01, "Serpent Game Framework");
-        bgfx_dbg_text_printf(2, 8, 0x08, "- Lispy Snake, Ltd");
+
+        /* Hella inefficient. Remove. */
+        if (_scene.name == dummyScene.name)
+        {
+            bgfx_dbg_text_clear(0, false);
+            bgfx_dbg_text_printf(2, 1, 0x03, "Please add a valid Scene");
+            bgfx_dbg_text_printf(2, 2, 0x01, "Serpent Game Framework");
+            bgfx_dbg_text_printf(2, 8, 0x08, "- Lispy Snake, Ltd");
+        }
 
         /* Skip frame now */
         bgfx_frame(false);
@@ -217,6 +225,10 @@ public:
 
         _game.display = this;
 
+        /* Ensure we always have SOMETHING to render */
+        dummyScene = new Scene("default_placeholder_scene");
+        addScene(dummyScene);
+
         /* Init the game instance against our configured display */
         if (!_game.init())
         {
@@ -248,7 +260,7 @@ public:
     {
         enforce(s.name !in scenes, "Duplicate scene name");
         scenes[s.name] = s;
-        if (_scene is null)
+        if (scenes.length == 2)
         {
             _scene = s;
         }
