@@ -111,6 +111,14 @@ public:
     {
         this.positions.reserve(many);
     }
+
+    /**
+     * Return the current size of the entity list.
+     */
+    @property final ulong size() @nogc @safe nothrow
+    {
+        return this.positions.length;
+    }
 }
 
 /**
