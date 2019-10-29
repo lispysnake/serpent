@@ -217,7 +217,7 @@ public:
         /* TODO: Init on separate render thread */
         bgfx_init(&bInit);
         bgfx_reset(width, height, BGFX_RESET_VSYNC, bInit.resolution.format);
-        bgfx_set_debug(BGFX_DEBUG_TEXT);
+        bgfx_set_debug(BGFX_DEBUG_TEXT | BGFX_DEBUG_WIREFRAME);
 
         /* Greyish background, should change this to black but it proves stuff works.. */
         bgfx_set_view_clear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030ff, 1.0f, 0);
