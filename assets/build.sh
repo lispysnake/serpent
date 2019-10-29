@@ -9,7 +9,7 @@ BUILDDIR="World"
 function convert_texture()
 {
     local filename="$1"
-    ../../serpent-support/runtime/bin/texturec -f "raw/${filename}" -o "${BUILDDIR}/${filename%.png}.dds" -m -q $QUALITY -t $FORMAT
+    ../../serpent-support/runtime/bin/texturec -f "raw/${filename}" -o "${BUILDDIR}/textures/${filename%.png}.dds" -m -q $QUALITY -t $FORMAT
 }
 
 function build_shader()
@@ -29,6 +29,8 @@ function build_shader()
 
 rm -rf "${BUILDDIR}"
 mkdir "${BUILDDIR}"
+mkdir "${BUILDDIR}/textures"
+mkdir "${BUILDDIR}/shaders"
 
 for i in raw/*.png ; do
     nom=$(basename "${i}")
