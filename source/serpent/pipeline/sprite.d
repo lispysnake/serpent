@@ -23,6 +23,7 @@
 module serpent.pipeline.sprite;
 
 import bindbc.bgfx;
+import gfm.math;
 
 import serpent.entity;
 import serpent.pipeline;
@@ -30,7 +31,7 @@ import serpent.pipeline;
 struct PosVertex
 {
 
-    float[3] pos;
+    vec3f pos;
 
     static bgfx_vertex_layout_t layout;
 
@@ -74,17 +75,9 @@ final class SpriteRenderer : Renderer
             bgfx_alloc_transient_vertex_buffer(&tvb, maxV, &PosVertex.layout);
 
             PosVertex* vertex = cast(PosVertex*) tvb.data;
-            vertex[0].pos[0] = 0.0f + x_offset;
-            vertex[0].pos[1] = 0.5f + y_offset;
-            vertex[0].pos[2] = 0.0f;
-
-            vertex[1].pos[0] = -0.5f + x_offset;
-            vertex[1].pos[1] = -0.5f + y_offset;
-            vertex[1].pos[2] = 0.0f;
-
-            vertex[2].pos[0] = 0.5f + x_offset;
-            vertex[2].pos[1] = -0.5f + y_offset;
-            vertex[2].pos[2] = 0.0f;
+            vertex[0].pos = vec3f(0.0f + x_offset, 0.5f + y_offset, 0.0f);
+            vertex[1].pos = vec3f(-0.5f + x_offset, -0.5f + y_offset, 0.0f);
+            vertex[2].pos = vec3f(0.5f + x_offset, -0.5f + y_offset, 0.0f);
 
             /* Try to draw it */
             bgfx_set_transient_vertex_buffer(0, &tvb, 0, maxV);
