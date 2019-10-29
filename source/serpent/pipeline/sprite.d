@@ -71,16 +71,16 @@ final class SpriteRenderer : Renderer
             bgfx_alloc_transient_vertex_buffer(&tvb, maxV, &PosVertex.layout);
 
             PosVertex* vertex = cast(PosVertex*) tvb.data;
-            vertex[0].pos[0] = -0.5;
+            vertex[0].pos[0] = 0.0f;
             vertex[0].pos[1] = 0.5f;
             vertex[0].pos[2] = 0.0f;
 
-            vertex[1].pos[0] = 1.0f;
-            vertex[1].pos[1] = 0.0f;
+            vertex[1].pos[0] = -0.5f;
+            vertex[1].pos[1] = -0.5f;
             vertex[1].pos[2] = 0.0f;
 
             vertex[2].pos[0] = 0.5f;
-            vertex[2].pos[1] = 0.5f;
+            vertex[2].pos[1] = -0.5f;
             vertex[2].pos[2] = 0.0f;
 
             /* Try to draw it */
