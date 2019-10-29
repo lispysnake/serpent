@@ -44,6 +44,6 @@ public:
         this.name = name;
 
         // TODO: Set aspect ratio correctly from the display width / height
-        matrix = matrix.orthographic(16.0f / 9.0f, 16.0f / 9.0f, 1.0f, -1.0f, -1.0f, 1.0f);
+        matrix = matrix.orthographic(16.0f / 9.0f, -(16.0f / 9.0f), 1.0f, -1.0f, -1.0f, 1.0f);
     }
 }

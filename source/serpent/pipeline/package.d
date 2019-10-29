@@ -67,6 +67,14 @@ public:
      */
     final void render() @system
     {
+        auto camera = display.scene.camera;
+        if (camera !is null)
+        {
+            auto matrix = camera.matrix();
+            auto identity = camera.identity();
+            bgfx_set_view_transform(0, cast(const void*)&identity, cast(const void*)&matrix);
+        }
+
         foreach (ref r; _renderers)
         {
             r.render();
