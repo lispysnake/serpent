@@ -46,8 +46,8 @@ final class Display
 {
 
 private:
-    int height;
-    int width;
+    int _height;
+    int _width;
     SDL_Window* window = null;
     bool running = false;
     string _title = "serpent";
@@ -147,11 +147,9 @@ private:
      */
     final void render() @system @nogc nothrow
     {
-        /* Set up the view */
-        bgfx_set_view_rect(0, 0, 0, cast(ushort) width, cast(ushort) height);
+        _pipeline.clear();
 
-        /* Debug crap. Draw things. */
-        bgfx_touch(0);
+        _pipeline.render();
 
         /* Hella inefficient. Remove. */
         if (_scene.name == dummyScene.name)
@@ -162,8 +160,7 @@ private:
             bgfx_dbg_text_printf(2, 8, 0x08, "- Lispy Snake, Ltd");
         }
 
-        /* Skip frame now */
-        bgfx_frame(false);
+        _pipeline.flush();
     }
 
 public:
@@ -179,10 +176,10 @@ public:
     final this(int width, int height) @system
     {
         init();
-        this.width = width;
-        this.height = height;
+        this._width = width;
+        this._height = height;
 
-        _pipeline = new Pipeline();
+        _pipeline = new Pipeline(this);
     }
 
     final ~this() @system @nogc nothrow
@@ -205,7 +202,7 @@ public:
         enforce(_game !is null, "Cannot run without a valid game!");
 
         window = SDL_CreateWindow(toStringz(_title), SDL_WINDOWPOS_UNDEFINED,
-                SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+                SDL_WINDOWPOS_UNDEFINED, _width, _height, flags);
         if (!window)
         {
             throw new SystemException("Couldn't create Window: %s".format(SDL_GetError()));
@@ -343,5 +340,21 @@ public:
         enforce(s in scenes, "Cannot use unknown scene '%s'".format(s));
         enforce(s !is null, "Cannot use a null scene ID");
         _scene = scenes[s];
+    }
+
+    /**
+     * Return our width.
+     */
+    @property final int width() @nogc @safe nothrow
+    {
+        return _width;
+    }
+
+    /**
+     * Return our height.
+     */
+    @property final int height() @nogc @safe nothrow
+    {
+        return _height;
     }
 }

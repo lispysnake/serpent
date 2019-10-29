@@ -25,6 +25,8 @@ module serpent.pipeline;
 public import serpent.display;
 public import serpent.pipeline.sprite;
 
+import bindbc.bgfx;
+
 /**
  * The pipeline abstraction allows us to split our rendering logic from
  * our display/input management logic. Rendering is implemented internally
@@ -41,24 +43,37 @@ private:
 
 public:
 
-    this()
+    this(Display display)
     {
         /* Just try to optimise startup. */
         _renderers.reserve(3);
+        this._display = display;
     }
 
     /**
      * Clear any drawing
      */
-    final void clear()
+    final void clear() @nogc @system nothrow
     {
+        /* Set up sizing for view0  */
+        bgfx_set_view_rect(0, 0, 0, cast(ushort) display.width, cast(ushort) display.height);
+
+        /* Make sure view0 is drawn. */
+        bgfx_touch(0);
+    }
+
+    final void render() @nogc @system nothrow
+    {
+
     }
 
     /**
      * Flush any drawing.
      */
-    final void flush()
+    final void flush() @nogc @system nothrow
     {
+        /* Skip frame now */
+        bgfx_frame(false);
     }
 
     /**
@@ -76,14 +91,6 @@ public:
     @property final Display display() @safe @nogc nothrow
     {
         return _display;
-    }
-
-    /**
-     * Set the associated display
-     */
-    @property final void display(Display d) @safe @nogc nothrow
-    {
-        this._display = d;
     }
 }
 
