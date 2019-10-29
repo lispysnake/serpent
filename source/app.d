@@ -147,6 +147,8 @@ public:
 
 int main()
 {
-    return new Display(1366, 768).title("Serpent Demo").pipeline(new Pipeline2D)
-        .game(new DemoGame).run();
+    auto display = new Display(1366, 768).title("Serpent Demo")
+        .pipeline(new Pipeline2D).game(new DemoGame);
+    // display.pipeline.addRenderer(new SpriteRenderer());
+    return display.run();
 }
