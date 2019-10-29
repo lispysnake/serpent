@@ -215,6 +215,7 @@ public:
         }
 
         /* TODO: Init on separate render thread */
+        bInit.type = bgfx_renderer_type_t.BGFX_RENDERER_TYPE_VULKAN;
         bgfx_init(&bInit);
         bgfx_reset(width, height, BGFX_RESET_VSYNC, bInit.resolution.format);
         bgfx_set_debug(BGFX_DEBUG_TEXT | BGFX_DEBUG_WIREFRAME);
@@ -242,6 +243,22 @@ public:
         }
 
         SDL_ShowWindow(window);
+
+        import std.stdio;
+
+        auto renderer = bgfx_get_renderer_type();
+        switch (renderer)
+        {
+        case bgfx_renderer_type_t.BGFX_RENDERER_TYPE_OPENGL:
+            writefln("Rendering with: OpenGL");
+            break;
+        case bgfx_renderer_type_t.BGFX_RENDERER_TYPE_VULKAN:
+            writefln("Rendering with: Vulkan");
+            break;
+        default:
+            writefln("Unknown renderer");
+            break;
+        }
 
         while (running)
         {
