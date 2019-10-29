@@ -22,6 +22,7 @@
 
 module serpent;
 
+public import serpent.camera;
 public import serpent.display;
 public import serpent.entity;
 public import serpent.pipeline;
