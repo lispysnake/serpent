@@ -24,7 +24,7 @@ function build_shader()
     if [[ "${shader_lang}" == "glsl" ]]; then
         profile_arg=""
     fi
-    ../../serpent-support/runtime/bin/shaderc -f "shaders/${filename}" -o "${BUILDDIR}/shaders/${platform}/${shader_lang}/${filename%.sc}.bin" --type "${shader_type}" -i ../../serpent-support/staging/bgfx/src "${profile_arg}" --platform "${platform}"
+    ../../serpent-support/runtime/bin/shaderc -f "shaders/${filename}" -o "${BUILDDIR}/shaders/${platform}/${shader_lang}/${filename%.sc}.bin" --type "${shader_type}" -i ../../serpent-support/staging/bgfx/src ${profile_arg} --platform "${platform}"
 }
 
 rm -rf "${BUILDDIR}"
