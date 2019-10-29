@@ -75,9 +75,13 @@ final class SpriteRenderer : Renderer
             bgfx_alloc_transient_vertex_buffer(&tvb, maxV, &PosVertex.layout);
 
             PosVertex* vertex = cast(PosVertex*) tvb.data;
-            vertex[0].pos = vec3f(0.0f + x_offset, 0.5f + y_offset, 0.0f);
+            /* bottom triangle */
+            vertex[0].pos = vec3f(0.5f + x_offset, 0.5f + y_offset, 0.0f);
             vertex[1].pos = vec3f(-0.5f + x_offset, -0.5f + y_offset, 0.0f);
             vertex[2].pos = vec3f(0.5f + x_offset, -0.5f + y_offset, 0.0f);
+            vertex[3].pos = vec3f(0.5f + x_offset, 0.5f + y_offset, 0.0f);
+            vertex[4].pos = vec3f(-0.5f + x_offset, 0.5f + y_offset, 0.0f);
+            vertex[5].pos = vec3f(-0.5f + x_offset, -0.5f + y_offset, 0.0f);
 
             /* Try to draw it */
             bgfx_set_transient_vertex_buffer(0, &tvb, 0, maxV);
