@@ -62,17 +62,18 @@ private:
         static assert("Entity should be constructed with 2 or 3 axes only");
     }
 
-    alias _vecType = Vector!(T, n);
-
     /* TextureHandle[] texture; */
 
 public:
-    @disable this();
+
+    alias _vecType = Vector!(T, n);
 
     /**
-     * Add a new entity.
+     * Add a new entity. Interested implementations should override this
+     * function when adding new behaviours. This also adds an interesting
+     * default-spawn mechanic.
      */
-    void add()
+    void add() @safe
     {
         static if (n == 2)
         {
@@ -89,7 +90,7 @@ public:
      */
     final void setPosition(ulong index, _vecType pos) @safe
     {
-        enforce(index > 0 && index < positions.length, "Invalid position index");
+        enforce(index >= 0 && index < positions.length, "Invalid position index");
         positions[index] = pos;
     }
 
@@ -98,7 +99,7 @@ public:
      */
     _vecType getPosition(ulong index) @safe
     {
-        enforce(index > 0 && index < positions.length, "Invalid position index");
+        enforce(index >= 0 && index < positions.length, "Invalid position index");
         return positions[index];
     }
 
