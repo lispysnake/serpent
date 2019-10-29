@@ -79,7 +79,7 @@ public:
     /**
      * Return the list of visible 2D entities
      */
-    @property final Entity2D[] visibleEntities() @nogc @safe nothrow
+    @property final Entity2D[] visibleEntities2D() @nogc @safe nothrow
     {
         /* TODO: Only return visible, not all. */
         return this.e2d;
@@ -88,7 +88,7 @@ public:
     /**
      * Return the list of visible 3D entities
      */
-    @property final Entity3D[] visibleEntities() @nogc @safe nothrow
+    @property final Entity3D[] visibleEntities3D() @nogc @safe nothrow
     {
         /* TODO: Only return visible, not all. */
         return this.e3d;

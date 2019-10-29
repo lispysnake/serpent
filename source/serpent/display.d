@@ -181,6 +181,8 @@ public:
         init();
         this.width = width;
         this.height = height;
+
+        _pipeline = new Pipeline();
     }
 
     final ~this() @system @nogc nothrow
@@ -200,7 +202,6 @@ public:
         auto flags = SDL_WINDOW_HIDDEN;
         SDL_Event e;
 
-        enforce(_pipeline !is null, "Cannot run without a valid pipeline!");
         enforce(_game !is null, "Cannot run without a valid game!");
 
         window = SDL_CreateWindow(toStringz(_title), SDL_WINDOWPOS_UNDEFINED,
@@ -294,18 +295,6 @@ public:
     @property final Pipeline pipeline() @nogc @safe nothrow
     {
         return _pipeline;
-    }
-
-    /**
-     * Set the pipeline to be used.
-     */
-    @property final Display pipeline(Pipeline p) @safe
-    {
-        enforce(p !is null, "Pipeline instance must be valid");
-        enforce(!running, "Cannot change pipeline once running");
-        _pipeline = p;
-        _pipeline.display = this;
-        return this;
     }
 
     /**

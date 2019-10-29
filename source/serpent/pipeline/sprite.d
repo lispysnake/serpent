@@ -20,23 +20,30 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.pipeline.twod;
+module serpent.pipeline.sprite;
 
+import serpent.entity;
 import serpent.pipeline;
 
 /**
- * This pipeline is the main point of entry for any 2D-style games reliant
- * on sprites, etc.
+ * The SpriteRenderer will collect and draw all visible sprites within
+ * the current scene.
+ *
+ * A Sprite is currently considered anything that is an Entity2D.
+ * This will change in future to tag various base types.
  */
-final class Pipeline2D : Pipeline
+final class SpriteRenderer : Renderer
 {
-
-public:
-    final override void clear() @safe @nogc nothrow
+    final override void render() @safe
     {
-    }
+        import std.stdio;
 
-    final override void flush() @safe @nogc nothrow
-    {
+        auto ents = pipeline.display.scene.visibleEntities2D();
+        foreach (ent; ents)
+        {
+            writefln("Draw %d entities now", ent.size());
+        }
+        /* TODO: Something useful */
+        return;
     }
 }

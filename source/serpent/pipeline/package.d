@@ -22,16 +22,17 @@
 
 module serpent.pipeline;
 
-public import serpent.pipeline.twod;
 public import serpent.display;
+public import serpent.pipeline.sprite;
 
 /**
  * The pipeline abstraction allows us to split our rendering logic from
- * our display/input management logic.
+ * our display/input management logic. Rendering is implemented internally
+ * through Renderer instances.
  *
  * Internally implementations just use bgfx and render through them.
  */
-abstract class Pipeline
+final class Pipeline
 {
 
 private:
@@ -49,18 +50,23 @@ public:
     /**
      * Clear any drawing
      */
-    abstract void clear();
+    final void clear()
+    {
+    }
 
     /**
      * Flush any drawing.
      */
-    abstract void flush();
+    final void flush()
+    {
+    }
 
     /**
      * Add a renderer to the pipeline
      */
     final void addRenderer(Renderer r) @safe nothrow
     {
+        r.pipeline = this;
         this._renderers ~= r;
     }
 
@@ -108,4 +114,9 @@ public:
     {
         this._pipeline = p;
     }
+
+    /**
+     * This renderer must do its job now.
+     */
+    abstract void render();
 }
