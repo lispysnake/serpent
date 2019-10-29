@@ -20,45 +20,9 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.camera;
-import serpent.scene;
+module serpent.camera.orthographic;
 
-import gfm.math;
-import std.exception : enforce;
-
-/**
- * The Camera class is responsible for providing the correct positions
- * for an Entity to be rendered. Without a camera, the correct perpective
- * and positions will not be used.
- *
- * Typically you need to instaniate a subclass of Camera for it to be
- * effective.
- */
-abstract class Camera
-{
-
-private:
-    Scene _scene;
-
-public:
-
-    /**
-     * Return the Scene associated with this Camera
-     */
-    @property final Scene scene() @nogc @safe nothrow
-    {
-        return _scene;
-    }
-
-    /**
-     * Set the Scene associated with this Camera
-     */
-    @property final void scene(Scene s) @safe
-    {
-        enforce(s !is null, "Should not have a null Scene");
-        _scene = s;
-    }
-}
+import serpent.camera;
 
 /**
  * An implementation of the Camera using Orthographic Perspective.
@@ -67,8 +31,14 @@ public:
  */
 class OrthographicCamera : Camera
 {
+
 public:
-    this()
+
+    /**
+     * Construct a new OrthographicCamera with an optional name.
+     */
+    this(string name = "default")
     {
+        this.name = name;
     }
 }

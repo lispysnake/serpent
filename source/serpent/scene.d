@@ -23,7 +23,9 @@
 module serpent.scene;
 
 import std.exception;
+import std.string : format;
 
+import serpent.camera;
 import serpent.entity;
 
 /**
@@ -42,6 +44,8 @@ private:
     string _name;
     Entity2D[] e2d;
     Entity3D[] e3d;
+    Camera[string] cameras;
+    Camera _camera;
 
 public:
 
@@ -77,6 +81,24 @@ public:
     }
 
     /**
+     * Add a new Camera to the scene.
+     *
+     * If no camera is present, the new Camera will be activated
+     * as the default.
+     */
+    final void addCamera(Camera c) @safe
+    {
+        enforce(c !is null, "Camera cannot be null");
+        enforce(c.name !in cameras, "Cannot add duplicate Camera: '%s'".format(c.name));
+        c.scene = this;
+        this.cameras[c.name] = c;
+        if (_camera is null)
+        {
+            _camera = c;
+        }
+    }
+
+    /**
      * Return the list of visible 2D entities
      */
     @property final Entity2D[] visibleEntities2D() @nogc @safe nothrow
@@ -100,5 +122,23 @@ public:
     @property final string name() @nogc @safe nothrow
     {
         return _name;
+    }
+
+    @property final Camera camera() @nogc @safe nothrow
+    {
+        return _camera;
+    }
+
+    @property final void camera(Camera c) @safe
+    {
+        enforce(c.name in cameras, "Cannot set Camera before adding it");
+        enforce(c !is null, "Camera must not be null");
+        _camera = c;
+    }
+
+    @property final void camera(string s) @safe
+    {
+        enforce(s in cameras, "Cannot set unknown camera");
+        _camera = cameras[s];
     }
 }

@@ -51,6 +51,7 @@ public:
         s = new Scene("sample");
         display.addScene(s);
         display.scene = "sample";
+        s.addCamera(new OrthographicCamera());
 
         /* Create our first player */
         p = new Player();
