@@ -36,8 +36,15 @@ abstract class Pipeline
 
 private:
     Display _display;
+    Renderer[] _renderers;
 
 public:
+
+    this()
+    {
+        /* Just try to optimise startup. */
+        _renderers.reserve(3);
+    }
 
     /**
      * Clear any drawing
@@ -48,6 +55,14 @@ public:
      * Flush any drawing.
      */
     abstract void flush();
+
+    /**
+     * Add a renderer to the pipeline
+     */
+    final void addRenderer(Renderer r) @safe nothrow
+    {
+        this._renderers ~= r;
+    }
 
     /**
      * Return the associated display
@@ -63,5 +78,34 @@ public:
     @property final void display(Display d) @safe @nogc nothrow
     {
         this._display = d;
+    }
+}
+
+/**
+ * A renderer knows how to draw Things. It must be added to the
+ * stages of a Pipeline for drawing to actually happen.
+ */
+abstract class Renderer
+{
+
+private:
+    Pipeline _pipeline;
+
+public:
+
+    /**
+     * Return the associated pipeline
+     */
+    @property final Pipeline pipeline() @safe @nogc nothrow
+    {
+        return _pipeline;
+    }
+
+    /**
+     * Set the associated pipeline
+     */
+    @property final void pipeline(Pipeline p) @safe @nogc nothrow
+    {
+        this._pipeline = p;
     }
 }
