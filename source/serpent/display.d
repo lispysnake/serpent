@@ -330,6 +330,7 @@ public:
     @property final void scene(Scene s) @safe
     {
         enforce(s.name in scenes, "Cannot use scene that hasn't been added to Display");
+        enforce(s !is null, "Cannot use a null Scene");
         _scene = s;
     }
 
@@ -339,6 +340,7 @@ public:
     @property final void scene(string s) @safe
     {
         enforce(s in scenes, "Cannot use unknown scene '%s'".format(s));
+        enforce(s !is null, "Cannot use a null scene ID");
         _scene = scenes[s];
     }
 }
