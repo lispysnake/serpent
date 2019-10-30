@@ -19,12 +19,12 @@ function build_shader()
     local shader_lang="$2"
     local shader_type="$3"
     local filename="$4"
-    install -d -D -m 00755 "${BUILDDIR}/shaders/${platform}/${shader_lang}"
+    install -d -D -m 00755 "${BUILDDIR}/shaders/${shader_lang}"
     profile_arg="--profile ${shader_lang}"
     if [[ "${shader_lang}" == "glsl" ]]; then
         profile_arg=""
     fi
-    ../../serpent-support/runtime/bin/shaderc -f "shaders/${filename}" -o "${BUILDDIR}/shaders/${platform}/${shader_lang}/${filename%.sc}.bin" --type "${shader_type}" -i ../../serpent-support/staging/bgfx/src ${profile_arg} --platform "${platform}"
+    ../../serpent-support/runtime/bin/shaderc -f "shaders/${filename}" -o "${BUILDDIR}/shaders/${shader_lang}/${filename%.sc}.bin" --type "${shader_type}" -i ../../serpent-support/staging/bgfx/src ${profile_arg} --platform "${platform}"
 }
 
 rm -rf "${BUILDDIR}"
