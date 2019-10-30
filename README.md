@@ -10,6 +10,17 @@ change daily. As such the document provides a rough roadmap and
 vision overview. Note this is a restart of efforts after our
 lispysnake2d repo (also public)
 
+Do note that we're initially only focusing on Linux development,
+with a strong bias towards Vulkan. After some initial stability
+begins to appear, we'll focus on OpenGL, then other platforms such
+as Android, macOS (Metal) and Windows (DX/OpenGL/Vulkan).
+
+Whilst we develop, it will appear we're developing a mini game
+in-tree. This is to help steer direction of the project. Eventually
+however we're looking to build more of an SDK out of the core
+`serpent` runtime and associated tooling, to help others very
+easily build their games.
+
 ## Support Development
 
 This framework is being developed by Lispy Snake for our first games.
