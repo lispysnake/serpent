@@ -74,7 +74,7 @@ public:
     }
 }
 
-final class Player : Entity2D
+final class Player : Entity
 {
 
 private:
@@ -88,7 +88,7 @@ public:
     {
         super.add();
         health ~= 100; /** Start with 100hp */
-        setPosition(0, _vecType(20, 20));
+        setPosition(0, vec3f(20, 20));
     }
 
     /**
@@ -112,7 +112,7 @@ public:
 /**
  * Simplistic representation of an Enemy.
  */
-final class Enemy : Entity2D
+final class Enemy : Entity
 {
 
 private:

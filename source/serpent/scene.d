@@ -43,8 +43,7 @@ final class Scene
 
 private:
     string _name;
-    Entity2D[] e2d;
-    Entity3D[] e3d;
+    Entity[] ents;
     Camera[string] cameras;
     Camera _camera;
     Display _display;
@@ -63,23 +62,13 @@ public:
     }
 
     /**
-     * Add a 2D entity to this scene.
-     * It should be noted that a singular Entity2D may be composed
+     * Add an entity to this scene.
+     * It should be noted that a singular Entity may be composed
      * of many instances.
      */
-    final void addEntity(Entity2D e) @safe
+    final void addEntity(Entity e) @safe
     {
-        this.e2d ~= e;
-    }
-
-    /**
-     * Add a 3D Entity to this scene.
-     * It should be noted that a singular Entity3D may be composed
-     * of many instances.
-     */
-    final void addEntity(Entity3D e) @safe
-    {
-        this.e3d ~= e;
+        this.ents ~= e;
     }
 
     /**
@@ -101,21 +90,13 @@ public:
     }
 
     /**
-     * Return the list of visible 2D entities
+     * Return the list of visible entities
+     * TODO: Add tag filtering
      */
-    @property final Entity2D[] visibleEntities2D() @nogc @safe nothrow
+    @property final Entity[] visibleEntities() @nogc @safe nothrow
     {
         /* TODO: Only return visible, not all. */
-        return this.e2d;
-    }
-
-    /**
-     * Return the list of visible 3D entities
-     */
-    @property final Entity3D[] visibleEntities3D() @nogc @safe nothrow
-    {
-        /* TODO: Only return visible, not all. */
-        return this.e3d;
+        return this.ents;
     }
 
     /**

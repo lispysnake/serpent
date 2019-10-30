@@ -22,7 +22,7 @@
 
 module serpent.entity;
 
-import gfm.math;
+public import gfm.math;
 import std.exception;
 
 /**
@@ -39,8 +39,12 @@ import std.exception;
  * You should mark any overridden methods as *final* as a hint to the
  * D compiler to ensure optimisation.
  *
+ * Note: All entities, whether 2D or 3D, have at least 3 axes.
+ * These determine the X,Y, and Z coordinates. It is up to the
+ * individual renderers and cameras to respect these properties.
+ *
  */
-class Entity(T, int n)
+class Entity
 {
 
 private:
@@ -48,25 +52,11 @@ private:
     /**
      * A set of positions - indexed for each entity.
      */
-
-    static if (n == 2)
-    {
-        Vector!(T, 2)[] positions;
-    }
-    static if (n == 3)
-    {
-        Vector!(T, 3)[] positions;
-    }
-    else
-    {
-        static assert("Entity should be constructed with 2 or 3 axes only");
-    }
+    vec3f[] positions;
 
     /* TextureHandle[] texture; */
 
 public:
-
-    alias _vecType = Vector!(T, n);
 
     /**
      * Add a new entity. Interested implementations should override this
@@ -75,20 +65,13 @@ public:
      */
     void add() @safe
     {
-        static if (n == 2)
-        {
-            positions ~= _vecType(0, 0);
-        }
-        else
-        {
-            positions ~= _vecType(0, 0, 0);
-        }
+        positions ~= vec3f(0.0, 0.0, 0.0);
     }
 
     /**
      * Update the position for the entity at the given index
      */
-    final void setPosition(ulong index, _vecType pos) @safe
+    final void setPosition(ulong index, vec3f pos) @safe
     {
         enforce(index >= 0 && index < positions.length, "Invalid position index");
         positions[index] = pos;
@@ -97,7 +80,7 @@ public:
     /**
      * Retrieve a position for modification
      */
-    _vecType getPosition(ulong index) @safe
+    vec3f getPosition(ulong index) @safe
     {
         enforce(index >= 0 && index < positions.length, "Invalid position index");
         return positions[index];
@@ -120,13 +103,3 @@ public:
         return this.positions.length;
     }
 }
-
-/**
- * 2D Entities expressed with 2 axes (x, y)
- */
-alias Entity2D = Entity!(float, 2);
-
-/**
- * 3D Entities expressed with 3 axes (x, y, z)
- */
-alias Entity3D = Entity!(float, 3);

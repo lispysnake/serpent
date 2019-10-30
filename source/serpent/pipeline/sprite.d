@@ -66,7 +66,7 @@ final class SpriteRenderer : Renderer
         float x_offset = 0.0f;
         float y_offset = 0.0f;
 
-        auto ents = pipeline.display.scene.visibleEntities2D();
+        auto ents = pipeline.display.scene.visibleEntities();
         foreach (ent; ents)
         {
             /* Set up our transient buffer. */
