@@ -73,6 +73,7 @@ public:
     {
         if (surface !is null)
         {
+            bgfx_destroy_texture(handle);
             SDL_FreeSurface(surface);
         }
     }
