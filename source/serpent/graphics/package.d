@@ -25,3 +25,4 @@ module serpent.graphics;
 public import serpent.graphics.display;
 public import serpent.graphics.renderer;
 public import serpent.graphics.pipeline;
+public import serpent.graphics.shader;
