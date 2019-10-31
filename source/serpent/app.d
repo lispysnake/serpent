@@ -20,16 +20,16 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.game;
+module serpent.app;
 
 import serpent.context;
 
 /**
- * The Game interface is used to control lifecycle and entry points,
+ * The App interface is used to control lifecycle and entry points,
  * to make life that bit easier for the end developer. This avoids
  * ugly C-style func hooks.
  */
-abstract class Game
+abstract class App
 {
 
 private:

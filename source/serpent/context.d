@@ -27,7 +27,7 @@ import bindbc.bgfx;
 import bindbc.sdl;
 
 public import serpent.graphics.display;
-public import serpent.game;
+public import serpent.app;
 public import serpent.input;
 public import serpent.resource;
 
@@ -43,7 +43,7 @@ private:
 
     ResourceManager _resource;
     InputManager _input;
-    Game _game;
+    App _app;
     Display _display;
     bool running = false;
 
@@ -88,25 +88,25 @@ public:
     }
 
     /**
-     * Run the Game within the context
+     * Run the App within the context
      */
-    int run(Game g = null)
+    int run(App a = null)
     {
-        if (g !is null)
+        if (a !is null)
         {
-            game = g;
+            app = a;
         }
 
-        enforce(game !is null, "Cannot run context without a valid Game");
+        enforce(app !is null, "Cannot run context without a valid App");
 
-        if (!game.init())
+        if (!app.init())
         {
             return 1;
         }
 
         scope (exit)
         {
-            _game.shutdown();
+            _app.shutdown();
         }
 
         import std.stdio;
@@ -158,9 +158,9 @@ public:
     /**
      * Return the Game associated with this context
      */
-    pure @property final Game game() @nogc @safe nothrow
+    pure @property final App app() @nogc @safe nothrow
     {
-        return _game;
+        return _app;
     }
 
     /**
@@ -174,12 +174,12 @@ public:
     /**
      * Set the Game for this Context to run.
      */
-    @property final Context game(Game g) @safe
+    @property final Context app(App a) @safe
     {
-        enforce(g !is null, "Game canot be null");
-        enforce(_game is null, "Cannot change Game while running");
-        _game = g;
-        _game.context = this;
+        enforce(a !is null, "App canot be null");
+        enforce(_app is null, "Cannot change App while running");
+        _app = a;
+        _app.context = this;
         return this;
     }
 }

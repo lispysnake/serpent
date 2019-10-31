@@ -33,7 +33,7 @@ enum Faction
 /**
  * Provided merely for demo purposes.
  */
-final class DemoGame : Game
+final class DemoGame : App
 {
 
 private:

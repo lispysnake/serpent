@@ -22,6 +22,7 @@
 
 module serpent;
 
+public import serpent.app;
 public import serpent.camera;
 public import serpent.context;
 public import serpent.graphics;
@@ -30,7 +31,6 @@ public import serpent.event;
 public import serpent.input;
 public import serpent.resource;
 public import serpent.scene;
-public import serpent.game;
 
 final class SystemException : Exception
 {
