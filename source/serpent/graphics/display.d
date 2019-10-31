@@ -27,18 +27,17 @@ import bindbc.bgfx;
 import std.string : toStringz, format;
 import std.exception : enforce;
 
+public import gfm.math;
+
 import serpent : SystemException;
-import serpent.input;
 import serpent.graphics.pipeline;
-import serpent.game;
 import serpent.scene;
 
 /**
  * The Display handler
  *
- * The Display class is responsible for the main lifecycle of the game.
- * As a core part of the framework, it is the main entry point into
- * running and developing games.
+ * The Display class is responsible for managing scenes and
+ * drawing them. Effectively it is just a window.
  *
  * It will initialise dependent subsystems and prepare the window for
  * construction within the run routine.
@@ -54,7 +53,6 @@ private:
     string _title = "serpent";
     bgfx_init_t bInit;
     Pipeline _pipeline = null;
-    Game _game = null;
 
     /* Our scenes mapping */
     Scene[string] scenes;
@@ -64,7 +62,6 @@ private:
 
     /* Placeholder scene to prevent bugs */
     Scene dummyScene;
-    InputManager _input;
 
 private:
 
@@ -123,32 +120,63 @@ private:
         bgfx_set_platform_data(&pd);
     }
 
-    /**
-     * Handle any events pending in the queue and appropriately
-     * dispatch them.
-     */
-    final void processEvents() @system
+    void reset() @system @nogc nothrow
     {
-        SDL_Event event;
+        SDL_SetWindowSize(window, _width, _height);
+        bgfx_reset(_width, _height, BGFX_RESET_VSYNC, bInit.resolution.format);
+    }
 
-        while (SDL_PollEvent(&event))
+public:
+
+    /** Must have window attributes to construct */
+    @disable this();
+
+    /**
+     * Construct a new Display
+     *
+     * This will construct a new display with the given width and height.
+     */
+    final this(int width, int height) @system
+    {
+        init();
+        this._width = width;
+        this._height = height;
+
+        _pipeline = new Pipeline(this);
+
+        auto flags = SDL_WINDOW_HIDDEN;
+
+        window = SDL_CreateWindow(toStringz(_title), SDL_WINDOWPOS_UNDEFINED,
+                SDL_WINDOWPOS_UNDEFINED, _width, _height, flags);
+        if (!window)
         {
-
-            /* If InputManager consumes the event, don't process it here. */
-            if (input.process(&event))
-            {
-                continue;
-            }
-
-            switch (event.type)
-            {
-            case SDL_QUIT:
-                running = false;
-                break;
-            default:
-                break;
-            }
+            throw new SystemException("Couldn't create Window: %s".format(SDL_GetError()));
         }
+
+        integrateWindowBgfx();
+
+        /* TODO: Init on separate render thread */
+        bInit.type = bgfx_renderer_type_t.BGFX_RENDERER_TYPE_VULKAN;
+        bgfx_init(&bInit);
+        bgfx_reset(width, height, BGFX_RESET_VSYNC, bInit.resolution.format);
+        bgfx_set_debug(BGFX_DEBUG_TEXT);
+
+        /* Greyish background, should change this to black but it proves stuff works.. */
+        bgfx_set_view_clear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030ff, 1.0f, 0);
+
+        /* Ensure we always have SOMETHING to render */
+        dummyScene = new Scene("default_placeholder_scene");
+        addScene(dummyScene);
+    }
+
+    final ~this() @system @nogc nothrow
+    {
+        if (window)
+        {
+            bgfx_shutdown();
+            SDL_DestroyWindow(window);
+        }
+        shutdown();
     }
 
     /**
@@ -172,113 +200,9 @@ private:
         _pipeline.flush();
     }
 
-public:
-
-    /** Must have window attributes to construct */
-    @disable this();
-
-    /**
-     * Construct a new Display
-     *
-     * This will construct a new display with the given width and height.
-     */
-    final this(int width, int height) @system
+    final void show() @system @nogc nothrow
     {
-        init();
-        this._width = width;
-        this._height = height;
-
-        _pipeline = new Pipeline(this);
-        _input = new InputManager(this);
-    }
-
-    final ~this() @system @nogc nothrow
-    {
-        if (window)
-        {
-            SDL_DestroyWindow(window);
-        }
-        shutdown();
-    }
-
-    /**
-     * Bring up windowing resources and start the main game loop.
-     */
-    final int run() @system
-    {
-        auto flags = SDL_WINDOW_HIDDEN;
-        SDL_Event e;
-
-        enforce(_game !is null, "Cannot run without a valid game!");
-
-        window = SDL_CreateWindow(toStringz(_title), SDL_WINDOWPOS_UNDEFINED,
-                SDL_WINDOWPOS_UNDEFINED, _width, _height, flags);
-        if (!window)
-        {
-            throw new SystemException("Couldn't create Window: %s".format(SDL_GetError()));
-        }
-
-        integrateWindowBgfx();
-        scope (exit)
-        {
-            bgfx_shutdown();
-        }
-
-        /* TODO: Init on separate render thread */
-        bInit.type = bgfx_renderer_type_t.BGFX_RENDERER_TYPE_VULKAN;
-        bgfx_init(&bInit);
-        bgfx_reset(width, height, BGFX_RESET_VSYNC, bInit.resolution.format);
-        bgfx_set_debug(BGFX_DEBUG_TEXT);
-
-        /* Greyish background, should change this to black but it proves stuff works.. */
-        bgfx_set_view_clear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030ff, 1.0f, 0);
-
-        running = true;
-
-        _game.display = this;
-
-        /* Ensure we always have SOMETHING to render */
-        dummyScene = new Scene("default_placeholder_scene");
-        addScene(dummyScene);
-
-        /* Init the game instance against our configured display */
-        if (!_game.init())
-        {
-            return 1;
-        }
-
-        scope (exit)
-        {
-            _game.shutdown();
-        }
-
         SDL_ShowWindow(window);
-
-        import std.stdio;
-
-        auto renderer = bgfx_get_renderer_type();
-        switch (renderer)
-        {
-        case bgfx_renderer_type_t.BGFX_RENDERER_TYPE_OPENGL:
-            writefln("Rendering with: OpenGL");
-            title = title ~ " (OpenGL)";
-            break;
-        case bgfx_renderer_type_t.BGFX_RENDERER_TYPE_VULKAN:
-            writefln("Rendering with: Vulkan");
-            title = title ~ " (Vulkan)";
-            break;
-        default:
-            writefln("Unknown renderer");
-            break;
-        }
-
-        while (running)
-        {
-            processEvents();
-            render();
-        }
-
-        return 0;
     }
 
     /**
@@ -311,12 +235,35 @@ public:
     @property final Display title(string title) @system nothrow
     {
         this._title = title;
-        if (!running)
-        {
-            return this;
-        }
         SDL_SetWindowTitle(window, toStringz(_title));
         return this;
+    }
+
+    /**
+     * Return the size of the display
+     */
+    @property final vec2i size() @safe @nogc nothrow
+    {
+        return vec2i(_width, _height);
+    }
+
+    /**
+     * Set the size to a given vec2i
+     */
+    @property final Display size(vec2i size) @system @nogc nothrow
+    {
+        _width = size.x;
+        _height = size.y;
+        reset();
+        return this;
+    }
+
+    /**
+     * Set the size using integers
+     */
+    @property final void size(int w, int h) @system @nogc nothrow
+    {
+        size(vec2i(w, h));
     }
 
     /**
@@ -325,26 +272,6 @@ public:
     pure @property final Pipeline pipeline() @nogc @safe nothrow
     {
         return _pipeline;
-    }
-
-    /**
-     * Returns the Game for this Display to run
-     */
-    pure @property final Game game() @nogc @safe nothrow
-    {
-        return _game;
-    }
-
-    /**
-     * Set the Game for this Display to run
-     */
-    @property final Display game(Game g) @safe
-    {
-        enforce(g !is null, "Game instance must be valid");
-        enforce(!running, "Cannot change game once running");
-        _game = g;
-        _game.display = this;
-        return this;
     }
 
     /**
@@ -389,13 +316,5 @@ public:
     pure @property final const int height() @nogc @safe nothrow
     {
         return _height;
-    }
-
-    /**
-     * Return our InputManager
-     */
-    pure @property final InputManager input() @nogc @safe nothrow
-    {
-        return _input;
     }
 }

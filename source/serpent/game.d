@@ -22,7 +22,7 @@
 
 module serpent.game;
 
-import serpent.graphics.display;
+import serpent.context;
 
 /**
  * The Game interface is used to control lifecycle and entry points,
@@ -33,23 +33,23 @@ abstract class Game
 {
 
 private:
-    Display _display;
+    Context _context;
 
 public:
     /**
      * Get the display associated with this Game
      */
-    @property final Display display() @safe @nogc nothrow
+    pure @property final Context context() @safe @nogc nothrow
     {
-        return _display;
+        return _context;
     }
 
     /**
      * Set the display associated with this Game
      */
-    @property final void display(Display d) @safe @nogc nothrow
+    @property final void context(Context c) @safe @nogc nothrow
     {
-        _display = d;
+        _context = c;
     }
 
     /**

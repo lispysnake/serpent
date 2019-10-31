@@ -22,7 +22,7 @@
 
 module serpent.input;
 
-import serpent.graphics.display;
+import serpent.context;
 import serpent.event;
 
 import bindbc.sdl;
@@ -44,16 +44,16 @@ final class InputManager
 
 private:
 
-    Display _display;
+    Context _context;
 
 package:
 
     /**
      * Construct a new InputManager. Only a display can do this.
      */
-    this(Display display)
+    this(Context context)
     {
-        _display = display;
+        _context = context;
     }
 
     /**
@@ -154,10 +154,10 @@ public:
     mixin Signal!(KeyboardEvent) keyReleased;
 
     /**
-     * Return the associated display.
+     * Return the associated context.
      */
-    pure @property final Display display() @nogc @safe nothrow
+    pure @property final Context context() @nogc @safe nothrow
     {
-        return _display;
+        return _context;
     }
 }

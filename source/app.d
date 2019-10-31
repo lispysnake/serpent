@@ -62,14 +62,13 @@ public:
     {
         writeln("Game Init");
 
-        display.input.mousePressed.connect(&onMousePressed);
-        display.input.mouseMoved.connect(&onMouseMoved);
-
-        display.input.keyReleased.connect(&onKeyReleased);
+        context.input.mousePressed.connect(&onMousePressed);
+        context.input.mouseMoved.connect(&onMouseMoved);
+        context.input.keyReleased.connect(&onKeyReleased);
 
         s = new Scene("sample");
-        display.addScene(s);
-        display.scene = "sample";
+        context.display.addScene(s);
+        context.display.scene = "sample";
         s.addCamera(new OrthographicCamera());
 
         /* Create our first player */
@@ -87,8 +86,8 @@ public:
                 e.setFaction(i, Faction.GoodDudes);
         }
 
-        display.scene.addEntity(p);
-        display.scene.addEntity(e);
+        context.display.scene.addEntity(p);
+        context.display.scene.addEntity(e);
         return true;
     }
 }
@@ -167,7 +166,9 @@ public:
 
 int main()
 {
-    auto display = new Display(1366, 768).title("Serpent Demo").game(new DemoGame);
-    display.pipeline.addRenderer(new SpriteRenderer());
-    return display.run();
+    auto context = new Context();
+    context.display.title("Serpent").size(1366, 768);
+    context.display.pipeline.addRenderer(new SpriteRenderer());
+
+    return context.run(new DemoGame());
 }
