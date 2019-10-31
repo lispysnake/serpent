@@ -49,7 +49,6 @@ private:
     int _height;
     int _width;
     SDL_Window* window = null;
-    bool running = false;
     bool _resizable = false;
     string _title = "serpent";
     bgfx_init_t bInit;
