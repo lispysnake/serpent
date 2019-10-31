@@ -31,7 +31,7 @@ import std.string : toStringz;
  * The Shader struct is a quick and dirty wrapper around bgfx's
  * shader APIs.
  */
-final struct Shader
+final class Shader
 {
 
 private:
@@ -75,7 +75,7 @@ public:
  * A Program combines two shaders so that they can be used by bgfx
  * for rendering in some meaningful way.
  */
-final struct Program
+final class Program
 {
 
 private:

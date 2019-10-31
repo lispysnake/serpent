@@ -27,6 +27,7 @@ import gfm.math;
 
 import serpent.entity;
 import serpent.graphics.pipeline;
+import serpent.graphics.shader;
 
 struct PosVertex
 {
@@ -59,6 +60,15 @@ struct PosVertex
  */
 final class SpriteRenderer : Renderer
 {
+    Program shader = null;
+
+    this()
+    {
+        auto vertex = new Shader("assets/built/shaders/spirv/sprite_2d_vertex.bin");
+        auto fragment = new Shader("assets/built/shaders/spirv/sprite_2d_fragment.bin");
+        shader = new Program(vertex, fragment);
+    }
+
     final override void render() @system
     {
         import std.stdio;
@@ -86,7 +96,7 @@ final class SpriteRenderer : Renderer
             /* Try to draw it */
             bgfx_set_transient_vertex_buffer(0, &tvb, 0, maxV);
             bgfx_set_state(BGFX_STATE_DEFAULT, 0);
-            bgfx_submit(0, cast(bgfx_program_handle_t) 0, 0, false);
+            bgfx_submit(0, shader.handle, 0, false);
 
             x_offset += 0.10;
             y_offset += 0.15;
