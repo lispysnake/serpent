@@ -90,8 +90,6 @@ final class SpriteRenderer : Renderer
 
             x_offset += 0.10;
             y_offset += 0.15;
-
-            writefln("Draw %d entities now", ent.size());
         }
         /* TODO: Something useful */
         return;

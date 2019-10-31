@@ -22,7 +22,7 @@
 
 import serpent;
 import serpent.pipeline;
-import std.stdio : writeln;
+import std.stdio : writeln, writefln;
 import std.exception;
 
 enum Faction
@@ -42,11 +42,25 @@ private:
     Enemy e;
     Scene s;
 
+private:
+    final void onMousePressed(uint button, double x, double y)
+    {
+        writefln("Pressed: %f %f", x, y);
+    }
+
+    final void onMouseMoved(double x, double y)
+    {
+        writefln("Moved: %f %f", x, y);
+    }
+
 public:
     final override bool init() @system
     {
         writeln("Game Init");
         display.title = "Running: Serpent Demo";
+
+        display.input.mousePressed.connect(&onMousePressed);
+        display.input.mouseMoved.connect(&onMouseMoved);
 
         s = new Scene("sample");
         display.addScene(s);

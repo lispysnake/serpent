@@ -62,11 +62,11 @@ package:
         case SDL_KEYDOWN:
             return processKey(event);
         case SDL_MOUSEMOTION:
-            return processMouseMove(cast(SDL_MouseMotionEvent*) event);
+            return processMouseMove(&event.motion);
         case SDL_MOUSEBUTTONDOWN:
-            return processMousePress(cast(SDL_MouseButtonEvent*) event, true);
+            return processMousePress(&event.button, true);
         case SDL_MOUSEBUTTONUP:
-            return processMousePress(cast(SDL_MouseButtonEvent*) event, false);
+            return processMousePress(&event.button, false);
         default:
             return false;
         }
