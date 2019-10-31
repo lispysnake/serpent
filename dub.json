@@ -24,7 +24,7 @@
 	},
 	"description": "Serpent Game Framework",
 	"libs": [
-		"SDL2",
+		"SDL2", "SDL2_image",
 		"bgfxRelease", "bxRelease", "bimgRelease",
 		"stdc++", "GL", "x11", "bxRelease",
 	],
@@ -38,6 +38,7 @@
 	"targetType": "none",
 	"versions": [
 		"BindSDL_Static",
+		"BindSDL_Image",
 		"SDL_205",
 	],
 	"buildTypes": {
