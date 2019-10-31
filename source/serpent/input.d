@@ -33,6 +33,11 @@ public import std.signals;
  * The InputManager is managed by a Display and provides a way to access
  * input events. Internally it is seeded by events from the SDL event
  * queue.
+ *
+ * Note that the InputManager relies on the std.signals module, and
+ * currently it is only possible to connect class-level functions.
+ * Connecting to anything else (such as a lambda) leads to undefined
+ * behaviour, and likely, full crashes.
  */
 final class InputManager
 {
