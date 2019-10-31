@@ -52,7 +52,7 @@ private:
         writefln("Moved: %f %f", e.x, e.y);
     }
 
-    final void onKeyReleased(KeyEvent e) @safe
+    final void onKeyReleased(KeyboardEvent e) @safe
     {
         writefln("Key released");
     }

@@ -22,5 +22,5 @@
 
 module serpent.event;
 
-public import serpent.event.key;
+public import serpent.event.keyboard;
 public import serpent.event.mouse;

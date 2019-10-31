@@ -20,20 +20,20 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.event.key;
+module serpent.event.keyboard;
 
 import bindbc.sdl;
 
 /**
- * MouseEvent encapsulates an SDL_KeyboardEvent
+ * KeyboardEvent encapsulates an SDL_KeyboardEvent
  */
-final struct KeyEvent
+final struct KeyboardEvent
 {
 
 public:
 
     /**
-     * Construct a new ButtonEvent from an SDL_KeyboardEvent
+     * Construct a new KeyboardEvent from an SDL_KeyboardEvent
      */
     this(SDL_KeyboardEvent* origin)
     {

@@ -88,11 +88,11 @@ private:
         /* TODO: Handle Actions ?? */
         if (event.type == SDL_KEYUP)
         {
-            keyReleased.emit(KeyEvent(&event.key));
+            keyReleased.emit(KeyboardEvent(&event.key));
         }
         else
         {
-            keyPressed.emit(KeyEvent(&event.key));
+            keyPressed.emit(KeyboardEvent(&event.key));
         }
         return false;
     }
@@ -146,12 +146,12 @@ public:
     /**
      * keyPressed is emitted whenever a key has been pressed
      */
-    mixin Signal!(KeyEvent) keyPressed;
+    mixin Signal!(KeyboardEvent) keyPressed;
 
     /**
      * keyReleased is emitted whenever a key has been released
      */
-    mixin Signal!(KeyEvent) keyReleased;
+    mixin Signal!(KeyboardEvent) keyReleased;
 
     /**
      * Return the associated display.
