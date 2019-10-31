@@ -131,6 +131,12 @@ private:
     {
         SDL_Event event;
 
+        /* If InputManager consumes the event, don't process it here. */
+        if (input.process(&event))
+        {
+            return;
+        }
+
         while (SDL_PollEvent(&event))
         {
             switch (event.type)

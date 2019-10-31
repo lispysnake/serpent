@@ -24,6 +24,8 @@ module serpent.input;
 
 import serpent.display;
 
+import bindbc.sdl;
+
 /**
  * The InputManager is managed by a Display and provides a way to access
  * input events. Internally it is seeded by events from the SDL event
@@ -44,6 +46,54 @@ package:
     this(Display display)
     {
         _display = display;
+    }
+
+    /**
+     * Feed the InputManager an SDL_Event.
+     * From here, we'll perform the appropriate dispatches.
+     */
+    final bool process(SDL_Event* event) @safe @nogc nothrow
+    {
+        switch (event.type)
+        {
+        case SDL_KEYUP:
+        case SDL_KEYDOWN:
+            return processKey(event);
+        case SDL_MOUSEMOTION:
+            return processMouseMove(event);
+        case SDL_MOUSEBUTTONDOWN:
+            return processMousePress(event, true);
+        case SDL_MOUSEBUTTONUP:
+            return processMousePress(event, false);
+        default:
+            return false;
+        }
+    }
+
+private:
+
+    /**
+     * Process a key event
+     */
+    final bool processKey(SDL_Event* event) @safe @nogc nothrow
+    {
+        return false;
+    }
+
+    /**
+     * Process mouse motion
+     */
+    final bool processMouseMove(SDL_Event* event) @safe @nogc nothrow
+    {
+        return false;
+    }
+
+    /**
+     * Process mouse click
+     */
+    final bool processMousePress(SDL_Event* event, bool pressed) @safe @nogc nothrow
+    {
+        return false;
     }
 
 public:
