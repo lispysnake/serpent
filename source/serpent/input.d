@@ -85,6 +85,15 @@ private:
      */
     final bool processKey(SDL_Event* event) @system
     {
+        /* TODO: Handle Actions ?? */
+        if (event.type == SDL_KEYUP)
+        {
+            keyReleased.emit(KeyEvent(&event.key));
+        }
+        else
+        {
+            keyPressed.emit(KeyEvent(&event.key));
+        }
         return false;
     }
 
@@ -131,6 +140,18 @@ public:
      * mouseReleased is emitted whenever a mouse button has been released
      */
     mixin Signal!(MouseEvent) mouseReleased;
+
+    /* key signals */
+
+    /**
+     * keyPressed is emitted whenever a key has been pressed
+     */
+    mixin Signal!(KeyEvent) keyPressed;
+
+    /**
+     * keyReleased is emitted whenever a key has been released
+     */
+    mixin Signal!(KeyEvent) keyReleased;
 
     /**
      * Return the associated display.

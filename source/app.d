@@ -42,14 +42,19 @@ private:
     Scene s;
 
 private:
-    final void onMousePressed(MouseEvent e)
+    final void onMousePressed(MouseEvent e) @safe
     {
         writefln("Pressed: %f %f", e.x, e.y);
     }
 
-    final void onMouseMoved(MouseEvent e)
+    final void onMouseMoved(MouseEvent e) @safe
     {
         writefln("Moved: %f %f", e.x, e.y);
+    }
+
+    final void onKeyReleased(KeyEvent e) @safe
+    {
+        writefln("Key released");
     }
 
 public:
@@ -59,6 +64,8 @@ public:
 
         display.input.mousePressed.connect(&onMousePressed);
         display.input.mouseMoved.connect(&onMouseMoved);
+
+        display.input.keyReleased.connect(&onKeyReleased);
 
         s = new Scene("sample");
         display.addScene(s);
