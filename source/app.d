@@ -44,7 +44,7 @@ private:
 private:
     final void onMousePressed(MouseEvent e) @safe
     {
-        writefln("Pressed: %f %f", e.x, e.y);
+        writefln("Pressed (%u): %f %f", e.button, e.x, e.y);
     }
 
     final void onMouseMoved(MouseEvent e) @safe
