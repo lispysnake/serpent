@@ -23,7 +23,7 @@
 module serpent.pipeline;
 
 public import serpent.display;
-public import serpent.pipeline.sprite;
+public import serpent.renderer;
 
 import bindbc.bgfx;
 
@@ -41,7 +41,7 @@ private:
     Display _display;
     Renderer[] _renderers;
 
-public:
+package:
 
     this(Display display)
     {
@@ -50,6 +50,7 @@ public:
         this._display = display;
     }
 
+public:
     /**
      * Clear any drawing
      */
@@ -100,42 +101,8 @@ public:
     /**
      * Return the associated display
      */
-    @property final Display display() @safe @nogc nothrow
+    pure @property final Display display() @safe @nogc nothrow
     {
         return _display;
     }
-}
-
-/**
- * A renderer knows how to draw Things. It must be added to the
- * stages of a Pipeline for drawing to actually happen.
- */
-abstract class Renderer
-{
-
-private:
-    Pipeline _pipeline;
-
-public:
-
-    /**
-     * Return the associated pipeline
-     */
-    @property final Pipeline pipeline() @safe @nogc nothrow
-    {
-        return _pipeline;
-    }
-
-    /**
-     * Set the associated pipeline
-     */
-    @property final void pipeline(Pipeline p) @safe @nogc nothrow
-    {
-        this._pipeline = p;
-    }
-
-    /**
-     * This renderer must do its job now.
-     */
-    abstract void render();
 }

@@ -20,22 +20,41 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent;
+module serpent.renderer;
 
-public import serpent.camera;
-public import serpent.display;
-public import serpent.entity;
-public import serpent.input;
+public import serpent.renderer.sprite;
 public import serpent.pipeline;
-public import serpent.resource;
-public import serpent.renderer;
-public import serpent.scene;
-public import serpent.game;
 
-final class SystemException : Exception
+/**
+ * A renderer knows how to draw Things. It must be added to the
+ * stages of a Pipeline for drawing to actually happen.
+ */
+abstract class Renderer
 {
-    this(string msg, string file = __FILE__, size_t line = __LINE__)
+
+private:
+    Pipeline _pipeline;
+
+public:
+
+    /**
+     * Return the associated pipeline
+     */
+    @property final Pipeline pipeline() @safe @nogc nothrow
     {
-        super(msg, file, line);
+        return _pipeline;
     }
+
+    /**
+     * Set the associated pipeline
+     */
+    pure @property final void pipeline(Pipeline p) @safe @nogc nothrow
+    {
+        this._pipeline = p;
+    }
+
+    /**
+     * This renderer must do its job now.
+     */
+    abstract void render();
 }

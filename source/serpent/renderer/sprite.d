@@ -20,7 +20,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.pipeline.sprite;
+module serpent.renderer.sprite;
 
 import bindbc.bgfx;
 import gfm.math;
