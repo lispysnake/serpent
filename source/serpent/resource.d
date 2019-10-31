@@ -20,20 +20,32 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent;
+module serpent.resource;
 
-public import serpent.camera;
-public import serpent.display;
-public import serpent.entity;
-public import serpent.pipeline;
-public import serpent.resource;
-public import serpent.scene;
-public import serpent.game;
-
-final class SystemException : Exception
+/**
+ * The ResourceManager is used for abstracting access to file-based
+ * resources in a platform-agnostic way. Largely we rely upon ZIP archives
+ * for bundling, with the assumption that the ZIP assets are supplied
+ * with the game's executable as an output of the build system for the
+ * game.
+ */
+final class ResourceManager
 {
-    this(string msg, string file = __FILE__, size_t line = __LINE__)
+
+public:
+
+    /**
+     * Construct a new ResourceManager.
+     */
+    this()
     {
-        super(msg, file, line);
+    }
+
+    /**
+     * Set the root directory for all lookup operations.
+     */
+    final void setRootDirectory(string dirpath)
+    {
+        return;
     }
 }
