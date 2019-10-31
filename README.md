@@ -1,5 +1,7 @@
 # Serpent Game Framework
 
+[![License](https://img.shields.io/badge/License-ZLib-blue.svg)](https://opensource.org/licenses/ZLib)
+
 A game framework from [Lispy Snake, Ltd.](https://lispysnake.com).
 This is not *exactly* an engine.
 
