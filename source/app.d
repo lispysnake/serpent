@@ -56,7 +56,6 @@ public:
     final override bool init() @system
     {
         writeln("Game Init");
-        display.title = "Running: Serpent Demo";
 
         display.input.mousePressed.connect(&onMousePressed);
         display.input.mouseMoved.connect(&onMouseMoved);

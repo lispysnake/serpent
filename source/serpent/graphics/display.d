@@ -261,9 +261,11 @@ public:
         {
         case bgfx_renderer_type_t.BGFX_RENDERER_TYPE_OPENGL:
             writefln("Rendering with: OpenGL");
+            title = title ~ " (OpenGL)";
             break;
         case bgfx_renderer_type_t.BGFX_RENDERER_TYPE_VULKAN:
             writefln("Rendering with: Vulkan");
+            title = title ~ " (Vulkan)";
             break;
         default:
             writefln("Unknown renderer");
