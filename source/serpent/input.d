@@ -20,21 +20,39 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent;
+module serpent.input;
 
-public import serpent.camera;
-public import serpent.display;
-public import serpent.entity;
-public import serpent.input;
-public import serpent.pipeline;
-public import serpent.resource;
-public import serpent.scene;
-public import serpent.game;
+import serpent.display;
 
-final class SystemException : Exception
+/**
+ * The InputManager is managed by a Display and provides a way to access
+ * input events. Internally it is seeded by events from the SDL event
+ * queue.
+ */
+final class InputManager
 {
-    this(string msg, string file = __FILE__, size_t line = __LINE__)
+
+private:
+
+    Display _display;
+
+package:
+
+    /**
+     * Construct a new InputManager. Only a display can do this.
+     */
+    this(Display display)
     {
-        super(msg, file, line);
+        _display = display;
+    }
+
+public:
+
+    /**
+     * Return the associated display.
+     */
+    pure @property final Display display() @nogc @safe nothrow
+    {
+        return _display;
     }
 }

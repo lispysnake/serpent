@@ -28,6 +28,7 @@ import std.string : toStringz, format;
 import std.exception : enforce;
 
 import serpent : SystemException;
+import serpent.input;
 import serpent.pipeline;
 import serpent.game;
 import serpent.scene;
@@ -63,6 +64,7 @@ private:
 
     /* Placeholder scene to prevent bugs */
     Scene dummyScene;
+    InputManager _input;
 
 private:
 
@@ -180,6 +182,7 @@ public:
         this._height = height;
 
         _pipeline = new Pipeline(this);
+        _input = new InputManager(this);
     }
 
     final ~this() @system @nogc nothrow
@@ -288,7 +291,7 @@ public:
     /**
      * Return the currently set window title
      */
-    @property final string title() @nogc @safe nothrow
+    pure @property final string title() @nogc @safe nothrow
     {
         return _title;
     }
@@ -310,7 +313,7 @@ public:
     /**
      * Return the pipeline associated with this display
      */
-    @property final Pipeline pipeline() @nogc @safe nothrow
+    pure @property final Pipeline pipeline() @nogc @safe nothrow
     {
         return _pipeline;
     }
@@ -318,7 +321,7 @@ public:
     /**
      * Returns the Game for this Display to run
      */
-    @property final Game game() @nogc @safe nothrow
+    pure @property final Game game() @nogc @safe nothrow
     {
         return _game;
     }
@@ -366,7 +369,7 @@ public:
     /**
      * Return our width.
      */
-    @property final int width() @nogc @safe nothrow
+    pure @property final const int width() @nogc @safe nothrow
     {
         return _width;
     }
@@ -374,8 +377,16 @@ public:
     /**
      * Return our height.
      */
-    @property final int height() @nogc @safe nothrow
+    pure @property final const int height() @nogc @safe nothrow
     {
         return _height;
+    }
+
+    /**
+     * Return our InputManager
+     */
+    pure @property final InputManager input() @nogc @safe nothrow
+    {
+        return _input;
     }
 }
