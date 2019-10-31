@@ -26,6 +26,8 @@ import serpent.display;
 
 import bindbc.sdl;
 
+public import std.signals;
+
 /**
  * The InputManager is managed by a Display and provides a way to access
  * input events. Internally it is seeded by events from the SDL event
@@ -52,7 +54,7 @@ package:
      * Feed the InputManager an SDL_Event.
      * From here, we'll perform the appropriate dispatches.
      */
-    final bool process(SDL_Event* event) @safe @nogc nothrow
+    final bool process(SDL_Event* event) @system
     {
         switch (event.type)
         {
@@ -60,11 +62,11 @@ package:
         case SDL_KEYDOWN:
             return processKey(event);
         case SDL_MOUSEMOTION:
-            return processMouseMove(event);
+            return processMouseMove(cast(SDL_MouseMotionEvent*) event);
         case SDL_MOUSEBUTTONDOWN:
-            return processMousePress(event, true);
+            return processMousePress(cast(SDL_MouseButtonEvent*) event, true);
         case SDL_MOUSEBUTTONUP:
-            return processMousePress(event, false);
+            return processMousePress(cast(SDL_MouseButtonEvent*) event, false);
         default:
             return false;
         }
@@ -75,7 +77,7 @@ private:
     /**
      * Process a key event
      */
-    final bool processKey(SDL_Event* event) @safe @nogc nothrow
+    final bool processKey(SDL_Event* event) @system
     {
         return false;
     }
@@ -83,20 +85,33 @@ private:
     /**
      * Process mouse motion
      */
-    final bool processMouseMove(SDL_Event* event) @safe @nogc nothrow
+    final bool processMouseMove(SDL_MouseMotionEvent* event) @system
     {
+        mouseMoved.emit(event.x, event.y);
         return false;
     }
 
     /**
      * Process mouse click
      */
-    final bool processMousePress(SDL_Event* event, bool pressed) @safe @nogc nothrow
+    final bool processMousePress(SDL_MouseButtonEvent* event, bool pressed) @system
     {
+        if (pressed)
+        {
+            mousePressed.emit(event.button, event.x, event.y);
+        }
+        else
+        {
+            mouseReleased.emit(event.button, event.x, event.y);
+        }
         return false;
     }
 
 public:
+
+    mixin Signal!(double, double) mouseMoved;
+    mixin Signal!(uint, double, double) mousePressed;
+    mixin Signal!(uint, double, double) mouseReleased;
 
     /**
      * Return the associated display.

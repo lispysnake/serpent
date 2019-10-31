@@ -127,7 +127,7 @@ private:
      * Handle any events pending in the queue and appropriately
      * dispatch them.
      */
-    final void processEvents() @system @nogc nothrow
+    final void processEvents() @system
     {
         SDL_Event event;
 
