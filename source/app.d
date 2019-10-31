@@ -43,14 +43,14 @@ private:
     Scene s;
 
 private:
-    final void onMousePressed(uint button, double x, double y)
+    final void onMousePressed(MouseEvent e)
     {
-        writefln("Pressed: %f %f", x, y);
+        writefln("Pressed: %f %f", e.x, e.y);
     }
 
-    final void onMouseMoved(double x, double y)
+    final void onMouseMoved(MouseEvent e)
     {
-        writefln("Moved: %f %f", x, y);
+        writefln("Moved: %f %f", e.x, e.y);
     }
 
 public:

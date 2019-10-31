@@ -87,7 +87,7 @@ private:
      */
     final bool processMouseMove(SDL_MouseMotionEvent* event) @system
     {
-        mouseMoved.emit(event.x, event.y);
+        mouseMoved.emit(MouseEvent(event));
         return false;
     }
 
@@ -98,20 +98,33 @@ private:
     {
         if (pressed)
         {
-            mousePressed.emit(event.button, event.x, event.y);
+            mousePressed.emit(MouseEvent(event));
         }
         else
         {
-            mouseReleased.emit(event.button, event.x, event.y);
+            mouseReleased.emit(MouseEvent(event));
         }
         return false;
     }
 
 public:
 
-    mixin Signal!(double, double) mouseMoved;
-    mixin Signal!(uint, double, double) mousePressed;
-    mixin Signal!(uint, double, double) mouseReleased;
+    /* mouse signals */
+
+    /**
+     * mouseMoved is emitted whenever the mouse has moved position
+     */
+    mixin Signal!(MouseEvent) mouseMoved;
+
+    /**
+     * mousePressed is emitted whenever a mouse button has been pressed
+     */
+    mixin Signal!(MouseEvent) mousePressed;
+
+    /**
+     * mouseReleased is emitted whenever a mouse button has been released
+     */
+    mixin Signal!(MouseEvent) mouseReleased;
 
     /**
      * Return the associated display.
@@ -119,5 +132,62 @@ public:
     pure @property final Display display() @nogc @safe nothrow
     {
         return _display;
+    }
+}
+
+/**
+ * MouseEvent encapsulates an SDL_MouseMotionEvent and SDL_MouseButtonEvent
+ */
+final struct MouseEvent
+{
+
+private:
+    double _x, _y = 0;
+    uint _button = 0;
+
+package:
+
+    /**
+     * Construct a new MouseEvent from an SDL_MouseMotionEvent
+     */
+    this(SDL_MouseMotionEvent* origin)
+    {
+        _x = origin.x;
+        _y = origin.y;
+    }
+
+    /**
+     * Construct a new MouseEvent from an SDL_MouseButtonEvent
+     */
+    this(SDL_MouseButtonEvent* origin)
+    {
+        _x = origin.x;
+        _y = origin.y;
+        _button = origin.button;
+    }
+
+public:
+    /**
+     * Return read-only X property
+     */
+    pure @property const double x() @safe @nogc nothrow
+    {
+        return _x;
+    }
+
+    /**
+     * Return read-only y property
+     */
+    pure @property const double y() @safe @nogc nothrow
+    {
+        return _y;
+    }
+
+    /**
+     * Return read-only button property
+     */
+    pure @property const uint button() @safe @nogc nothrow
+    {
+        return _button;
     }
 }
