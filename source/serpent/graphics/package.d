@@ -20,21 +20,8 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent;
+module serpent.graphics;
 
-public import serpent.camera;
-public import serpent.graphics;
-public import serpent.entity;
-public import serpent.event;
-public import serpent.input;
-public import serpent.resource;
-public import serpent.scene;
-public import serpent.game;
-
-final class SystemException : Exception
-{
-    this(string msg, string file = __FILE__, size_t line = __LINE__)
-    {
-        super(msg, file, line);
-    }
-}
+public import serpent.graphics.display;
+public import serpent.graphics.renderer;
+public import serpent.graphics.pipeline;

@@ -20,10 +20,10 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.renderer;
+module serpent.graphics.renderer;
 
-public import serpent.renderer.sprite;
-public import serpent.pipeline;
+public import serpent.graphics.renderer.sprite;
+public import serpent.graphics.pipeline;
 
 /**
  * A renderer knows how to draw Things. It must be added to the

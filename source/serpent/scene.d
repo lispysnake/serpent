@@ -26,7 +26,7 @@ import std.exception;
 import std.string : format;
 
 import serpent.camera;
-import serpent.display;
+import serpent.graphics.display;
 import serpent.entity;
 
 /**

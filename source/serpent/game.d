@@ -22,7 +22,7 @@
 
 module serpent.game;
 
-import serpent.display;
+import serpent.graphics.display;
 
 /**
  * The Game interface is used to control lifecycle and entry points,

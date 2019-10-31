@@ -20,13 +20,13 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.renderer.sprite;
+module serpent.graphics.renderer.sprite;
 
 import bindbc.bgfx;
 import gfm.math;
 
 import serpent.entity;
-import serpent.pipeline;
+import serpent.graphics.pipeline;
 
 struct PosVertex
 {

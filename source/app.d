@@ -21,7 +21,6 @@
  */
 
 import serpent;
-import serpent.pipeline;
 import std.stdio : writeln, writefln;
 import std.exception;
 

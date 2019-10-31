@@ -22,7 +22,7 @@
 
 module serpent.input;
 
-import serpent.display;
+import serpent.graphics.display;
 import serpent.event;
 
 import bindbc.sdl;

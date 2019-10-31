@@ -20,7 +20,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.display;
+module serpent.graphics.display;
 
 import bindbc.sdl;
 import bindbc.bgfx;
@@ -29,7 +29,7 @@ import std.exception : enforce;
 
 import serpent : SystemException;
 import serpent.input;
-import serpent.pipeline;
+import serpent.graphics.pipeline;
 import serpent.game;
 import serpent.scene;
 

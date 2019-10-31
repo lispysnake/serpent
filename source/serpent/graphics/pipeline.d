@@ -20,10 +20,10 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.pipeline;
+module serpent.graphics.pipeline;
 
-public import serpent.display;
-public import serpent.renderer;
+public import serpent.graphics.display;
+public import serpent.graphics.renderer;
 
 import bindbc.bgfx;
 
