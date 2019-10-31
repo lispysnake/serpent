@@ -50,6 +50,7 @@ private:
     int _width;
     SDL_Window* window = null;
     bool running = false;
+    bool _resizable = false;
     string _title = "serpent";
     bgfx_init_t bInit;
     Pipeline _pipeline = null;
@@ -120,10 +121,29 @@ private:
         bgfx_set_platform_data(&pd);
     }
 
+    /**
+     * reset bgfx buffer
+     */
     void reset() @system @nogc nothrow
     {
-        SDL_SetWindowSize(window, _width, _height);
-        bgfx_reset(_width, _height, BGFX_RESET_VSYNC, bInit.resolution.format);
+        bgfx_reset(_width, _height, BGFX_RESET_NONE, bInit.resolution.format);
+    }
+
+    /**
+     * process pending window events
+     */
+    bool processWindow(SDL_WindowEvent* event) @system
+    {
+        switch (event.event)
+        {
+        case SDL_WINDOWEVENT_RESIZED:
+            _width = event.data1;
+            _height = event.data2;
+            reset();
+            return true;
+        default:
+            return false;
+        }
     }
 
 public:
@@ -200,6 +220,17 @@ public:
         _pipeline.flush();
     }
 
+    final bool process(SDL_Event* event) @system
+    {
+        switch (event.type)
+        {
+        case SDL_WINDOWEVENT:
+            return processWindow(&event.window);
+        default:
+            return false;
+        }
+    }
+
     final void show() @system @nogc nothrow
     {
         SDL_ShowWindow(window);
@@ -254,6 +285,7 @@ public:
     {
         _width = size.x;
         _height = size.y;
+        SDL_SetWindowSize(window, _width, _height);
         reset();
         return this;
     }
@@ -316,5 +348,26 @@ public:
     pure @property final const int height() @nogc @safe nothrow
     {
         return _height;
+    }
+
+    /**
+     * Returns true if the window is resizable
+     */
+    pure @property final bool resizable() @nogc @safe nothrow
+    {
+        return _resizable;
+    }
+
+    /**
+     * Enable or disable resizing for the window
+     */
+    @property final void resizable(bool b) @nogc @system nothrow
+    {
+        if (b == resizable)
+        {
+            return;
+        }
+        _resizable = b;
+        SDL_SetWindowResizable(window, _resizable ? SDL_TRUE : SDL_FALSE);
     }
 }

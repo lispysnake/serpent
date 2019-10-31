@@ -64,6 +64,12 @@ private:
                 continue;
             }
 
+            /* Likewise, see if the display consumes it */
+            if (_display.process(&event))
+            {
+                continue;
+            }
+
             switch (event.type)
             {
             case SDL_QUIT:

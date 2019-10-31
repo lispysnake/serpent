@@ -37,7 +37,8 @@
 	},
 	"targetType": "none",
 	"versions": [
-		"BindSDL_Static"
+		"BindSDL_Static",
+		"SDL_205",
 	],
 	"buildTypes": {
 		"debug": {
