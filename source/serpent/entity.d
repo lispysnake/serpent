@@ -80,7 +80,7 @@ public:
     /**
      * Retrieve a position for modification
      */
-    vec3f getPosition(ulong index) @safe
+    pure final vec3f getPosition(ulong index) @safe
     {
         enforce(index >= 0 && index < positions.length, "Invalid position index");
         return positions[index];
@@ -98,7 +98,7 @@ public:
     /**
      * Return the current size of the entity list.
      */
-    @property final ulong size() @nogc @safe nothrow
+    pure @property final const ulong size() @nogc @safe nothrow
     {
         return this.positions.length;
     }
