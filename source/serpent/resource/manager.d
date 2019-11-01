@@ -85,7 +85,7 @@ public:
      */
     @property final void context(Context ctx) @safe
     {
-        enforce(context !is null);
+        enforce(ctx !is null, "Cannot have a null context");
         _context = ctx;
     }
 

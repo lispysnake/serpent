@@ -30,6 +30,7 @@ import std.path;
 
 public import serpent.graphics.display;
 public import serpent.app;
+public import serpent.info;
 public import serpent.input;
 public import serpent.resource;
 
@@ -47,6 +48,7 @@ private:
     InputManager _input;
     App _app;
     Display _display;
+    Info _info;
     bool running = false;
 
     /**
@@ -94,6 +96,7 @@ public:
         _input = new InputManager(this);
         _display = new Display(640, 480);
         _resource = new ResourceManager(this, dirName(thisExePath()));
+        _info = new Info();
     }
 
     /**
@@ -118,16 +121,17 @@ public:
             _app.shutdown();
         }
 
+        _info.update();
+
         import std.stdio;
 
-        auto renderer = bgfx_get_renderer_type();
-        switch (renderer)
+        switch (info.driverType)
         {
-        case bgfx_renderer_type_t.BGFX_RENDERER_TYPE_OPENGL:
+        case DriverType.OpenGL:
             writefln("Rendering with: OpenGL");
             display.title = display.title ~ " (OpenGL)";
             break;
-        case bgfx_renderer_type_t.BGFX_RENDERER_TYPE_VULKAN:
+        case DriverType.Vulkan:
             writefln("Rendering with: Vulkan");
             display.title = display.title ~ " (Vulkan)";
             break;
@@ -178,6 +182,14 @@ public:
     pure @property final Display display() @nogc @safe nothrow
     {
         return _display;
+    }
+
+    /**
+     * Return the Info object associated with this Context
+     */
+    pure @property final Info info() @nogc @safe nothrow
+    {
+        return _info;
     }
 
     /**
