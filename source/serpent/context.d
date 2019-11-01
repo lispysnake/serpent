@@ -93,7 +93,7 @@ public:
         /* Create a display with the default size */
         _input = new InputManager(this);
         _display = new Display(640, 480);
-        _resource = new ResourceManager(dirName(thisExePath()));
+        _resource = new ResourceManager(this, dirName(thisExePath()));
     }
 
     /**

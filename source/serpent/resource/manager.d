@@ -22,8 +22,12 @@
 
 module serpent.resource.manager;
 
+import serpent.context;
+
 import std.exception : enforce;
 import std.file : exists;
+import std.string;
+import bindbc.bgfx;
 
 /**
  * The ResourceManager is used for abstracting access to file-based
@@ -37,14 +41,16 @@ final class ResourceManager
 
 private:
     string _root = null;
+    Context _context = null;
 
 public:
 
     /**
      * Construct a new ResourceManager.
      */
-    this(string root = null)
+    this(Context ctx, string root = null)
     {
+        this.context = ctx;
         this.root = root;
     }
 
@@ -64,5 +70,49 @@ public:
         enforce(s !is null, "Root directory cannot be null");
         enforce(s.exists);
         _root = s;
+    }
+
+    /**
+     * Return the Context associated with this ResourceManager
+     */
+    pure @property final Context context() @nogc @safe nothrow
+    {
+        return _context;
+    }
+
+    /**
+     * Set the context for this ResourceManager
+     */
+    @property final void context(Context ctx) @safe
+    {
+        enforce(context !is null);
+        _context = ctx;
+    }
+
+    /**
+     * Super simple path substitution method that allows decorated
+     * paths to automatically be *correct*.
+     *
+     * This is useful for shader paths, etc, so that we don't have
+     * to do lots of branching.
+     */
+    static final string substitutePath(string p) nothrow
+    {
+        /* TODO: Have this stuff exposed in Context */
+        auto renderer = bgfx_get_renderer_type();
+        auto shaderLang = "";
+        switch (renderer)
+        {
+        case bgfx_renderer_type_t.BGFX_RENDERER_TYPE_OPENGL:
+            shaderLang = "glsl";
+            break;
+        case bgfx_renderer_type_t.BGFX_RENDERER_TYPE_VULKAN:
+            shaderLang = "spirv";
+            break;
+        default:
+            shaderLang = "unknown";
+            break;
+        }
+        return p.replace("${shaderlang}", shaderLang);
     }
 }
