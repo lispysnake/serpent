@@ -124,21 +124,9 @@ public:
         _info.update();
 
         import std.stdio;
+        import std.conv : to;
 
-        switch (info.driverType)
-        {
-        case DriverType.OpenGL:
-            writefln("Rendering with: OpenGL");
-            display.title = display.title ~ " (OpenGL)";
-            break;
-        case DriverType.Vulkan:
-            writefln("Rendering with: Vulkan");
-            display.title = display.title ~ " (Vulkan)";
-            break;
-        default:
-            writefln("Unknown renderer");
-            break;
-        }
+        display.title = display.title ~ " (" ~ to!string(info.driverType) ~ ")";
 
         running = true;
         display.show();
