@@ -25,6 +25,8 @@ module serpent.context;
 import std.exception : enforce;
 import bindbc.bgfx;
 import bindbc.sdl;
+import std.file;
+import std.path;
 
 public import serpent.graphics.display;
 public import serpent.app;
@@ -91,6 +93,7 @@ public:
         /* Create a display with the default size */
         _input = new InputManager(this);
         _display = new Display(640, 480);
+        _resource = new ResourceManager(dirName(thisExePath()));
     }
 
     /**

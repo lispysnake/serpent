@@ -22,6 +22,9 @@
 
 module serpent.resource.manager;
 
+import std.exception : enforce;
+import std.file : exists;
+
 /**
  * The ResourceManager is used for abstracting access to file-based
  * resources in a platform-agnostic way. Largely we rely upon ZIP archives
@@ -32,20 +35,34 @@ module serpent.resource.manager;
 final class ResourceManager
 {
 
+private:
+    string _root = null;
+
 public:
 
     /**
      * Construct a new ResourceManager.
      */
-    this()
+    this(string root = null)
     {
+        this.root = root;
     }
 
     /**
-     * Set the root directory for all lookup operations.
+     * Return the root directory
      */
-    final void setRootDirectory(string dirpath)
+    pure @property final const string root() @nogc @safe nothrow
     {
-        return;
+        return _root;
+    }
+
+    /**
+     * Update the root directory
+     */
+    @property final void root(string s) @safe
+    {
+        enforce(s !is null, "Root directory cannot be null");
+        enforce(s.exists);
+        _root = s;
     }
 }
