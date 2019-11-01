@@ -20,7 +20,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.resource;
+module serpent.resource.manager;
 
 /**
  * The ResourceManager is used for abstracting access to file-based
