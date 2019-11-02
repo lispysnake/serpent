@@ -65,9 +65,9 @@ final class SpriteRenderer : Renderer
     final override void init()
     {
         auto vp = context.resource.substitutePath(
-                "assets/built/shaders/${shaderModel}/sprite_2d_vertex.bin");
+                context.resource.root ~ "/shaders/${shaderModel}/sprite_2d_vertex.bin");
         auto fp = context.resource.substitutePath(
-                "assets/built/shaders/${shaderModel}/sprite_2d_fragment.bin");
+                context.resource.root ~ "/shaders/${shaderModel}/sprite_2d_fragment.bin");
         auto vertex = new Shader(vp);
         auto fragment = new Shader(fp);
         shader = new Program(vertex, fragment);

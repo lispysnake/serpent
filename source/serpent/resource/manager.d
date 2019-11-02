@@ -68,7 +68,7 @@ public:
     @property final void root(string s) @safe
     {
         enforce(s !is null, "Root directory cannot be null");
-        enforce(s.exists);
+        enforce(s.exists, "Root directory must exist");
         _root = s;
     }
 

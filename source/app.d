@@ -170,5 +170,8 @@ int main()
     context.display.title("Serpent").size(1366, 768);
     context.display.pipeline.addRenderer(new SpriteRenderer());
 
+    /* Set our root directory up */
+    context.resource.root = context.resource.root ~ "/assets/built";
+
     return context.run(new DemoGame());
 }
