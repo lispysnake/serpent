@@ -52,7 +52,7 @@ public:
     {
         auto matrix = matrix();
         auto identity = identity();
-        bgfx_set_view_transform(0, cast(const void*)&identity, cast(const void*)&matrix);
+        // bgfx_set_view_transform(0, cast(const void*)&identity, cast(const void*)&matrix);
     }
 
     /**
