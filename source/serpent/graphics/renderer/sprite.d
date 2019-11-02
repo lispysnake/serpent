@@ -30,7 +30,13 @@ import serpent.graphics.pipeline;
 import serpent.graphics.shader;
 import serpent.graphics.texture;
 
-struct PosUVVertex
+/**
+ * The PosUVVertex type simply contains coordinates for the position
+ * of a Thing (3f), along with the texture coordinates (2f)
+ *
+ * It is currently only used for Sprite quads.
+ */
+final struct PosUVVertex
 {
 
     vec3f pos;
