@@ -41,9 +41,22 @@ enum DriverType
     Vulkan,
     Unsupported, /** Should error out in this instance */
 
-
-
 }
+
+/**
+ * ShaderModel indicates the language used for the underlying
+ * driver. For example, GLSL is used for OpenGL/ES, whereas SPIRV
+ * is used for Vulkan.
+ */
+enum ShaderModel
+{
+    None = 0,
+    GLSL,
+    Metal,
+    SPIRV,
+    Unsupported, /** Should error out in this instance */
+
+};
 
 /**
  * The Info class is populated at runtime with information on the
@@ -54,6 +67,7 @@ final class Info
 
 private:
     DriverType _driverType = DriverType.None;
+    ShaderModel _shaderModel = ShaderModel.None;
 
 package:
 
@@ -64,6 +78,7 @@ package:
     final void update() @system @nogc nothrow
     {
         _driverType = convRenderer(bgfx_get_renderer_type());
+        _shaderModel = convShaderModel(_driverType);
     }
 
 public:
@@ -105,10 +120,39 @@ public:
     }
 
     /**
+     * Convert a DriverType to the associated shader language
+     */
+    pure static final ShaderModel convShaderModel(DriverType driver) @nogc @safe nothrow
+    {
+        switch (driver)
+        {
+        case DriverType.None:
+            return ShaderModel.None;
+        case DriverType.OpenGL:
+        case DriverType.OpenGLES:
+            return ShaderModel.GLSL;
+        case DriverType.Metal:
+            return ShaderModel.Metal;
+        case DriverType.Vulkan:
+            return ShaderModel.SPIRV;
+        default:
+            return ShaderModel.Unsupported;
+        }
+    }
+
+    /**
      * Return the currently running driver type
      */
     pure @property const DriverType driverType() @nogc @safe nothrow
     {
         return _driverType;
+    }
+
+    /**
+     * Return the underlying shader model
+     */
+    pure @property const ShaderModel shaderModel() @nogc @safe nothrow
+    {
+        return _shaderModel;
     }
 }
