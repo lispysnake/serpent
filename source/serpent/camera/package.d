@@ -42,6 +42,8 @@ abstract class Camera
 private:
     Scene _scene;
     string _name;
+    mat4f _worldToLocal = mat4f.identity();
+    mat4f _localToWorld = mat4f.identity();
 
 public:
 
@@ -88,5 +90,43 @@ public:
     {
         enforce(s !is null, "Camera name cannot be null");
         _name = s;
+    }
+
+    /**
+     * Return the worldToLocal matrix
+     */
+    pure @property final mat4f worldToLocal() @nogc @safe nothrow
+    {
+        return _worldToLocal;
+    }
+
+package:
+
+    /**
+     * Set the worldToLocal matrix
+     */
+    @property final void worldToLocal(mat4f m) @nogc @safe nothrow
+    {
+        _worldToLocal = m;
+    }
+
+public:
+
+    /**
+     * Return the localToWorld matrix
+     */
+    pure @property final mat4f localToWorld() @nogc @safe nothrow
+    {
+        return _localToWorld;
+    }
+
+package:
+
+    /**
+     * Set the localToWorld matrix
+     */
+    @property final void localToWorld(mat4f m) @nogc @safe nothrow
+    {
+        _localToWorld = m;
     }
 }
