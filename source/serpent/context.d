@@ -94,7 +94,7 @@ public:
     {
         /* Create a display with the default size */
         _input = new InputManager(this);
-        _display = new Display(640, 480);
+        _display = new Display(this, 640, 480);
         _resource = new ResourceManager(this, dirName(thisExePath()));
         _info = new Info();
     }
@@ -110,6 +110,8 @@ public:
         }
 
         enforce(app !is null, "Cannot run context without a valid App");
+
+        _display.prepare();
 
         if (!app.init())
         {

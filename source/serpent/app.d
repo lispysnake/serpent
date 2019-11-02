@@ -24,6 +24,8 @@ module serpent.app;
 
 import serpent.context;
 
+import std.exception : enforce;
+
 /**
  * The App interface is used to control lifecycle and entry points,
  * to make life that bit easier for the end developer. This avoids
@@ -47,8 +49,9 @@ public:
     /**
      * Set the display associated with this Game
      */
-    @property final void context(Context c) @safe @nogc nothrow
+    @property final void context(Context c) @safe
     {
+        enforce(c !is null, "Context cannot be null");
         _context = c;
     }
 

@@ -22,6 +22,7 @@
 
 module serpent.graphics.renderer;
 
+public import serpent.context;
 public import serpent.graphics.renderer.sprite;
 public import serpent.graphics.pipeline;
 
@@ -54,7 +55,22 @@ public:
     }
 
     /**
+     * Renderers are given a single opportunity in which to load
+     * all of their required resources (i.e. shaders) before startup.
+     * This is the time to do so.
+     */
+    abstract void init();
+
+    /**
      * This renderer must do its job now.
      */
     abstract void render();
+
+    /**
+     * Get the display associated with this Game
+     */
+    pure @property final Context context() @safe @nogc nothrow
+    {
+        return _pipeline.display.context;
+    }
 }

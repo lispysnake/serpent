@@ -40,6 +40,8 @@ final class Pipeline
 private:
     Display _display;
     Renderer[] _renderers;
+    Context _context;
+    bool didInit = false;
 
 package:
 
@@ -91,11 +93,28 @@ public:
 
     /**
      * Add a renderer to the pipeline
+     * At this point we'll attempt to init the renderer.
      */
-    final void addRenderer(Renderer r) @safe nothrow
+    final void addRenderer(Renderer r) @system
     {
         r.pipeline = this;
         this._renderers ~= r;
+    }
+
+    /**
+     * Begin init of all renderers
+     */
+    final void init() @system
+    {
+        if (didInit)
+        {
+            return;
+        }
+        didInit = true;
+        foreach (ren; _renderers)
+        {
+            ren.init();
+        }
     }
 
     /**
@@ -105,4 +124,5 @@ public:
     {
         return _display;
     }
+
 }

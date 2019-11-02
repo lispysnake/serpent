@@ -46,6 +46,7 @@ final class Display
 {
 
 private:
+    bool didInit = false;
     int _height;
     int _width;
     SDL_Window* window = null;
@@ -63,6 +64,8 @@ private:
     /* Placeholder scene to prevent bugs */
     Scene dummyScene;
 
+    Context _context;
+
 private:
 
     /**
@@ -74,7 +77,6 @@ private:
         {
             throw new SystemException("Failed to initialise SDL: %s".format(SDL_GetError()));
         }
-        bgfx_init_ctor(&bInit);
     }
 
     /**
@@ -125,6 +127,10 @@ private:
      */
     void reset() @system @nogc nothrow
     {
+        if (!didInit)
+        {
+            return;
+        }
         bgfx_reset(_width, _height, BGFX_RESET_NONE, bInit.resolution.format);
     }
 
@@ -155,9 +161,12 @@ public:
      *
      * This will construct a new display with the given width and height.
      */
-    final this(int width, int height) @system
+    final this(Context ctx, int width, int height) @system
     {
         init();
+
+        this.context = ctx;
+
         this._width = width;
         this._height = height;
 
@@ -171,17 +180,6 @@ public:
         {
             throw new SystemException("Couldn't create Window: %s".format(SDL_GetError()));
         }
-
-        integrateWindowBgfx();
-
-        /* TODO: Init on separate render thread */
-        bInit.type = bgfx_renderer_type_t.BGFX_RENDERER_TYPE_VULKAN;
-        bgfx_init(&bInit);
-        bgfx_reset(width, height, BGFX_RESET_VSYNC, bInit.resolution.format);
-        bgfx_set_debug(BGFX_DEBUG_TEXT);
-
-        /* Greyish background, should change this to black but it proves stuff works.. */
-        bgfx_set_view_clear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030ff, 1.0f, 0);
 
         /* Ensure we always have SOMETHING to render */
         dummyScene = new Scene("default_placeholder_scene");
@@ -230,9 +228,39 @@ public:
         }
     }
 
-    final void show() @system @nogc nothrow
+    final void show() @system
     {
+        /* Init the pipeline now */
+        _pipeline.init();
+
         SDL_ShowWindow(window);
+    }
+
+    /**
+     * Ensure initialisation
+     */
+    final void prepare() @system
+    {
+        if (didInit)
+        {
+            return;
+        }
+        import std.stdio;
+
+        didInit = true;
+
+        bgfx_init_ctor(&bInit);
+
+        integrateWindowBgfx();
+
+        /* TODO: Init on separate render thread */
+        bInit.type = bgfx_renderer_type_t.BGFX_RENDERER_TYPE_VULKAN;
+        bgfx_init(&bInit);
+        bgfx_reset(_width, _height, BGFX_RESET_VSYNC, bInit.resolution.format);
+        bgfx_set_debug(BGFX_DEBUG_TEXT);
+
+        /* Greyish background, should change this to black but it proves stuff works.. */
+        bgfx_set_view_clear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030ff, 1.0f, 0);
     }
 
     /**
@@ -368,5 +396,22 @@ public:
         }
         _resizable = b;
         SDL_SetWindowResizable(window, _resizable ? SDL_TRUE : SDL_FALSE);
+    }
+
+    /**
+     * Get the display associated with this Game
+     */
+    pure @property final Context context() @safe @nogc nothrow
+    {
+        return _context;
+    }
+
+    /**
+     * Set the display associated with this Game
+     */
+    @property final void context(Context c) @safe
+    {
+        enforce(c !is null, "Context cannot be null");
+        _context = c;
     }
 }

@@ -62,10 +62,14 @@ final class SpriteRenderer : Renderer
 {
     Program shader = null;
 
-    this()
+    final override void init()
     {
-        auto vertex = new Shader("assets/built/shaders/spirv/sprite_2d_vertex.bin");
-        auto fragment = new Shader("assets/built/shaders/spirv/sprite_2d_fragment.bin");
+        auto vp = context.resource.substitutePath(
+                "assets/built/shaders/${shaderModel}/sprite_2d_vertex.bin");
+        auto fp = context.resource.substitutePath(
+                "assets/built/shaders/${shaderModel}/sprite_2d_fragment.bin");
+        auto vertex = new Shader(vp);
+        auto fragment = new Shader(fp);
         shader = new Program(vertex, fragment);
     }
 
