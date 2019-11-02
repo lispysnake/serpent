@@ -49,7 +49,7 @@ private:
     App _app;
     Display _display;
     Info _info;
-    bool running = false;
+    bool _running = false;
 
     /**
      * Handle any events pending in the queue and appropriately
@@ -77,7 +77,7 @@ private:
             switch (event.type)
             {
             case SDL_QUIT:
-                running = false;
+                _running = false;
                 break;
             default:
                 break;
@@ -131,10 +131,10 @@ public:
 
         display.title = display.title ~ " (" ~ to!string(info.driverType) ~ ")";
 
-        running = true;
+        _running = true;
         display.show();
 
-        while (running)
+        while (_running)
         {
             processEvents();
             display.render();
@@ -181,6 +181,14 @@ public:
     pure @property final Info info() @nogc @safe nothrow
     {
         return _info;
+    }
+
+    /**
+     * Return true if currently running
+     */
+    pure @property final bool running() @nogc @safe nothrow
+    {
+        return _running;
     }
 
     /**
