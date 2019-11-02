@@ -123,6 +123,9 @@ public:
 
         _info.update();
 
+        enforce(info.driverType != DriverType.Unsupported,
+                "Unsupported underlying driver. Please report this.");
+
         import std.stdio;
         import std.conv : to;
 
