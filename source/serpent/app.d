@@ -70,4 +70,14 @@ public:
     void shutdown()
     {
     }
+
+    /**
+     * For more traditional game development, you may wish to
+     * hook directly into the game update loop. You can do so
+     * by overriding this method.
+     */
+    void update()
+    {
+
+    }
 }

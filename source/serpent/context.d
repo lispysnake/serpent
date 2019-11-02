@@ -137,6 +137,9 @@ public:
         while (_running)
         {
             processEvents();
+
+            _app.update();
+
             display.render();
         }
 
