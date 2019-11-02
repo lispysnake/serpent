@@ -44,6 +44,12 @@ final struct PosUVVertex
 
     static bgfx_vertex_layout_t layout;
 
+    this(vec3f pos, vec2f tex)
+    {
+        this.pos = pos;
+        this.tex = tex;
+    }
+
     static this()
     {
         bgfx_vertex_layout_begin(&layout, bgfx_renderer_type_t.BGFX_RENDERER_TYPE_NOOP);
@@ -93,31 +99,38 @@ final class SpriteRenderer : Renderer
         auto ents = pipeline.display.scene.visibleEntities();
         foreach (ent; ents)
         {
-            static PosUVVertex[] vertices = [
-                {vec3f(-1.0f, 1.0f, 0.0f), vec2f(0.0f, 0.0f)},
-                {vec3f(-1.0f, -1.0f, 0.0f), vec2f(0.0f, 1.0f)},
-                {vec3f(1.0f, -1.0f, 0.0f), vec2f(1.0f, 1.0f)},
-                {vec3f(1.0f, 1.0f, 0.0f), vec2f(1.0f, 0.0f)}
-            ];
-            static uint16_t[] indices = [0, 1, 2, 2, 3, 0];
+            uint max = 32 << 10;
+            bgfx_transient_index_buffer_t tib;
+            bgfx_transient_vertex_buffer_t tvb;
 
-            /* Make vertex buffer */
-            auto sizeV = cast(uint)(vertices.length * PosUVVertex.sizeof);
-            auto vb = bgfx_create_vertex_buffer(bgfx_make_ref(vertices.ptr,
-                    sizeV), &PosUVVertex.layout, 0);
+            /* Sort out the index buffer */
+            bgfx_alloc_transient_index_buffer(&tib, 6);
+            auto indexData = cast(uint16_t*) tib.data;
+            indexData[0] = 0;
+            indexData[1] = 1;
+            indexData[2] = 2;
+            indexData[3] = 2;
+            indexData[4] = 3;
+            indexData[5] = 0;
 
-            /* Make index buffer */
-            auto sizeI = cast(uint)(indices.length * indices.sizeof);
-            auto ib = bgfx_create_index_buffer(bgfx_make_ref(indices.ptr, sizeI), 0);
+            /* Sort out the vertex buffer */
+            bgfx_alloc_transient_vertex_buffer(&tvb, max, &PosUVVertex.layout);
+            auto vertexData = cast(PosUVVertex*) tvb.data;
+            vertexData[0] = PosUVVertex(vec3f(-1.0f, 1.0f, 0.0f), vec2f(0.0f, 0.0f));
+            vertexData[1] = PosUVVertex(vec3f(-1.0f, -1.0f, 0.0f), vec2f(0.0f, 1.0f));
+            vertexData[2] = PosUVVertex(vec3f(1.0f, -1.0f, 0.0f), vec2f(1.0f, 1.0f));
+            vertexData[3] = PosUVVertex(vec3f(1.0f, 1.0f, 0.0f), vec2f(1.0f, 0.0f));
 
-            bgfx_set_vertex_buffer(0, vb, 0, cast(uint) vertices.length);
-            bgfx_set_index_buffer(ib, 0, cast(uint) indices.length);
+            /* Set the stage */
+            bgfx_set_transient_vertex_buffer(0, &tvb, 0, 4);
+            bgfx_set_transient_index_buffer(&tib, 0, 6);
             auto flags = BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP;
             bgfx_set_texture(0, cast(bgfx_uniform_handle_t) 0, texture.handle, flags);
 
-            /* Try to draw it */
+            /* Submit draw call */
             bgfx_set_state(BGFX_STATE_DEFAULT, 0);
             bgfx_submit(0, shader.handle, 0, false);
+            break;
         }
         /* TODO: Something useful */
         return;
