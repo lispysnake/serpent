@@ -96,23 +96,11 @@ public:
      * This is useful for shader paths, etc, so that we don't have
      * to do lots of branching.
      */
-    static final string substitutePath(string p) nothrow
+    final string substitutePath(string p) @safe
     {
-        /* TODO: Have this stuff exposed in Context */
-        auto renderer = bgfx_get_renderer_type();
-        auto shaderLang = "";
-        switch (renderer)
-        {
-        case bgfx_renderer_type_t.BGFX_RENDERER_TYPE_OPENGL:
-            shaderLang = "glsl";
-            break;
-        case bgfx_renderer_type_t.BGFX_RENDERER_TYPE_VULKAN:
-            shaderLang = "spirv";
-            break;
-        default:
-            shaderLang = "unknown";
-            break;
-        }
-        return p.replace("${shaderlang}", shaderLang);
+        import std.string : toLower;
+        import std.conv : to;
+
+        return p.replace("${shaderModel}", to!string(context.info.shaderModel).toLower());
     }
 }

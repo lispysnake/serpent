@@ -41,6 +41,8 @@ enum DriverType
     Vulkan,
     Unsupported, /** Should error out in this instance */
 
+
+
 }
 
 /**
@@ -55,6 +57,8 @@ enum ShaderModel
     Metal,
     SPIRV,
     Unsupported, /** Should error out in this instance */
+
+
 
 };
 
