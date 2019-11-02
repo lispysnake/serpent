@@ -30,7 +30,7 @@ import serpent.graphics.pipeline;
 import serpent.graphics.shader;
 import serpent.graphics.texture;
 
-struct PosVertex
+struct PosUVVertex
 {
 
     vec3f pos;
@@ -87,7 +87,7 @@ final class SpriteRenderer : Renderer
         auto ents = pipeline.display.scene.visibleEntities();
         foreach (ent; ents)
         {
-            static PosVertex[] vertices = [
+            static PosUVVertex[] vertices = [
                 {vec3f(-0.8f, 0.8f, 0.0f), vec2f(1.0f, 1.0f)},
                 {vec3f(-0.8f, -0.8f, 0.0f), vec2f(1.0f, 0.0f)},
                 {vec3f(0.8f, -0.8f, 0.0f), vec2f(0.0f, 0.0f)},
@@ -96,9 +96,9 @@ final class SpriteRenderer : Renderer
             static uint16_t[] indices = [0, 1, 2, 2, 3, 0];
 
             /* Make vertex buffer */
-            auto sizeV = cast(uint)(vertices.length * PosVertex.sizeof);
+            auto sizeV = cast(uint)(vertices.length * PosUVVertex.sizeof);
             auto vb = bgfx_create_vertex_buffer(bgfx_make_ref(vertices.ptr,
-                    sizeV), &PosVertex.layout, 0);
+                    sizeV), &PosUVVertex.layout, 0);
 
             /* Make index buffer */
             auto sizeI = cast(uint)(indices.length * indices.sizeof);
