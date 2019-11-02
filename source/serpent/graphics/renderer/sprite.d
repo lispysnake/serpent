@@ -77,32 +77,24 @@ final class SpriteRenderer : Renderer
     {
         import std.stdio;
 
-        float x_offset = 0.0f;
-        float y_offset = 0.0f;
-
         auto ents = pipeline.display.scene.visibleEntities();
         foreach (ent; ents)
         {
-            /* Set up our transient buffer. */
-            auto maxV = 32 << 10;
-            bgfx_transient_vertex_buffer_t tvb;
-            bgfx_alloc_transient_vertex_buffer(&tvb, maxV, &PosVertex.layout);
+            static PosVertex[] vertices = [
+                {vec3f(0.5f, 0.5f, 0.0f)}, {vec3f(-0.5f, -0.5f, 0.0f)},
+                {vec3f(0.5f, -0.5f, 0.0f)}, {vec3f(0.5f, 0.5f, 0.0f)},
+                {vec3f(-0.5f, 0.5f, 0.0f)}, {vec3f(-0.5f, -0.5f, 0.0f)},
+            ];
 
-            PosVertex* vertex = cast(PosVertex*) tvb.data;
-            vertex[0].pos = vec3f(0.5f + x_offset, 0.5f + y_offset, 0.0f);
-            vertex[1].pos = vec3f(-0.5f + x_offset, -0.5f + y_offset, 0.0f);
-            vertex[2].pos = vec3f(0.5f + x_offset, -0.5f + y_offset, 0.0f);
-            vertex[3].pos = vec3f(0.5f + x_offset, 0.5f + y_offset, 0.0f);
-            vertex[4].pos = vec3f(-0.5f + x_offset, 0.5f + y_offset, 0.0f);
-            vertex[5].pos = vec3f(-0.5f + x_offset, -0.5f + y_offset, 0.0f);
+            auto size = cast(uint)(vertices.length * vertices.sizeof);
+            auto vb = bgfx_create_vertex_buffer(bgfx_make_ref(vertices.ptr,
+                    size), &PosVertex.layout, 0);
+            bgfx_set_vertex_buffer(0, vb, 0, cast(uint) vertices.length);
 
             /* Try to draw it */
-            bgfx_set_transient_vertex_buffer(0, &tvb, 0, maxV);
             bgfx_set_state(BGFX_STATE_DEFAULT, 0);
             bgfx_submit(0, shader.handle, 0, false);
-
-            x_offset += 0.10;
-            y_offset += 0.15;
+            break;
         }
         /* TODO: Something useful */
         return;
