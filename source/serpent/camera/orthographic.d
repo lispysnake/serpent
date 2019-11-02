@@ -35,6 +35,9 @@ import gfm.math;
 class OrthographicCamera : Camera
 {
 
+private:
+    mat4f projection = mat4f.identity();
+
 public:
 
     /**
@@ -50,9 +53,7 @@ public:
      */
     final override void apply() @nogc @system nothrow
     {
-        auto matrix = matrix();
-        auto identity = identity();
-        // bgfx_set_view_transform(0, cast(const void*)&identity, cast(const void*)&matrix);
+        bgfx_set_view_transform(0, null, projection.ptr);
     }
 
     /**
@@ -61,6 +62,7 @@ public:
     final override void update() @nogc @safe nothrow
     {
         auto ratio = cast(float) scene.display.width / cast(float) scene.display.height;
-        matrix = matrix.orthographic(ratio, -ratio, 1.0f, -1.0f, -1.0f, 1.0f);
+        projection = mat4f.orthographic(ratio, -ratio, 1.0f, -1.0f, -1.0f, 1.0f);
+        projection = projection.rotateZ(radians(0.0f));
     }
 }
