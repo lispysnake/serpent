@@ -76,20 +76,28 @@ final class SpriteRenderer : Renderer
     final override void render() @system
     {
         import std.stdio;
+        import std.stdint;
 
         auto ents = pipeline.display.scene.visibleEntities();
         foreach (ent; ents)
         {
             static PosVertex[] vertices = [
-                {vec3f(0.5f, 0.5f, 0.0f)}, {vec3f(-0.5f, -0.5f, 0.0f)},
-                {vec3f(0.5f, -0.5f, 0.0f)}, {vec3f(0.5f, 0.5f, 0.0f)},
                 {vec3f(-0.5f, 0.5f, 0.0f)}, {vec3f(-0.5f, -0.5f, 0.0f)},
+                {vec3f(0.5f, -0.5f, 0.0f)}, {vec3f(0.5f, 0.5f, 0.0f)}
             ];
+            static uint16_t[] indices = [0, 1, 2, 2, 3, 0];
 
-            auto size = cast(uint)(vertices.length * vertices.sizeof);
+            /* Make vertex buffer */
+            auto sizeV = cast(uint)(vertices.length * vertices.sizeof);
             auto vb = bgfx_create_vertex_buffer(bgfx_make_ref(vertices.ptr,
-                    size), &PosVertex.layout, 0);
+                    sizeV), &PosVertex.layout, 0);
+
+            /* Make index buffer */
+            auto sizeI = cast(uint)(indices.length * indices.sizeof);
+            auto ib = bgfx_create_index_buffer(bgfx_make_ref(indices.ptr, sizeI), 0);
+
             bgfx_set_vertex_buffer(0, vb, 0, cast(uint) vertices.length);
+            bgfx_set_index_buffer(ib, 0, cast(uint) indices.length);
 
             /* Try to draw it */
             bgfx_set_state(BGFX_STATE_DEFAULT, 0);
