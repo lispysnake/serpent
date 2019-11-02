@@ -88,10 +88,10 @@ final class SpriteRenderer : Renderer
         foreach (ent; ents)
         {
             static PosVertex[] vertices = [
-                {vec3f(-0.8f, 0.8f, 0.0f), vec2f(0.0f, 0.0f)},
-                {vec3f(-0.8f, -0.8f, 0.0f), vec2f(0.0f, 1.0f)},
-                {vec3f(0.8f, -0.8f, 0.0f), vec2f(1.0f, 1.0f)},
-                {vec3f(0.8f, 0.8f, 0.0f), vec2f(1.0f, 0.0f)}
+                {vec3f(-0.8f, 0.8f, 0.0f), vec2f(1.0f, 1.0f)},
+                {vec3f(-0.8f, -0.8f, 0.0f), vec2f(1.0f, 0.0f)},
+                {vec3f(0.8f, -0.8f, 0.0f), vec2f(0.0f, 0.0f)},
+                {vec3f(0.8f, 0.8f, 0.0f), vec2f(0.0f, 1.0f)}
             ];
             static uint16_t[] indices = [0, 1, 2, 2, 3, 0];
 
