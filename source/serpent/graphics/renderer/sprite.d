@@ -94,10 +94,10 @@ final class SpriteRenderer : Renderer
         foreach (ent; ents)
         {
             static PosUVVertex[] vertices = [
-                {vec3f(-0.8f, 0.8f, 0.0f), vec2f(0.0f, 0.0f)},
-                {vec3f(-0.8f, -0.8f, 0.0f), vec2f(0.0f, 1.0f)},
-                {vec3f(0.8f, -0.8f, 0.0f), vec2f(1.0f, 1.0f)},
-                {vec3f(0.8f, 0.8f, 0.0f), vec2f(1.0f, 0.0f)}
+                {vec3f(-1.0f, 1.0f, 0.0f), vec2f(0.0f, 0.0f)},
+                {vec3f(-1.0f, -1.0f, 0.0f), vec2f(0.0f, 1.0f)},
+                {vec3f(1.0f, -1.0f, 0.0f), vec2f(1.0f, 1.0f)},
+                {vec3f(1.0f, 1.0f, 0.0f), vec2f(1.0f, 0.0f)}
             ];
             static uint16_t[] indices = [0, 1, 2, 2, 3, 0];
 
@@ -118,7 +118,6 @@ final class SpriteRenderer : Renderer
             /* Try to draw it */
             bgfx_set_state(BGFX_STATE_DEFAULT, 0);
             bgfx_submit(0, shader.handle, 0, false);
-            break;
         }
         /* TODO: Something useful */
         return;
