@@ -28,11 +28,13 @@ import gfm.math;
 import serpent.entity;
 import serpent.graphics.pipeline;
 import serpent.graphics.shader;
+import serpent.graphics.texture;
 
 struct PosVertex
 {
 
     vec3f pos;
+    vec2f tex;
 
     static bgfx_vertex_layout_t layout;
 
@@ -43,6 +45,8 @@ struct PosVertex
         /* Position */
         bgfx_vertex_layout_add(&layout, bgfx_attrib_t.BGFX_ATTRIB_POSITION, 3,
                 bgfx_attrib_type_t.BGFX_ATTRIB_TYPE_FLOAT, false, false);
+        bgfx_vertex_layout_add(&layout, bgfx_attrib_t.BGFX_ATTRIB_TEXCOORD0,
+                2, bgfx_attrib_type_t.BGFX_ATTRIB_TYPE_FLOAT, false, false);
 
         bgfx_vertex_layout_end(&layout);
     }
@@ -61,6 +65,7 @@ struct PosVertex
 final class SpriteRenderer : Renderer
 {
     Program shader = null;
+    Texture texture = null;
 
     final override void init()
     {
@@ -71,6 +76,7 @@ final class SpriteRenderer : Renderer
         auto vertex = new Shader(vp);
         auto fragment = new Shader(fp);
         shader = new Program(vertex, fragment);
+        texture = new Texture("titlescreen.png");
     }
 
     final override void render() @system
@@ -82,13 +88,15 @@ final class SpriteRenderer : Renderer
         foreach (ent; ents)
         {
             static PosVertex[] vertices = [
-                {vec3f(-0.5f, 0.5f, 0.0f)}, {vec3f(-0.5f, -0.5f, 0.0f)},
-                {vec3f(0.5f, -0.5f, 0.0f)}, {vec3f(0.5f, 0.5f, 0.0f)}
+                {vec3f(-0.8f, 0.8f, 0.0f), vec2f(0.0f, 0.0f)},
+                {vec3f(-0.8f, -0.8f, 0.0f), vec2f(0.0f, 1.0f)},
+                {vec3f(0.8f, -0.8f, 0.0f), vec2f(1.0f, 1.0f)},
+                {vec3f(0.8f, 0.8f, 0.0f), vec2f(1.0f, 0.0f)}
             ];
             static uint16_t[] indices = [0, 1, 2, 2, 3, 0];
 
             /* Make vertex buffer */
-            auto sizeV = cast(uint)(vertices.length * vertices.sizeof);
+            auto sizeV = cast(uint)(vertices.length * PosVertex.sizeof);
             auto vb = bgfx_create_vertex_buffer(bgfx_make_ref(vertices.ptr,
                     sizeV), &PosVertex.layout, 0);
 
@@ -98,6 +106,8 @@ final class SpriteRenderer : Renderer
 
             bgfx_set_vertex_buffer(0, vb, 0, cast(uint) vertices.length);
             bgfx_set_index_buffer(ib, 0, cast(uint) indices.length);
+            auto flags = BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP;
+            bgfx_set_texture(0, cast(bgfx_uniform_handle_t) 0, texture.handle, flags);
 
             /* Try to draw it */
             bgfx_set_state(BGFX_STATE_DEFAULT, 0);
