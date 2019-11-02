@@ -128,11 +128,6 @@ public:
         enforce(info.driverType != DriverType.Unsupported,
                 "Unsupported underlying driver. Please report this.");
 
-        import std.stdio;
-        import std.conv : to;
-
-        display.title = display.title ~ " (" ~ to!string(info.driverType) ~ ")";
-
         _running = true;
         display.visible = true;
 

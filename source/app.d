@@ -167,7 +167,7 @@ public:
 int main()
 {
     auto context = new Context();
-    context.display.title("Serpent").size(1366, 768);
+    context.display.title("#serpent demo").size(1366, 768);
     context.display.pipeline.addRenderer(new SpriteRenderer());
 
     /* Set our root directory up */
