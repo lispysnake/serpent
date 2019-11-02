@@ -134,7 +134,7 @@ public:
         display.title = display.title ~ " (" ~ to!string(info.driverType) ~ ")";
 
         _running = true;
-        display.show();
+        display.visible = true;
 
         while (_running)
         {

@@ -49,6 +49,7 @@ private:
     bool didInit = false;
     int _height;
     int _width;
+    bool _visible = false;
     SDL_Window* window = null;
     bool _resizable = false;
     string _title = "serpent";
@@ -228,14 +229,6 @@ public:
         }
     }
 
-    final void show() @system
-    {
-        /* Init the pipeline now */
-        _pipeline.init();
-
-        SDL_ShowWindow(window);
-    }
-
     /**
      * Ensure initialisation
      */
@@ -396,6 +389,35 @@ public:
         }
         _resizable = b;
         SDL_SetWindowResizable(window, _resizable ? SDL_TRUE : SDL_FALSE);
+    }
+
+    /**
+     * Returns true if the window is visible
+     */
+    pure @property final bool visible() @nogc @safe nothrow
+    {
+        return _resizable;
+    }
+
+    /**
+     * Hide or show the window
+     */
+    @property final void visible(bool b) @system
+    {
+        if (b == _visible)
+        {
+            return;
+        }
+        /* Init the pipeline now */
+        _pipeline.init();
+        if (b)
+        {
+            SDL_ShowWindow(window);
+        }
+        else
+        {
+            SDL_HideWindow(window);
+        }
     }
 
     /**
