@@ -46,17 +46,18 @@ private:
     /**
      * Camera position within 3D space
      */
-    vec3f position = vec3f(0.0f, 0.0f, 0.0f);
+    static const vec3f position = vec3f(0.0f, 0.0f, 0.0f);
 
     /**
      * Direction of camera (straight forward)
      */
-    vec3f direction = vec3f(0.0f, 0.0f, 1.0f);
+    static const vec3f direction = vec3f(0.0f, 0.0f, 1.0f);
 
     /**
      * Change up for X,Y world coordinates
      */
-    vec3f up = vec3f(0.0f, 1.0f, 0.0f);
+    static const vec3f up = vec3f(0.0f, 1.0f, 0.0f);
+
 public:
 
     /**
