@@ -39,7 +39,7 @@ us ($20!) to have lifetime access to our games.
 We build serpent with the `ldc2` (LLVM-based) D compiler. To test the
 included demo, build the `demo` subcomponent in release mode.
 
-    dub build --parallel -c demo -b release --compiler=ldc2
+    ./build.sh
 
 Note you will need to have `serpent-support` built in a directory
 parallel to this checkout. This is a bit janky but we're focusing
