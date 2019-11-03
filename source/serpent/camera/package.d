@@ -43,8 +43,10 @@ abstract class Camera
 private:
     Scene _scene;
     string _name;
-    mat4x4f _projection = mat4f.identity();
-    mat4x4f _view = mat4f.identity();
+    mat4x4f _projection = mat4x4f.identity();
+    mat4x4f _view = mat4x4f.identity();
+    mat4x4f _combined = mat4x4f.identity();
+    mat4x4f _inverse = mat4x4f.identity();
 
 public:
 
@@ -130,5 +132,37 @@ public:
     @property final void view(mat4x4f v) @safe @nogc nothrow
     {
         _view = v;
+    }
+
+    /**
+     * Return the combined view/projection matrix for this camera
+     */
+    pure @property final mat4x4f combined() @safe @nogc nothrow
+    {
+        return _combined;
+    }
+
+    /**
+     * Set the combined view/projection matrix for this camera
+     */
+    @property final void combined(mat4x4f v) @safe @nogc nothrow
+    {
+        _combined = v;
+    }
+
+    /**
+     * Return the inverse combined view/projection matrix for this camera
+     */
+    pure @property final mat4x4f inverse() @safe @nogc nothrow
+    {
+        return _inverse;
+    }
+
+    /**
+     * Set the inverse combined view/projection matrix for this camera
+     */
+    @property final void inverse(mat4x4f v) @safe @nogc nothrow
+    {
+        _inverse = v;
     }
 }

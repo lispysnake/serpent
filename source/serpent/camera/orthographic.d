@@ -69,13 +69,15 @@ public:
      */
     final override void update() @nogc @safe nothrow
     {
+        vec3f eyes = position + direction;
+
         projection = mat4x4f.orthographic(zoomLevel * (scene.display.width * 0.5f),
                 zoomLevel * -(scene.display.width * 0.5f),
                 zoomLevel * -(scene.display.height * 0.5f),
                 zoomLevel * (scene.display.height * 0.5f), nearPlane, farPlane);
-
-        vec3f eyes = position + direction;
         view = mat4x4f.lookAt(position, eyes, up);
+        combined = projection * view;
+        inverse = combined.inverse();
     }
 
     /**
