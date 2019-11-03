@@ -76,6 +76,7 @@ public:
                 zoomLevel * -(scene.display.height * 0.5f),
                 zoomLevel * (scene.display.height * 0.5f), nearPlane, farPlane);
         view = mat4x4f.lookAt(position, eyes, up);
+
         combined = projection * view;
         inverse = combined.inverse();
     }

@@ -120,17 +120,20 @@ private:
         bgfx_transient_vertex_buffer_t tvb;
         uint32_t max = 6; /* 6 vertices */
 
-        auto position = entitySet.getPosition(index);
-        position.z = 0.0f;
-        position.x = -position.x;
-
         auto width = 99;
         auto height = 75;
 
-        auto translation = mat4x4f.translation(position);
+        auto position = entitySet.getPosition(index);
+        auto position2 = pipeline.display.scene.camera.unproject(position);
+        import std.stdio;
+
+        writefln(" Position: %f %f %f", position.x, position.y, position.z);
+        writefln(" Position2: %f %f %f", position2.x, position2.y, position2.z);
+
+        auto translation = mat4x4f.translation(position2);
         auto scale = mat4x4f.scaling(vec3f(width, height, 1.0f));
-        auto rotation = mat4x4f.rotation(radians(180.0f), vec3f(0.0f, 0.0f, 1.0f));
-        auto model = translation * rotation * scale;
+        //auto rotation = mat4x4f.rotation(radians(180.0f), vec3f(0.0f, 0.0f, 1.0f));
+        auto model = translation * scale;
         model = model.transposed();
 
         /* Sort out the index buffer */

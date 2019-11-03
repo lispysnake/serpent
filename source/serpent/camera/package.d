@@ -70,7 +70,7 @@ public:
     /**
      * Return the Scene associated with this Camera
      */
-    @property final Scene scene() @nogc @safe nothrow
+    pure @property final Scene scene() @nogc @safe nothrow
     {
         return _scene;
     }
@@ -164,5 +164,29 @@ public:
     @property final void inverse(mat4x4f v) @safe @nogc nothrow
     {
         _inverse = v;
+    }
+
+    /**
+     * Unproject the inputted real-world coordinates to 3D-space
+     */
+    final vec3f unproject(const ref vec3f point) @safe
+    {
+        auto x = 0.0f; /* Viewport X */
+        auto y = 0.0f; /* Viewport Y */
+        auto width = cast(float) scene.display.width;
+        auto height = cast(float) scene.display.height;
+
+        vec4f normal = vec4f((point.x - x) / width * 2.0f - 1.0f,
+                (point.y - y) / height * 2.0f - 1.0f, point.z * 2.0f - 1.0f, 1.0f);
+
+        vec4f coord = inverse() * normal;
+        if (coord.w != 0.0f)
+        {
+            coord.w = 1.0f / coord.w;
+        }
+
+        /* TODO: Respect W property */
+        coord.z = 0.0f;
+        return vec3f(coord.x * coord.w, coord.y * coord.w, coord.z * coord.w);
     }
 }

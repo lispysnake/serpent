@@ -102,12 +102,12 @@ public:
     /**
      * Return the scene name. It cannot be modified after creation
      */
-    @property final string name() @nogc @safe nothrow
+    pure @property final string name() @nogc @safe nothrow
     {
         return _name;
     }
 
-    @property final Camera camera() @nogc @safe nothrow
+    pure @property final Camera camera() @nogc @safe nothrow
     {
         return _camera;
     }
@@ -137,7 +137,7 @@ public:
     /**
      * Return the Display for this scene
      */
-    @property final Display display() @safe @nogc nothrow
+    pure @property final Display display() @safe @nogc nothrow
     {
         return _display;
     }

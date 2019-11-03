@@ -74,20 +74,21 @@ public:
         /* Create our first player */
         p = new Player();
         p.add();
-        p.setPosition(0, vec3f(20.0f, 20.0f));
+        p.setPosition(0, vec3f(20.0f, 20.0f, 1.0f));
 
         /* Create 20 enemies */
         e = new Enemy();
         e.reserve(20);
         auto offset = 10;
+        /*
         foreach (i; 0 .. 20)
         {
             e.add();
             if (i % 2 == 0)
                 e.setFaction(i, Faction.GoodDudes);
-            e.setPosition(i, vec3f(offset, offset));
+            e.setPosition(i, vec3f(offset, offset, 0.0f));
             offset += 50;
-        }
+        }*/
 
         context.display.scene.addEntity(p);
         context.display.scene.addEntity(e);
