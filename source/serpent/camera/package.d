@@ -27,6 +27,7 @@ public import serpent.camera.orthographic;
 
 import gfm.math;
 import std.exception : enforce;
+import bindbc.bgfx;
 
 /**
  * The Camera class is responsible for providing the correct positions
@@ -42,17 +43,25 @@ abstract class Camera
 private:
     Scene _scene;
     string _name;
-    mat4x4f _projectionMatrix = mat4f.identity();
+    mat4x4f _projection = mat4f.identity();
+    mat4x4f _view = mat4f.identity();
 
 public:
 
     /**
      * Apply the Camera transformation prior to rendering.
      */
-    abstract void apply() @nogc nothrow;
+    final void apply() @system @nogc nothrow
+    {
+        bgfx_set_view_transform(0, view.ptr, projection.ptr);
+    }
 
     /**
      * Update Camera for display
+     *
+     * Implementations should use this to set the view and projection
+     * properties. As such, directly setting a view or projection
+     * matrix is not recommended, as it will likely be discarded.
      */
     abstract void update() @nogc @safe nothrow;
 
@@ -92,20 +101,34 @@ public:
     }
 
     /**
-     * Return the projectionMatrix matrix
+     * Return the projection matrix for this camera
      */
-    pure @property final mat4x4f projectionMatrix() @nogc @safe nothrow
+    pure @property final mat4x4f projection() @safe @nogc nothrow
     {
-        return _projectionMatrix;
+        return _projection;
     }
 
-package:
+    /**
+     * Set the projection matrix for this camera
+     */
+    @property final void projection(mat4x4f p) @safe @nogc nothrow
+    {
+        _projection = p;
+    }
 
     /**
-     * Set the projectionMatrix matrix
+     * Return the view matrix for this camera
      */
-    @property final void projectionMatrix(mat4x4f m) @nogc @safe nothrow
+    pure @property final mat4x4f view() @safe @nogc nothrow
     {
-        _projectionMatrix = m;
+        return _view;
+    }
+
+    /**
+     * Set the view matrix for this camera
+     */
+    @property final void view(mat4x4f v) @safe @nogc nothrow
+    {
+        _view = v;
     }
 }

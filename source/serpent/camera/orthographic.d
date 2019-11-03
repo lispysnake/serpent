@@ -24,7 +24,6 @@ module serpent.camera.orthographic;
 
 import serpent.camera;
 
-import bindbc.bgfx;
 import gfm.math;
 
 /**
@@ -36,9 +35,6 @@ class OrthographicCamera : Camera
 {
 
 private:
-    mat4x4f projection = mat4x4f.identity();
-    mat4x4f view = mat4x4f.identity();
-
     float _zoomLevel = 1.0f;
     float _nearPlane = 0.0f;
     float _farPlane = 1.0f;
@@ -66,14 +62,6 @@ public:
     this(string name = "default")
     {
         this.name = name;
-    }
-
-    /**
-     * Apply orthographic perspective
-     */
-    final override void apply() @nogc @system nothrow
-    {
-        bgfx_set_view_transform(0, view.ptr, projection.ptr);
     }
 
     /**
