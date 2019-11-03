@@ -37,6 +37,9 @@ class OrthographicCamera : Camera
 
 private:
     mat4x4f projection = mat4x4f.identity();
+    float _zoomLevel = 1.0f;
+    float _nearPlane = 0.0f;
+    float _farPlane = 1.0f;
 
 public:
 
@@ -66,5 +69,53 @@ public:
                 scene.display.width * -1.0f, scene.display.height * 1.0f,
                 scene.display.height * -1.0f, -1.0f, 1.0f);
         projection = projection.transposed();
+    }
+
+    /**
+     * Return the camera zoomLevel
+     */
+    pure @property final float zoomLevel() @nogc @safe nothrow
+    {
+        return _zoomLevel;
+    }
+
+    /**
+     * Set the camera zoomLevel
+     */
+    @property final void zoomLevel(float z) @nogc @safe nothrow
+    {
+        _zoomLevel = z;
+    }
+
+    /**
+     * Return the nearPlane level
+     */
+    pure @property final float nearPlane() @nogc @safe nothrow
+    {
+        return _nearPlane;
+    }
+
+    /**
+     * Set the nearPlane level
+     */
+    @property final void nearPlane(float p) @nogc @safe nothrow
+    {
+        _nearPlane = p;
+    }
+
+    /**
+     * Return the farPlane level
+     */
+    pure @property final float farPlane() @nogc @safe nothrow
+    {
+        return _farPlane;
+    }
+
+    /**
+     * Set the farPlane level
+     */
+    @property final void farPlane(float p) @nogc @safe nothrow
+    {
+        _farPlane = p;
     }
 }
