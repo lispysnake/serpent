@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Autoformat the code.
-dub run --verror autoformat --skip-registry=all --  `find . -name '*.d'`
+dub run --verror autoformat --skip-registry=all --  `find source -name '*.d'`
 
 # Check we have no typos.
 which misspell 2>/dev/null >/dev/null
