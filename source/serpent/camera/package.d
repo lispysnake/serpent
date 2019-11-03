@@ -42,7 +42,7 @@ abstract class Camera
 private:
     Scene _scene;
     string _name;
-    mat4f _projectionMatrix = mat4f.identity();
+    mat4x4f _projectionMatrix = mat4f.identity();
 
 public:
 
@@ -94,7 +94,7 @@ public:
     /**
      * Return the projectionMatrix matrix
      */
-    pure @property final mat4f projectionMatrix() @nogc @safe nothrow
+    pure @property final mat4x4f projectionMatrix() @nogc @safe nothrow
     {
         return _projectionMatrix;
     }
@@ -104,7 +104,7 @@ package:
     /**
      * Set the projectionMatrix matrix
      */
-    @property final void projectionMatrix(mat4f m) @nogc @safe nothrow
+    @property final void projectionMatrix(mat4x4f m) @nogc @safe nothrow
     {
         _projectionMatrix = m;
     }

@@ -36,7 +36,7 @@ class OrthographicCamera : Camera
 {
 
 private:
-    mat4f projection = mat4f.identity();
+    mat4x4f projection = mat4x4f.identity();
 
 public:
 
@@ -62,7 +62,7 @@ public:
     final override void update() @nogc @safe nothrow
     {
         auto ratio = cast(float) scene.display.width / cast(float) scene.display.height;
-        projection = mat4f.orthographic(scene.display.width * 1.0f,
+        projection = mat4x4f.orthographic(scene.display.width * 1.0f,
                 scene.display.width * -1.0f, scene.display.height * 1.0f,
                 scene.display.height * -1.0f, -1.0f, 1.0f);
         projection = projection.transposed();

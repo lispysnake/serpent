@@ -103,11 +103,16 @@ final class SpriteRenderer : Renderer
             bgfx_transient_index_buffer_t tib;
             bgfx_transient_vertex_buffer_t tvb;
 
-            auto model = mat4f.identity();
+            /* Just prove to ourselves camera offsets now kinda work. */
+            auto x = 100.0f;
+            auto y = 100.0f;
 
+            auto model = mat4x4f.identity();
+            auto translation = mat4x4f.translation(vec3f(-x, y, 0.0f));
             model = model.rotateX(radians(0.0f));
             model = model.rotateY(radians(0.0f));
             model = model.rotateZ(radians(180.0f));
+            model = translation * model;
 
             // Scale to correct size
             model.scale(vec3f(pipeline.display.width, pipeline.display.height, 1.0f));
