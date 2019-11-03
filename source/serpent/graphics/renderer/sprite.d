@@ -24,6 +24,7 @@ module serpent.graphics.renderer.sprite;
 
 import bindbc.bgfx;
 import gfm.math;
+import std.stdint;
 
 import serpent.entity;
 import serpent.graphics.pipeline;
@@ -68,11 +69,12 @@ final struct PosUVVertex
  * The SpriteRenderer will collect and draw all visible sprites within
  * the current scene.
  *
- * A Sprite is currently considered anything that is an Entity2D.
+ * A Sprite is currently considered anything that is an Enity.
  * This will change in future to tag various base types.
  *
  * TODO: Optimise this into a batching sprite renderer. For now we're
- * going to be ugly and draw a quad at a time.
+ * going to be ugly and draw a quad at a time. This results in multiple
+ * draw calls per frame, and is hella inefficient.
  */
 final class SpriteRenderer : Renderer
 {
@@ -93,60 +95,72 @@ final class SpriteRenderer : Renderer
 
     final override void render() @system
     {
-        import std.stdio;
-        import std.stdint;
-
         auto ents = pipeline.display.scene.visibleEntities();
         foreach (ent; ents)
         {
-            uint max = 32 << 10;
-            bgfx_transient_index_buffer_t tib;
-            bgfx_transient_vertex_buffer_t tvb;
-
-            /* Just prove to ourselves camera offsets now kinda work. */
-            auto x = 20.0f;
-            auto y = 100.0f;
-            auto width = pipeline.display.width;
-            auto height = pipeline.display.height;
-
-            auto translation = mat4x4f.translation(vec3f(-x, y, 0.0f));
-            auto scale = mat4x4f.scaling(vec3f(width, height, 1.0f));
-            auto rotation = mat4x4f.rotation(radians(180.0f), vec3f(0.0f, 0.0f, 1.0f));
-            auto model = translation * rotation * scale;
-            model = model.transposed();
-
-            /* Sort out the index buffer */
-            bgfx_alloc_transient_index_buffer(&tib, 6);
-            auto indexData = cast(uint16_t*) tib.data;
-            indexData[0] = 0;
-            indexData[1] = 1;
-            indexData[2] = 2;
-            indexData[3] = 2;
-            indexData[4] = 3;
-            indexData[5] = 0;
-
-            /* Sort out the vertex buffer */
-            bgfx_alloc_transient_vertex_buffer(&tvb, max, &PosUVVertex.layout);
-            auto vertexData = cast(PosUVVertex*) tvb.data;
-            vertexData[0] = PosUVVertex(vec3f(-1.0f, 1.0f, 0.0f), vec2f(0.0f, 0.0f));
-            vertexData[1] = PosUVVertex(vec3f(-1.0f, -1.0f, 0.0f), vec2f(0.0f, 1.0f));
-            vertexData[2] = PosUVVertex(vec3f(1.0f, -1.0f, 0.0f), vec2f(1.0f, 1.0f));
-            vertexData[3] = PosUVVertex(vec3f(1.0f, 1.0f, 0.0f), vec2f(1.0f, 0.0f));
-
-            bgfx_set_transform(model.ptr, 1);
-
-            /* Set the stage */
-            bgfx_set_transient_vertex_buffer(0, &tvb, 0, 4);
-            bgfx_set_transient_index_buffer(&tib, 0, 6);
-            auto flags = BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP;
-            bgfx_set_texture(0, cast(bgfx_uniform_handle_t) 0, texture.handle, flags);
-
-            /* Submit draw call */
-            bgfx_set_state(BGFX_STATE_DEFAULT, 0);
-            bgfx_submit(0, shader.handle, 0, false);
-            break;
+            foreach (i; 0 .. ent.size())
+            {
+                drawOne(ent, i);
+            }
         }
-        /* TODO: Something useful */
-        return;
+    }
+
+private:
+
+    /**
+     * Extremely inefficient, we submit a VB/IB pair for every
+     * single sprite. However, we can optimise this at a later
+     * time into a batching renderer.
+     *
+     * We have other priorities to sort through first.
+     */
+    final void drawOne(Entity entitySet, ulong index)
+    {
+        bgfx_transient_index_buffer_t tib;
+        bgfx_transient_vertex_buffer_t tvb;
+        uint32_t max = 6; /* 6 vertices */
+
+        auto position = entitySet.getPosition(index);
+        position.z = 0.0f;
+        position.x = -position.x;
+
+        auto width = pipeline.display.width;
+        auto height = pipeline.display.height;
+
+        auto translation = mat4x4f.translation(position);
+        auto scale = mat4x4f.scaling(vec3f(width, height, 1.0f));
+        auto rotation = mat4x4f.rotation(radians(180.0f), vec3f(0.0f, 0.0f, 1.0f));
+        auto model = translation * rotation * scale;
+        model = model.transposed();
+
+        /* Sort out the index buffer */
+        bgfx_alloc_transient_index_buffer(&tib, 6);
+        auto indexData = cast(uint16_t*) tib.data;
+        indexData[0] = 0;
+        indexData[1] = 1;
+        indexData[2] = 2;
+        indexData[3] = 2;
+        indexData[4] = 3;
+        indexData[5] = 0;
+
+        /* Sort out the vertex buffer */
+        bgfx_alloc_transient_vertex_buffer(&tvb, max, &PosUVVertex.layout);
+        auto vertexData = cast(PosUVVertex*) tvb.data;
+        vertexData[0] = PosUVVertex(vec3f(-1.0f, 1.0f, 0.0f), vec2f(0.0f, 0.0f));
+        vertexData[1] = PosUVVertex(vec3f(-1.0f, -1.0f, 0.0f), vec2f(0.0f, 1.0f));
+        vertexData[2] = PosUVVertex(vec3f(1.0f, -1.0f, 0.0f), vec2f(1.0f, 1.0f));
+        vertexData[3] = PosUVVertex(vec3f(1.0f, 1.0f, 0.0f), vec2f(1.0f, 0.0f));
+
+        bgfx_set_transform(model.ptr, 1);
+
+        /* Set the stage */
+        bgfx_set_transient_vertex_buffer(0, &tvb, 0, 4);
+        bgfx_set_transient_index_buffer(&tib, 0, 6);
+        auto flags = BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP;
+        bgfx_set_texture(0, cast(bgfx_uniform_handle_t) 0, texture.handle, flags);
+
+        /* Submit draw call */
+        bgfx_set_state(BGFX_STATE_DEFAULT, 0);
+        bgfx_submit(0, shader.handle, 0, false);
     }
 }
