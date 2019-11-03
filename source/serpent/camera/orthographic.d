@@ -37,10 +37,26 @@ class OrthographicCamera : Camera
 
 private:
     mat4x4f projection = mat4x4f.identity();
+    mat4x4f view = mat4x4f.identity();
+
     float _zoomLevel = 1.0f;
     float _nearPlane = 0.0f;
     float _farPlane = 1.0f;
 
+    /**
+     * Camera position within 3D space
+     */
+    vec3f position = vec3f(0.0f, 0.0f, 0.0f);
+
+    /**
+     * Direction of camera (straight forward)
+     */
+    vec3f direction = vec3f(0.0f, 0.0f, 1.0f);
+
+    /**
+     * Change up for X,Y world coordinates
+     */
+    vec3f up = vec3f(0.0f, 1.0f, 0.0f);
 public:
 
     /**
@@ -56,7 +72,7 @@ public:
      */
     final override void apply() @nogc @system nothrow
     {
-        bgfx_set_view_transform(0, null, projection.ptr);
+        bgfx_set_view_transform(0, view.ptr, projection.ptr);
     }
 
     /**
@@ -64,11 +80,13 @@ public:
      */
     final override void update() @nogc @safe nothrow
     {
-        auto ratio = cast(float) scene.display.width / cast(float) scene.display.height;
-        projection = mat4x4f.orthographic(scene.display.width * 1.0f,
-                scene.display.width * -1.0f, scene.display.height * 1.0f,
-                scene.display.height * -1.0f, -1.0f, 1.0f);
-        projection = projection.transposed();
+        projection = mat4x4f.orthographic(zoomLevel * (scene.display.width * 0.5f),
+                zoomLevel * -(scene.display.width * 0.5f),
+                zoomLevel * -(scene.display.height * 0.5f),
+                zoomLevel * (scene.display.height * 0.5f), nearPlane, farPlane);
+
+        vec3f eyes = position + direction;
+        view = mat4x4f.lookAt(position, eyes, up);
     }
 
     /**
@@ -85,6 +103,7 @@ public:
     @property final void zoomLevel(float z) @nogc @safe nothrow
     {
         _zoomLevel = z;
+        update();
     }
 
     /**
@@ -101,6 +120,7 @@ public:
     @property final void nearPlane(float p) @nogc @safe nothrow
     {
         _nearPlane = p;
+        update();
     }
 
     /**
@@ -117,5 +137,6 @@ public:
     @property final void farPlane(float p) @nogc @safe nothrow
     {
         _farPlane = p;
+        update();
     }
 }
