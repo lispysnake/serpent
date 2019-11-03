@@ -103,6 +103,16 @@ final class SpriteRenderer : Renderer
             bgfx_transient_index_buffer_t tib;
             bgfx_transient_vertex_buffer_t tvb;
 
+            auto model = mat4f.identity();
+
+            model = model.rotateX(radians(0.0f));
+            model = model.rotateY(radians(0.0f));
+            model = model.rotateZ(radians(180.0f));
+
+            // Scale to correct size
+            model.scale(vec3f(pipeline.display.width, pipeline.display.height, 1.0f));
+            model = model.transposed();
+
             /* Sort out the index buffer */
             bgfx_alloc_transient_index_buffer(&tib, 6);
             auto indexData = cast(uint16_t*) tib.data;
@@ -120,6 +130,8 @@ final class SpriteRenderer : Renderer
             vertexData[1] = PosUVVertex(vec3f(-1.0f, -1.0f, 0.0f), vec2f(0.0f, 1.0f));
             vertexData[2] = PosUVVertex(vec3f(1.0f, -1.0f, 0.0f), vec2f(1.0f, 1.0f));
             vertexData[3] = PosUVVertex(vec3f(1.0f, 1.0f, 0.0f), vec2f(1.0f, 0.0f));
+
+            bgfx_set_transform(model.ptr, 1);
 
             /* Set the stage */
             bgfx_set_transient_vertex_buffer(0, &tvb, 0, 4);
