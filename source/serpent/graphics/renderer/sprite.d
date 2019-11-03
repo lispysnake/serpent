@@ -90,7 +90,7 @@ final class SpriteRenderer : Renderer
         auto vertex = new Shader(vp);
         auto fragment = new Shader(fp);
         shader = new Program(vertex, fragment);
-        texture = new Texture("titlescreen.png");
+        texture = new Texture("assets/ship.png");
     }
 
     final override void render() @system
@@ -124,8 +124,8 @@ private:
         position.z = 0.0f;
         position.x = -position.x;
 
-        auto width = pipeline.display.width;
-        auto height = pipeline.display.height;
+        auto width = 99;
+        auto height = 75;
 
         auto translation = mat4x4f.translation(position);
         auto scale = mat4x4f.scaling(vec3f(width, height, 1.0f));
