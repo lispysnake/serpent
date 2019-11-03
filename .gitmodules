@@ -1,0 +1,12 @@
+[submodule "external/bindbc-loader"]
+	path = external/bindbc-loader
+	url = https://github.com/BindBC/bindbc-loader.git
+[submodule "external/bindbc-sdl"]
+	path = external/bindbc-sdl
+	url = https://github.com/BindBC/bindbc-sdl.git
+[submodule "external/bindbc-bgfx"]
+	path = external/bindbc-bgfx
+	url = https://github.com/GoaLitiuM/bindbc-bgfx.git
+[submodule "external/gfm"]
+	path = external/gfm
+	url = https://github.com/d-gamedev-team/gfm.git
