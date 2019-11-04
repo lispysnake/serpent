@@ -30,6 +30,8 @@ import gfm.math;
  * An implementation of the Camera using Orthographic Perspective.
  * This may be used for 2D and 3D games, but is highly recommended
  * for 2D games.
+ *
+ * Largely inspired by fragworks/frag camera implementation
  */
 class OrthographicCamera : Camera
 {
@@ -39,6 +41,8 @@ private:
     float _nearPlane = 0.0f;
     float _farPlane = 1.0f;
 
+    bool _invertedY = false;
+
     /**
      * Camera position within 3D space
      */
@@ -47,12 +51,12 @@ private:
     /**
      * Direction of camera (straight forward)
      */
-    static const vec3f direction = vec3f(0.0f, 0.0f, 1.0f);
+    vec3f direction = vec3f(0.0f, 0.0f, 1.0f);
 
     /**
      * Change up for X,Y world coordinates
      */
-    static const vec3f up = vec3f(0.0f, 1.0f, 0.0f);
+    vec3f up = vec3f(0.0f, 1.0f, 0.0f);
 
 public:
 
@@ -69,6 +73,17 @@ public:
      */
     final override void update() @nogc @safe nothrow
     {
+        if (invertedY)
+        {
+            up.y = -1.0;
+            direction.z = 1.0f;
+        }
+        else
+        {
+            up.y = 1.0f;
+            direction.z = 1.0f;
+        }
+
         vec3f eyes = position + direction;
 
         projection = mat4x4f.orthographic(zoomLevel * scene.display.width,
@@ -128,6 +143,23 @@ public:
     @property final void farPlane(float p) @nogc @safe nothrow
     {
         _farPlane = p;
+        update();
+    }
+
+    /**
+     * Returns whether invertedY is set
+     */
+    pure @property final bool invertedY() @nogc @safe nothrow
+    {
+        return _invertedY;
+    }
+
+    /**
+     * Set the invertedY property.
+     */
+    @property final void invertedY(bool b) @nogc @safe nothrow
+    {
+        _invertedY = b;
         update();
     }
 }
