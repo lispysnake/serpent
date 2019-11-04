@@ -149,26 +149,31 @@ private:
         auto indexData = cast(uint16_t*) tib.data;
         indexData[0] = 0;
         indexData[1] = 1;
-        indexData[2] = 2;
-        indexData[3] = 2;
-        indexData[4] = 3;
-        indexData[5] = 0;
+        indexData[2] = 3;
+        indexData[3] = 1;
+        indexData[4] = 2;
+        indexData[5] = 3;
+
+        static const auto tx1 = 0.0f;
+        static const auto ty1 = 0.0f;
+        static const auto tx2 = 1.0f;
+        static const auto ty2 = 1.0f;
 
         /* Sort out the vertex buffer */
         bgfx_alloc_transient_vertex_buffer(&tvb, max, &PosUVVertex.layout);
         auto vertexData = cast(PosUVVertex*) tvb.data;
-        vertexData[0] = PosUVVertex(vec3f(-1.0f, 1.0f, 0.0f), vec2f(0.0f, 0.0f));
-        vertexData[1] = PosUVVertex(vec3f(-1.0f, -1.0f, 0.0f), vec2f(0.0f, 1.0f));
-        vertexData[2] = PosUVVertex(vec3f(1.0f, -1.0f, 0.0f), vec2f(1.0f, 1.0f));
-        vertexData[3] = PosUVVertex(vec3f(1.0f, 1.0f, 0.0f), vec2f(1.0f, 0.0f));
+        vertexData[0] = PosUVVertex(vec3f(1.0f, 1.0f, 0.0f), vec2f(tx2, ty1)); // Top right
+        vertexData[1] = PosUVVertex(vec3f(1.0f, -1.0f, 0.0f), vec2f(tx2, ty2)); // Bottom right
+        vertexData[2] = PosUVVertex(vec3f(-1.0f, -1.0f, 0.0f), vec2f(tx1, ty2)); // Bottom Left
+        vertexData[3] = PosUVVertex(vec3f(-1.0f, 1.0f, 0.0f), vec2f(tx1, ty1)); // Top Left
 
         bgfx_set_transform(model.ptr, 1);
 
         /* Set the stage */
         bgfx_set_transient_vertex_buffer(0, &tvb, 0, 4);
         bgfx_set_transient_index_buffer(&tib, 0, 6);
-        auto flags = BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP;
-        bgfx_set_texture(0, cast(bgfx_uniform_handle_t) 0, texture.handle, flags);
+        bgfx_set_texture(0, cast(bgfx_uniform_handle_t) 0, texture.handle,
+                BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP);
 
         /* Submit draw call */
         bgfx_set_state(0UL | BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BlendState.Alpha, 0);
