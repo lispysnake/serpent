@@ -37,6 +37,8 @@ final class Texture
 private:
 
     SDL_Surface* surface = null;
+    float _width = 0;
+    float _height = 0;
 
 public:
     bgfx_texture_handle_t _handle = cast(bgfx_texture_handle_t) 0;
@@ -62,6 +64,9 @@ public:
         SDL_FreeSurface(surface);
         surface = surface2;
 
+        _width = surface.w;
+        _height = surface.h;
+
         /* TODO: Optimise to the platform. */
         auto fmt = bgfx_texture_format_t.BGFX_TEXTURE_FORMAT_RGBA8;
         _handle = bgfx_create_texture_2d(cast(ushort) surface.w, cast(ushort) surface.h,
@@ -84,5 +89,21 @@ public:
     pure @property final bgfx_texture_handle_t handle() @nogc @safe nothrow
     {
         return _handle;
+    }
+
+    /**
+     * Return texture width
+     */
+    pure @property final float width() @nogc @safe nothrow
+    {
+        return _width;
+    }
+
+    /**
+     * Return texture height
+     */
+    pure @property final float height() @nogc @safe nothrow
+    {
+        return _height;
     }
 }

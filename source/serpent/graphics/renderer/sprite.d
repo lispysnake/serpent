@@ -121,8 +121,8 @@ private:
         bgfx_transient_vertex_buffer_t tvb;
         uint32_t max = 6; /* 6 vertices */
 
-        auto width = 99;
-        auto height = 75;
+        auto width = texture.width;
+        auto height = texture.height;
 
         auto position = entitySet.getPosition(index);
         auto position2 = pipeline.display.scene.camera.unproject(position);
