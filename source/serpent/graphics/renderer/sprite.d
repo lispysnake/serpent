@@ -27,6 +27,7 @@ import gfm.math;
 import std.stdint;
 
 import serpent.entity;
+import serpent.graphics.blend;
 import serpent.graphics.pipeline;
 import serpent.graphics.shader;
 import serpent.graphics.texture;
@@ -159,7 +160,7 @@ private:
         bgfx_set_texture(0, cast(bgfx_uniform_handle_t) 0, texture.handle, flags);
 
         /* Submit draw call */
-        bgfx_set_state(BGFX_STATE_DEFAULT, 0);
+        bgfx_set_state(0UL | BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BlendState.Alpha, 0);
         bgfx_submit(0, shader.handle, 0, false);
     }
 }
