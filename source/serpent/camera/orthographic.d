@@ -71,10 +71,9 @@ public:
     {
         vec3f eyes = position + direction;
 
-        projection = mat4x4f.orthographic(zoomLevel * (scene.display.width * 0.5f),
-                zoomLevel * -(scene.display.width * 0.5f),
-                zoomLevel * -(scene.display.height * 0.5f),
-                zoomLevel * (scene.display.height * 0.5f), nearPlane, farPlane);
+        projection = mat4x4f.orthographic(zoomLevel * scene.display.width,
+                zoomLevel * -scene.display.width, zoomLevel * -scene.display.height,
+                zoomLevel * scene.display.height, nearPlane, farPlane);
         view = mat4x4f.lookAt(position, eyes, up);
 
         combined = projection * view;
