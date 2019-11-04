@@ -46,7 +46,6 @@ private:
      */
     box2f _clip = box2f(0.0f, 0.0f, 1.0f, 1.0f);
 
-public:
     bgfx_texture_handle_t _handle = cast(bgfx_texture_handle_t) 0;
 
 public:
