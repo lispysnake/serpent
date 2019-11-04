@@ -39,6 +39,8 @@ us ($20!) to have lifetime access to our games.
 We build serpent with the `ldc2` (LLVM-based) D compiler. To test the
 included demo, build the `demo` subcomponent in release mode.
 
+    git submodule init
+    git submodule update
     ./build.sh
 
 Note you will need to have `serpent-support` built in a directory
