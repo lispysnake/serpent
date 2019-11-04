@@ -108,6 +108,10 @@ public:
      */
     @property final void zoomLevel(float z) @nogc @safe nothrow
     {
+        if (_zoomLevel == z)
+        {
+            return;
+        }
         _zoomLevel = z;
         update();
     }
@@ -125,6 +129,10 @@ public:
      */
     @property final void nearPlane(float p) @nogc @safe nothrow
     {
+        if (_nearPlane == p)
+        {
+            return;
+        }
         _nearPlane = p;
         update();
     }
@@ -142,6 +150,10 @@ public:
      */
     @property final void farPlane(float p) @nogc @safe nothrow
     {
+        if (_farPlane == p)
+        {
+            return;
+        }
         _farPlane = p;
         update();
     }
@@ -159,6 +171,10 @@ public:
      */
     @property final void invertedY(bool b) @nogc @safe nothrow
     {
+        if (_invertedY == b)
+        {
+            return;
+        }
         _invertedY = b;
         update();
     }

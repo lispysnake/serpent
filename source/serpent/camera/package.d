@@ -89,9 +89,13 @@ public:
     /**
      * Set the Scene associated with this Camera
      */
-    @property final void scene(Scene s) @safe
+    @property final void scene(Scene s) @system
     {
         enforce(s !is null, "Should not have a null Scene");
+        if (s == _scene)
+        {
+            return;
+        }
         _scene = s;
         this.update();
     }
@@ -190,6 +194,10 @@ public:
      */
     @property final void worldOrigin(WorldOrigin o) @safe @nogc nothrow
     {
+        if (_worldOrigin == o)
+        {
+            return;
+        }
         _worldOrigin = o;
         update();
     }

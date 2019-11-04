@@ -77,7 +77,7 @@ public:
      * If no camera is present, the new Camera will be activated
      * as the default.
      */
-    final void addCamera(Camera c) @safe
+    final void addCamera(Camera c) @system
     {
         enforce(c !is null, "Camera cannot be null");
         enforce(c.name !in cameras, "Cannot add duplicate Camera: '%s'".format(c.name));
