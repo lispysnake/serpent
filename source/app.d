@@ -75,19 +75,19 @@ public:
         /* Create our first player */
         p = new Player();
         p.add();
-        p.setPosition(0, 20.0f, 20.0f);
+        p.setPosition(0, 0.0f, 0.0f);
 
         /* Create 20 enemies */
         e = new Enemy();
         e.reserve(10);
-        auto offset = 30;
-        foreach (i; 0 .. 10)
+        auto offset = 0;
+        foreach (i; 0 .. 13)
         {
             e.add();
             if (i % 2 == 0)
                 e.setFaction(i, Faction.GoodDudes);
-            e.setPosition(i, offset, offset);
-            offset += 50;
+            e.setPosition(i, offset, 80);
+            offset += 98;
         }
 
         context.display.scene.addEntity(p);

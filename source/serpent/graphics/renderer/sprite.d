@@ -27,6 +27,7 @@ import gfm.math;
 import std.stdint;
 
 import serpent.entity;
+import serpent.camera : WorldOrigin;
 import serpent.graphics.blend;
 import serpent.graphics.pipeline;
 import serpent.graphics.shader;
@@ -126,6 +127,16 @@ private:
 
         auto position = entitySet.getPosition(index);
         auto position2 = pipeline.display.scene.camera.unproject(position);
+
+        position2.x += width;
+        if (pipeline.display.scene.camera.worldOrigin == WorldOrigin.BottomLeft)
+        {
+            position2.y += height;
+        }
+        else
+        {
+            position2.y -= height;
+        }
 
         auto translation = mat4x4f.translation(position2);
         auto scale = mat4x4f.scaling(vec3f(width, height, 1.0f));
