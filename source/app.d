@@ -70,6 +70,7 @@ public:
         context.display.addScene(s);
         context.display.scene = "sample";
         s.addCamera(new OrthographicCamera());
+        s.camera.worldOrigin = WorldOrigin.TopLeft;
 
         /* Create our first player */
         p = new Player();
