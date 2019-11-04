@@ -26,6 +26,7 @@ import bindbc.sdl;
 import bindbc.sdl.image;
 import std.string : toStringz;
 import bindbc.bgfx;
+import gfm.math;
 
 /**
  * This is a very temporary type which will undergo many changes as
@@ -39,6 +40,11 @@ private:
     SDL_Surface* surface = null;
     float _width = 0;
     float _height = 0;
+
+    /**
+     * Default clip is to use the whole size.
+     */
+    box2f _clip = box2f(0.0f, 0.0f, 1.0f, 1.0f);
 
 public:
     bgfx_texture_handle_t _handle = cast(bgfx_texture_handle_t) 0;
@@ -105,5 +111,13 @@ public:
     pure @property final float height() @nogc @safe nothrow
     {
         return _height;
+    }
+
+    /**
+     * Return the clipping region for drawing.
+     */
+    pure @property box2f clip() @nogc @safe nothrow
+    {
+        return _clip;
     }
 }

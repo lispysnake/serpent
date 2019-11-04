@@ -154,18 +154,15 @@ private:
         indexData[4] = 2;
         indexData[5] = 3;
 
-        static const auto tx1 = 0.0f;
-        static const auto ty1 = 0.0f;
-        static const auto tx2 = 1.0f;
-        static const auto ty2 = 1.0f;
+        auto clip = texture.clip();
 
         /* Sort out the vertex buffer */
         bgfx_alloc_transient_vertex_buffer(&tvb, max, &PosUVVertex.layout);
         auto vertexData = cast(PosUVVertex*) tvb.data;
-        vertexData[0] = PosUVVertex(vec3f(1.0f, 1.0f, 0.0f), vec2f(tx2, ty1)); // Top right
-        vertexData[1] = PosUVVertex(vec3f(1.0f, -1.0f, 0.0f), vec2f(tx2, ty2)); // Bottom right
-        vertexData[2] = PosUVVertex(vec3f(-1.0f, -1.0f, 0.0f), vec2f(tx1, ty2)); // Bottom Left
-        vertexData[3] = PosUVVertex(vec3f(-1.0f, 1.0f, 0.0f), vec2f(tx1, ty1)); // Top Left
+        vertexData[0] = PosUVVertex(vec3f(1.0f, 1.0f, 0.0f), vec2f(clip.max.x, clip.min.y)); // Top right
+        vertexData[1] = PosUVVertex(vec3f(1.0f, -1.0f, 0.0f), vec2f(clip.max.x, clip.max.y)); // Bottom right
+        vertexData[2] = PosUVVertex(vec3f(-1.0f, -1.0f, 0.0f), vec2f(clip.min.x, clip.max.y)); // Bottom Left
+        vertexData[3] = PosUVVertex(vec3f(-1.0f, 1.0f, 0.0f), vec2f(clip.min.x, clip.min.y)); // Top Left
 
         bgfx_set_transform(model.ptr, 1);
 
