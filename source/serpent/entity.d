@@ -77,6 +77,21 @@ public:
         positions[index] = pos;
     }
 
+    final void setPosition(ulong index, vec2f pos) @safe
+    {
+        setPosition(index, vec3f(pos, 0.0f));
+    }
+
+    final void setPosition(ulong index, float x, float y) @safe
+    {
+        setPosition(index, vec3f(x, y, 0.0f));
+    }
+
+    final void setPosition(ulong index, float x, float y, float z) @safe
+    {
+        setPosition(index, vec3f(x, y, z));
+    }
+
     /**
      * Retrieve a position for modification
      */

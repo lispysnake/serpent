@@ -75,7 +75,7 @@ public:
         /* Create our first player */
         p = new Player();
         p.add();
-        p.setPosition(0, vec3f(20.0f, 20.0f, 1.0f));
+        p.setPosition(0, 20.0f, 20.0f);
 
         /* Create 20 enemies */
         e = new Enemy();
@@ -86,7 +86,7 @@ public:
             e.add();
             if (i % 2 == 0)
                 e.setFaction(i, Faction.GoodDudes);
-            e.setPosition(i, vec3f(offset, offset, 0.0f));
+            e.setPosition(i, offset, offset);
             offset += 50;
         }
 
