@@ -125,10 +125,6 @@ private:
 
         auto position = entitySet.getPosition(index);
         auto position2 = pipeline.display.scene.camera.unproject(position);
-        import std.stdio;
-
-        writefln(" Position: %f %f %f", position.x, position.y, position.z);
-        writefln(" Position2: %f %f %f", position2.x, position2.y, position2.z);
 
         auto translation = mat4x4f.translation(position2);
         auto scale = mat4x4f.scaling(vec3f(width, height, 1.0f));
