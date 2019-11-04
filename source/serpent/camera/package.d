@@ -30,6 +30,16 @@ import std.exception : enforce;
 import bindbc.bgfx;
 
 /**
+ * WorldOrigin allows us to specify a different WorldOrigin than
+ * the default coordinate system, re-mapping from bottom-left to top-left
+ */
+enum WorldOrigin
+{
+    TopLeft = 0,
+    BottomLeft,
+};
+
+/**
  * The Camera class is responsible for providing the correct positions
  * for an Entity to be rendered. Without a camera, the correct perpective
  * and positions will not be used.
@@ -47,6 +57,7 @@ private:
     mat4x4f _view = mat4x4f.identity();
     mat4x4f _combined = mat4x4f.identity();
     mat4x4f _inverse = mat4x4f.identity();
+    WorldOrigin _worldOrigin = WorldOrigin.BottomLeft;
 
 public:
 
@@ -167,6 +178,23 @@ public:
     }
 
     /**
+     * Return the worldOrigin for this camera
+     */
+    pure @property final WorldOrigin worldOrigin() @safe @nogc nothrow
+    {
+        return _worldOrigin;
+    }
+
+    /**
+     * Set the worldOrigin used by this camera
+     */
+    @property final void worldOrigin(WorldOrigin o) @safe @nogc nothrow
+    {
+        _worldOrigin = o;
+        update();
+    }
+
+    /**
      * Unproject the inputted real-world coordinates to 3D-space
      */
     final vec3f unproject(const ref vec3f point) @safe
@@ -176,8 +204,14 @@ public:
         auto width = cast(float) scene.display.width;
         auto height = cast(float) scene.display.height;
 
+        float objY = point.y;
+        if (_worldOrigin == WorldOrigin.TopLeft)
+        {
+            objY = height - objY;
+        }
+
         vec4f normal = vec4f((point.x - x) / width * 2.0f - 1.0f,
-                (point.y - y) / height * 2.0f - 1.0f, point.z * 2.0f - 1.0f, 1.0f);
+                (objY - y) / height * 2.0f - 1.0f, point.z * 2.0f - 1.0f, 1.0f);
 
         vec4f coord = inverse() * normal;
         if (coord.w != 0.0f)
