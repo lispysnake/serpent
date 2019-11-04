@@ -78,17 +78,16 @@ public:
 
         /* Create 20 enemies */
         e = new Enemy();
-        e.reserve(20);
-        auto offset = 10;
-        /*
-        foreach (i; 0 .. 20)
+        e.reserve(10);
+        auto offset = 30;
+        foreach (i; 0 .. 10)
         {
             e.add();
             if (i % 2 == 0)
                 e.setFaction(i, Faction.GoodDudes);
             e.setPosition(i, vec3f(offset, offset, 0.0f));
             offset += 50;
-        }*/
+        }
 
         context.display.scene.addEntity(p);
         context.display.scene.addEntity(e);
