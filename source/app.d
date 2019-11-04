@@ -42,14 +42,16 @@ private:
     Scene s;
 
 private:
-    final void onMousePressed(MouseEvent e) @safe
+    final void onMousePressed(MouseEvent e) @system
     {
         writefln("Pressed (%u): %f %f", e.button, e.x, e.y);
+        context.display.debugMode = !context.display.debugMode;
     }
 
     final void onMouseMoved(MouseEvent e) @safe
     {
         writefln("Moved: %f %f", e.x, e.y);
+        p.setPosition(0, e.x, e.y);
     }
 
     final void onKeyReleased(KeyboardEvent e) @safe
@@ -70,7 +72,7 @@ public:
         context.display.addScene(s);
         context.display.scene = "sample";
         s.addCamera(new OrthographicCamera());
-        s.camera.worldOrigin = WorldOrigin.BottomLeft;
+        s.camera.worldOrigin = WorldOrigin.TopLeft;
 
         /* Create our first player */
         p = new Player();
@@ -90,8 +92,8 @@ public:
             offset += 98;
         }
 
-        context.display.scene.addEntity(p);
         context.display.scene.addEntity(e);
+        context.display.scene.addEntity(p);
         return true;
     }
 }
