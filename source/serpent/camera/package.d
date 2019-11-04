@@ -185,7 +185,7 @@ public:
             coord.w = 1.0f / coord.w;
         }
 
-        /* TODO: Respect W property */
+        /* TODO: Respect Z property */
         coord.z = 0.0f;
         return vec3f(coord.x * coord.w, coord.y * coord.w, coord.z * coord.w);
     }
