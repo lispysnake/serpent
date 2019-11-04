@@ -28,6 +28,7 @@ import std.string : toStringz, format;
 import std.exception : enforce;
 
 public import gfm.math;
+public import std.stdint;
 
 import serpent : SystemException;
 import serpent.graphics.pipeline;
@@ -66,6 +67,10 @@ private:
     Scene dummyScene;
 
     Context _context;
+
+    uint32_t _backgroundColor = 0x303030ff;
+
+    bool _debugMode = false;
 
 private:
 
@@ -126,7 +131,7 @@ private:
     /**
      * reset bgfx buffer
      */
-    void reset() @system @nogc nothrow
+    final void reset() @system @nogc nothrow
     {
         if (!didInit)
         {
@@ -138,7 +143,7 @@ private:
     /**
      * process pending window events
      */
-    bool processWindow(SDL_WindowEvent* event) @system
+    final bool processWindow(SDL_WindowEvent* event) @system
     {
         switch (event.event)
         {
@@ -150,6 +155,16 @@ private:
         default:
             return false;
         }
+    }
+
+    final void updateDebug() @system @nogc nothrow
+    {
+        if (!_debugMode)
+        {
+            bgfx_set_debug(0);
+            return;
+        }
+        bgfx_set_debug(BGFX_DEBUG_STATS | BGFX_DEBUG_TEXT);
     }
 
 public:
@@ -250,10 +265,10 @@ public:
         bInit.type = bgfx_renderer_type_t.BGFX_RENDERER_TYPE_VULKAN;
         bgfx_init(&bInit);
         bgfx_reset(_width, _height, BGFX_RESET_VSYNC, bInit.resolution.format);
-        bgfx_set_debug(BGFX_DEBUG_TEXT | BGFX_DEBUG_STATS);
+        updateDebug();
 
-        /* Greyish background, should change this to black but it proves stuff works.. */
-        bgfx_set_view_clear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, 0x303030ff, 1.0f, 0);
+        /* Set clearing of view0 background. */
+        bgfx_set_view_clear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, _backgroundColor, 1.0f, 0);
     }
 
     /**
@@ -436,4 +451,55 @@ public:
         enforce(c !is null, "Context cannot be null");
         _context = c;
     }
+
+    /**
+     * Return the display background color
+     */
+    pure @property final uint32_t backgroundColor() @safe @nogc nothrow
+    {
+        return _backgroundColor;
+    }
+
+    /**
+     * Set the display background color
+     */
+    @property final void backgroundColor(uint32_t bg) @system @nogc nothrow
+    {
+        if (bg == _backgroundColor)
+        {
+            return;
+        }
+        _backgroundColor = bg;
+        if (!didInit)
+        {
+            return;
+        }
+        bgfx_set_view_clear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, _backgroundColor, 1.0f, 0);
+    }
+
+    /**
+     * Return true if debugMode is set
+     */
+    pure @property final bool debugMode() @safe @nogc nothrow
+    {
+        return _debugMode;
+    }
+
+    /**
+     * Update the debugMode
+     */
+    @property final void debugMode(bool b) @system @nogc nothrow
+    {
+        if (_debugMode == b)
+        {
+            return;
+        }
+        _debugMode = b;
+        if (!didInit)
+        {
+            return;
+        }
+        updateDebug();
+    }
+
 }

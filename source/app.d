@@ -173,6 +173,7 @@ int main()
     auto context = new Context();
     context.display.title("#serpent demo").size(1366, 768);
     context.display.pipeline.addRenderer(new SpriteRenderer());
+    context.display.backgroundColor = 0x0f;
 
     /* Set our root directory up */
     context.resource.root = context.resource.root ~ "/assets/built";
