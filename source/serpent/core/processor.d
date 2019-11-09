@@ -20,7 +20,28 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.core;
+module serpent.core.processor;
 
 public import serpent.core.policy;
-public import serpent.core.processor;
+
+/**
+ * The virtual base class for any Processor (System) within the Serpent
+ * core framework loop.
+ *
+ * Any implementation of Processor must explicitly extend with their
+ * data-policy defined at compile time, i.e. ReadWrite or ReadOnly.
+ *
+ * A Processor can only be added to a group with the same data policy,
+ * to allow optimisation of parallel execution strategies. Thus you
+ * cannot add a ReadWrite Processor to a ReadOnly Group.
+ *
+ * With these (deliberate) limitations in mind, you should ensure
+ * your group setup is chained to take advantage of this in terms
+ * of data batching.
+ */
+abstract class Processor(T : DataPolicy)
+{
+
+public:
+    abstract void run() @system;
+}
