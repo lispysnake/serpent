@@ -129,7 +129,7 @@ package:
     /**
      * Execute our full set of processors
      */
-    final void run(Context c, TaskPool tp) @system
+    final void run(TaskPool tp) @system
     {
         writeln("Executing");
 

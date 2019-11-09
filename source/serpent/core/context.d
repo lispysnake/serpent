@@ -27,12 +27,38 @@ import bindbc.bgfx;
 import bindbc.sdl;
 import std.file;
 import std.path;
+import std.parallelism;
+
+import serpent.core.group;
+import serpent.core.policy;
 
 public import serpent.graphics.display;
 public import serpent.app;
 public import serpent.info;
 public import serpent.input;
 public import serpent.resource;
+
+/**
+ * Wrap groups with RW attribute to protect insertion order and
+ * class size to prevent ugly casts
+ */
+final struct GroupRunner
+{
+    bool rw;
+    string name;
+    GroupLayer layer;
+}
+
+/**
+ * Can contain only a Read-Only or Read-Write group.
+ * Luckily, they're basically the same size. This just handles
+ * type preservation for us.
+ */
+final union GroupLayer
+{
+    Group!ReadOnly ro_group;
+    Group!ReadWrite rw_group;
+}
 
 /**
  * The Context is the main entry point into Serpent. It initialises
@@ -50,6 +76,11 @@ private:
     Display _display;
     Info _info;
     bool _running = false;
+
+    /* Scheduling cruft */
+    GroupRunner[] groups;
+    TaskPool tp;
+    Group!ReadWrite _systemGroup;
 
     /**
      * Handle any events pending in the queue and appropriately
@@ -92,6 +123,13 @@ public:
      */
     this()
     {
+        /* Sort out the scheduling cruft */
+        tp = new TaskPool();
+        tp.isDaemon = false;
+        _systemGroup = new Group!ReadWrite("system");
+
+        this.addGroup(_systemGroup);
+
         /* Create a display with the default size */
         _input = new InputManager(this);
         _display = new Display(this, 640, 480);
@@ -141,6 +179,30 @@ public:
         }
 
         return 0;
+    }
+
+    /**
+     * Add a group to the execution context. The original insertion
+     * order is preserved.
+     */
+    final void addGroup(Group!ReadWrite rw) @trusted
+    {
+        auto gr = GroupRunner(true);
+        gr.name = rw.name;
+        gr.layer.rw_group = rw;
+        groups ~= gr;
+    }
+
+    /**
+     * Add a group to the execution context. The original insertion
+     * order is preserved.
+     */
+    final void addGroup(Group!ReadOnly ro) @trusted
+    {
+        auto gr = GroupRunner(false);
+        gr.name = ro.name;
+        gr.layer.ro_group = ro;
+        groups ~= gr;
     }
 
     /**
@@ -201,5 +263,14 @@ public:
         _app = a;
         _app.context = this;
         return this;
+    }
+
+    /**
+     * Returns the Group used within the first stage of frame-execution.
+     * Internally this is the core 'system' group.
+     */
+    pure @property final Group!ReadWrite systemGroup() @safe @nogc nothrow
+    {
+        return _systemGroup;
     }
 }
