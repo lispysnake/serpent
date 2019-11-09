@@ -111,14 +111,10 @@ public:
         /* Sort out the scheduling cruft */
         tp = new TaskPool();
         tp.isDaemon = false;
-        _systemGroup = new Group!ReadWrite("system");
 
-        this.addGroup(_systemGroup);
-
-        /* Insert our input processor */
-        _systemGroup.add(new InputProcessor);
-        _systemGroup.add(new AppUpdateProcessor);
-        _systemGroup.add(new RenderProcessor);
+        _systemGroup = new Group!ReadWrite("system").add(new InputProcessor)
+            .add(new AppUpdateProcessor()).add(new RenderProcessor);
+        addGroup(_systemGroup);
 
         /* Create a display with the default size */
         _input = new InputManager(this);
