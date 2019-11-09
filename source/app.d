@@ -30,6 +30,23 @@ enum Faction
     GoodDudes = 2,
 };
 
+final class EnemyMovementProcessor : Processor!ReadWrite
+{
+
+    final override void run() @system
+    {
+        import std.stdio;
+
+        auto ent = context.display.scene.visibleEntities()[0];
+        foreach (i; 0 .. ent.size())
+        {
+            auto pos = ent.getPosition(i);
+            pos.y += 1.5;
+            ent.setPosition(i, pos);
+        }
+    }
+}
+
 /**
  * Provided merely for demo purposes.
  */
@@ -67,6 +84,7 @@ public:
         context.input.mousePressed.connect(&onMousePressed);
         context.input.mouseMoved.connect(&onMouseMoved);
         context.input.keyReleased.connect(&onKeyReleased);
+        context.addGroup(new Group!ReadWrite("logic").add(new EnemyMovementProcessor()));
 
         s = new Scene("sample");
         context.display.addScene(s);

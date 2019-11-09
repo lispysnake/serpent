@@ -147,6 +147,7 @@ package:
         {
             foreach (ref p; tp.parallel(processors))
             {
+                p.context = this.context;
                 p.run();
             }
         }
@@ -156,6 +157,7 @@ package:
         {
             foreach (ref p; processors)
             {
+                p.context = this.context;
                 p.run();
             }
         }

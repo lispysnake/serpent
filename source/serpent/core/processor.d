@@ -56,6 +56,7 @@ package:
         _context = c;
     }
 
+public:
     /**
      * Return the underlying context for this processor
      */
