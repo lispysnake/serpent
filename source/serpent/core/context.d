@@ -187,6 +187,7 @@ public:
      */
     final void addGroup(Group!ReadWrite rw) @trusted
     {
+        enforce(!running, "Cannot add a Group to a running Context");
         auto gr = GroupRunner(true);
         gr.name = rw.name;
         gr.layer.rw_group = rw;
@@ -199,6 +200,7 @@ public:
      */
     final void addGroup(Group!ReadOnly ro) @trusted
     {
+        enforce(!running, "Cannot add a Group to a running Context");
         auto gr = GroupRunner(false);
         gr.name = ro.name;
         gr.layer.ro_group = ro;
