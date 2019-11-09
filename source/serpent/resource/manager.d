@@ -22,7 +22,7 @@
 
 module serpent.resource.manager;
 
-import serpent.context;
+import serpent.core.context;
 
 import std.exception : enforce;
 import std.file : exists;

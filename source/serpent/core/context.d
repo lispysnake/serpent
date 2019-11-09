@@ -20,7 +20,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.context;
+module serpent.core.context;
 
 import std.exception : enforce;
 import bindbc.bgfx;

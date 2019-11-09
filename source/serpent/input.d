@@ -22,7 +22,7 @@
 
 module serpent.input;
 
-import serpent.context;
+import serpent.core.context;
 import serpent.event;
 
 import bindbc.sdl;

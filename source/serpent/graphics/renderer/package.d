@@ -22,7 +22,7 @@
 
 module serpent.graphics.renderer;
 
-public import serpent.context;
+public import serpent.core.context;
 public import serpent.graphics.renderer.sprite;
 public import serpent.graphics.pipeline;
 

@@ -22,7 +22,7 @@
 
 module serpent.app;
 
-import serpent.context;
+import serpent.core.context;
 
 import std.exception : enforce;
 

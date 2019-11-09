@@ -24,7 +24,7 @@ module serpent;
 
 public import serpent.app;
 public import serpent.camera;
-public import serpent.context;
+public import serpent.core;
 public import serpent.graphics;
 public import serpent.entity;
 public import serpent.event;
