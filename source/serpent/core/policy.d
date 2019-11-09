@@ -20,6 +20,35 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.core;
+module serpent.core.policy;
 
-public import serpent.core.policy;
+/**
+ * The DataPolicy base type provides a mechanism whereby we can enforce
+ * a compiler-level promise on data sharing. This is required for the
+ * context main loop, with its Group implementation.
+ */
+final struct DataPolicy
+{
+}
+
+/**
+ * A ReadWrite policy permits read *and* write access to the underlying
+ * data storage. As such, different parallel-execution strategies must
+ * be employed.
+ */
+final struct ReadWrite
+{
+    DataPolicy parent;
+    alias parent this;
+}
+
+/**
+ * A ReadOnly policy strictly permits only read-only access to the
+ * underlying data, allowing optimisation of parallel-execution within
+ * a frame.
+ */
+final struct ReadOnly
+{
+    DataPolicy parent;
+    alias parent this;
+}
