@@ -22,6 +22,7 @@
 
 module serpent.core.processor;
 
+public import serpent.core.context;
 public import serpent.core.policy;
 
 /**
@@ -42,6 +43,24 @@ public import serpent.core.policy;
 abstract class Processor(T : DataPolicy)
 {
 
+private:
+    Context _context;
+
 public:
     abstract void run() @system;
+
+package:
+
+    final void context(Context c) @safe @nogc nothrow
+    {
+        _context = c;
+    }
+
+    /**
+     * Return the underlying context for this processor
+     */
+    pure final Context context() @safe @nogc nothrow
+    {
+        return _context;
+    }
 }

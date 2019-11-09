@@ -29,6 +29,7 @@ import std.file;
 import std.path;
 import std.parallelism;
 
+import serpent.core.builtin;
 import serpent.core.group;
 import serpent.core.policy;
 
@@ -83,40 +84,6 @@ private:
     Group!ReadWrite _systemGroup;
 
     /**
-     * Handle any events pending in the queue and appropriately
-     * dispatch them.
-     */
-    final void processEvents() @system
-    {
-        SDL_Event event;
-
-        while (SDL_PollEvent(&event))
-        {
-
-            /* If InputManager consumes the event, don't process it here. */
-            if (_input.process(&event))
-            {
-                continue;
-            }
-
-            /* Likewise, see if the display consumes it */
-            if (_display.process(&event))
-            {
-                continue;
-            }
-
-            switch (event.type)
-            {
-            case SDL_QUIT:
-                _running = false;
-                break;
-            default:
-                break;
-            }
-        }
-    }
-
-    /**
      * Step through groups for scheduled executions
      */
     final void scheduledExecution() @system
@@ -147,6 +114,9 @@ public:
         _systemGroup = new Group!ReadWrite("system");
 
         this.addGroup(_systemGroup);
+
+        /* Insert our input processor */
+        _systemGroup.add(new InputProcessor);
 
         /* Create a display with the default size */
         _input = new InputManager(this);
@@ -191,7 +161,6 @@ public:
         while (_running)
         {
             scheduledExecution();
-            processEvents();
 
             _app.update();
 
@@ -211,6 +180,7 @@ public:
         auto gr = GroupRunner(true);
         gr.name = rw.name;
         gr.layer.rw_group = rw;
+        rw.context = this;
         groups ~= gr;
     }
 
@@ -224,6 +194,7 @@ public:
         auto gr = GroupRunner(false);
         gr.name = ro.name;
         gr.layer.ro_group = ro;
+        ro.context = this;
         groups ~= gr;
     }
 
@@ -294,5 +265,13 @@ public:
     pure @property final Group!ReadWrite systemGroup() @safe @nogc nothrow
     {
         return _systemGroup;
+    }
+
+    /**
+     * Force the main loop to end
+     */
+    final void quit() @safe @nogc nothrow
+    {
+        _running = false;
     }
 }

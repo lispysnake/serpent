@@ -22,6 +22,7 @@
 
 module serpent.core.group;
 
+public import serpent.core.context;
 public import serpent.core.policy;
 public import serpent.core.processor;
 
@@ -46,6 +47,7 @@ final class Group(T : DataPolicy)
 private:
 
     string _name = "unnamed group";
+    Context _context;
 
     static if (is(T : ReadOnly))
     {
@@ -69,6 +71,7 @@ public:
     final Group!T add(Processor!T processor) @safe
     {
         writefln("Adding processor: %s", processor.classinfo.name);
+        processor.context = this.context;
         processors ~= processor;
         return this;
     }
@@ -124,6 +127,14 @@ public:
         return this;
     }
 
+    /**
+     * Return the underlying Context for this Group
+     */
+    pure @property final Context context() @safe @nogc nothrow
+    {
+        return _context;
+    }
+
 package:
 
     /**
@@ -150,5 +161,13 @@ package:
                 p.run();
             }
         }
+    }
+
+    /**
+     * Set the context for this Group
+     */
+    @property final void context(Context c) @safe @nogc nothrow
+    {
+        _context = c;
     }
 }
