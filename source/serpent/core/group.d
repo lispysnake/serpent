@@ -142,8 +142,6 @@ package:
      */
     final void run(TaskPool tp) @system
     {
-        writeln("Executing");
-
         /* If parallel is set+supported, execute units in parallel */
         if (this.parallel())
         {
