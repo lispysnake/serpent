@@ -75,3 +75,25 @@ public:
         }
     }
 }
+
+/**
+ * The AppUpdater Processor will call the Context's current app's
+ * `update` method during the main loop iteration.
+ */
+final class AppUpdateProcessor : Processor!ReadWrite
+{
+
+package:
+    this()
+    {
+    }
+
+public:
+    /**
+     * Call update on the App instance midloop
+     */
+    final override void run() @system
+    {
+        context.app.update();
+    }
+}
