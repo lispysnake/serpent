@@ -22,5 +22,6 @@
 
 module serpent.core;
 
+public import serpent.core.group;
 public import serpent.core.policy;
 public import serpent.core.processor;
