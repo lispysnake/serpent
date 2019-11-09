@@ -116,6 +116,24 @@ private:
         }
     }
 
+    /**
+     * Step through groups for scheduled executions
+     */
+    final void scheduledExecution() @system
+    {
+        foreach (ref g; groups)
+        {
+            if (g.rw)
+            {
+                g.layer.rw_group.run(this.tp);
+            }
+            else
+            {
+                g.layer.ro_group.run(this.tp);
+            }
+        }
+    }
+
 public:
 
     /**
@@ -158,6 +176,7 @@ public:
 
         scope (exit)
         {
+            tp.finish(true);
             _app.shutdown();
         }
 
@@ -171,6 +190,7 @@ public:
 
         while (_running)
         {
+            scheduledExecution();
             processEvents();
 
             _app.update();
