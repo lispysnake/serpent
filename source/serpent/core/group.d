@@ -124,6 +124,8 @@ public:
         return this;
     }
 
+package:
+
     /**
      * Execute our full set of processors
      */
