@@ -118,6 +118,7 @@ public:
         /* Insert our input processor */
         _systemGroup.add(new InputProcessor);
         _systemGroup.add(new AppUpdateProcessor);
+        _systemGroup.add(new RenderProcessor);
 
         /* Create a display with the default size */
         _input = new InputManager(this);
@@ -162,7 +163,6 @@ public:
         while (_running)
         {
             scheduledExecution();
-            display.render();
         }
 
         return 0;

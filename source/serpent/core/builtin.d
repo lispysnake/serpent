@@ -97,3 +97,28 @@ public:
         context.app.update();
     }
 }
+
+/**
+ * The RenderProcessor is responsible for getting the display
+ * to actually render.
+ *
+ * Right now it lives on the main thread - but in future this
+ * will just kick off a frame render for bgfx.
+ */
+final class RenderProcessor : Processor!ReadWrite
+{
+
+package:
+    this()
+    {
+    }
+
+public:
+    /**
+     * Call render on the target display
+     */
+    final override void run() @system
+    {
+        context.display.render();
+    }
+}
