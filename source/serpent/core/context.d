@@ -76,7 +76,7 @@ private:
     App _app;
     Display _display;
     Info _info;
-    bool _running = false;
+    __gshared bool _running = false;
 
     /* Scheduling cruft */
     GroupRunner[] groups;
@@ -239,7 +239,7 @@ public:
     /**
      * Return true if currently running
      */
-    pure @property final bool running() @nogc @safe nothrow
+    @property final bool running() @nogc @trusted nothrow
     {
         return _running;
     }
@@ -268,7 +268,7 @@ public:
     /**
      * Force the main loop to end
      */
-    final void quit() @safe @nogc nothrow
+    final void quit() @trusted @nogc nothrow
     {
         _running = false;
     }
