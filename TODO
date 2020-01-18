@@ -7,6 +7,7 @@ basic demo shape.
 
  - Bring back basic keyboard handling (F, etc.)
  - Bring back fullscreen switching/support
+ - Allow loading/setting the textures per-sprite-data (instead of everything being Ship.png..)
  - Let's kill the stupid plane demo and focus on recreating the `lispysnake2d` demo.
  - Bring back parsers for Tiled, but let's just focus on JSON now, not XML (future-maybe?)
  - Bring back parsers for Tilesheet sprites, to get a player on screen
