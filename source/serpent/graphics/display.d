@@ -263,7 +263,7 @@ public:
         integrateWindowBgfx();
 
         /* TODO: Init on separate render thread */
-        bInit.type = bgfx_renderer_type_t.BGFX_RENDERER_TYPE_VULKAN;
+        bInit.type = bgfx_renderer_type_t.BGFX_RENDERER_TYPE_OPENGL;
         bgfx_init(&bInit);
         bgfx_reset(_width, _height, BGFX_RESET_VSYNC, bInit.resolution.format);
         updateDebug();
