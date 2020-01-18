@@ -11,3 +11,12 @@ basic demo shape.
  - Implement tilemap renderer with commonality to sprite renderer.
  - Reintroduce animation framework through the Context Job system (perhaps stage -> static class?)
  - Retain stateful approaches to per-level/stage concepts.
+
+
+Things to remember:
+
+ - Plane focus is dumb as it's a simple rotational dynamic X/Y positional sprite.
+ - Our real game is more reliant on tiling, as well as psuedo-infinite spaces.
+ - Inside is far more important than the outside, as it's technically more difficult.
+ - We need detailed tilemaps for ship/station interiors, with per-tile animations, etc.
+   This is much more easily realisable (word?) with the original not-ocarina demo.
