@@ -33,6 +33,18 @@ enum Faction
 final class EnemyMovementProcessor : Processor!ReadWrite
 {
 
+    private bool _inverted = false;
+
+    final @property void inverted(bool b) @safe @nogc nothrow
+    {
+        _inverted = b;
+    }
+
+    pure final @property bool inverted() @safe @nogc nothrow
+    {
+        return _inverted;
+    }
+
     final override void run() @system
     {
         import std.stdio;
@@ -41,7 +53,17 @@ final class EnemyMovementProcessor : Processor!ReadWrite
         foreach (i; 0 .. ent.size())
         {
             auto pos = ent.getPosition(i);
-            pos.y -= 1.5;
+            if (inverted) {
+                pos.y += 1.5;
+            } else {
+                pos.y -= 1.5;
+            }
+            if (pos.y <= 0) {
+                pos.y = 0;
+            }
+            if (pos.y >= 768 - 75) {
+                pos.y = 768 - 75;
+            }
             ent.setPosition(i, pos);
         }
     }
@@ -58,11 +80,15 @@ private:
     Enemy e;
     Scene s;
 
+public:
+    EnemyMovementProcessor proc;
+
 private:
     final void onMousePressed(MouseEvent e) @system
     {
         writefln("Pressed (%u): %f %f", e.button, e.x, e.y);
-        context.display.debugMode = !context.display.debugMode;
+        // context.display.debugMode = !context.display.debugMode;
+        proc.inverted = !proc.inverted;
     }
 
     final void onMouseMoved(MouseEvent e) @safe
@@ -84,7 +110,8 @@ public:
         context.input.mousePressed.connect(&onMousePressed);
         context.input.mouseMoved.connect(&onMouseMoved);
         context.input.keyReleased.connect(&onKeyReleased);
-        context.addGroup(new Group!ReadWrite("logic").add(new EnemyMovementProcessor()));
+        proc = new EnemyMovementProcessor();
+        context.addGroup(new Group!ReadWrite("logic").add(proc));
 
         s = new Scene("sample");
         context.display.addScene(s);
@@ -106,7 +133,7 @@ public:
             e.add();
             if (i % 2 == 0)
                 e.setFaction(i, Faction.GoodDudes);
-            e.setPosition(i, offset, 800);
+            e.setPosition(i, offset, 768);
             offset += 100;
         }
 
