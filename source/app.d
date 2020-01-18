@@ -41,7 +41,7 @@ final class EnemyMovementProcessor : Processor!ReadWrite
         foreach (i; 0 .. ent.size())
         {
             auto pos = ent.getPosition(i);
-            pos.y += 1.5;
+            pos.y -= 1.5;
             ent.setPosition(i, pos);
         }
     }
@@ -100,14 +100,14 @@ public:
         /* Create 20 enemies */
         e = new Enemy();
         e.reserve(10);
-        auto offset = 0;
+        auto offset = 10;
         foreach (i; 0 .. 13)
         {
             e.add();
             if (i % 2 == 0)
                 e.setFaction(i, Faction.GoodDudes);
-            e.setPosition(i, offset, 80);
-            offset += 98;
+            e.setPosition(i, offset, 800);
+            offset += 100;
         }
 
         context.display.scene.addEntity(e);
@@ -193,7 +193,7 @@ int main()
     auto context = new Context();
     context.display.title("#serpent demo").size(1366, 768);
     context.display.pipeline.addRenderer(new SpriteRenderer());
-    context.display.backgroundColor = 0x0f;
+    context.display.backgroundColor = 0x7ec0ee;
 
     /* Set our root directory up */
     context.resource.root = context.resource.root ~ "/assets/built";
