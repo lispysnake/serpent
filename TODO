@@ -12,6 +12,13 @@ basic demo shape.
  - Reintroduce animation framework through the Context Job system (perhaps stage -> static class?)
  - Retain stateful approaches to per-level/stage concepts.
 
+Nice to have:
+
+ - Chunked data processors. Right now we can run our units in parallel or series, and ensure
+   there is a correct execution order for the system. However, we have chains that run in parallel
+   that would need internal parallelisation. Thus, having some example chunked processors that can
+   split the input data among a group of jobs is essential.
+
 
 Things to remember:
 
