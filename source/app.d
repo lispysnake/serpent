@@ -23,6 +23,7 @@
 import serpent;
 import std.stdio : writeln, writefln;
 import std.exception;
+import bindbc.sdl;
 
 enum Faction
 {
@@ -100,7 +101,18 @@ private:
     final void onKeyReleased(KeyboardEvent e) @safe
     {
         // TODO: Go fullscreen on F
-        writefln("Key released");
+        switch (e.scancode()) {
+            case SDL_SCANCODE_F:
+                writeln("Fullscreen??");
+                break;
+            case SDL_SCANCODE_Q:
+                writeln("Quitting time.");
+                context.quit();
+                break;
+            default:
+                writeln("Key released");
+                break;
+        }
     }
 
 public:

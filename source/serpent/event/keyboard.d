@@ -50,7 +50,7 @@ public:
     }
 
     /**
-     * Return read-only key/symbol for this event (physical key)
+     * Return read-only key/symbol for this event (virtual key)
      */
     pure @property const SDL_Keycode symbol() @safe @nogc nothrow
     {
@@ -58,7 +58,7 @@ public:
     }
 
     /**
-     * Return read-only scancode for this event (virtual mapping)
+     * Return read-only scancode for this event (physical mapping)
      */
     pure @property const SDL_Scancode scancode() @safe @nogc nothrow
     {
