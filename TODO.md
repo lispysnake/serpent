@@ -7,8 +7,9 @@ basic demo shape.
 
  - [x] Bring back basic keyboard handling (F, etc.)
     - Expose underlying SDL_Event for now but in future expand to be more useful.
- - [ ] Bring back fullscreen switching/support
-    - Port from `lispysnake2d` demo
+ - [x] Bring back fullscreen switching/support
+    - [x] Port from `lispysnake2d` demo
+    - [ ] Fix busted bgfx integration, ensure scaling ratio + track window changes
  - [ ] Allow loading/setting the textures per-sprite-data (instead of everything being Ship.png..)
  - [ ] Let's kill the stupid plane demo and focus on recreating the `lispysnake2d` demo.
  - [ ] Bring back parsers for Tiled, but let's just focus on ~~JSON now, not XML (future-maybe?)~~
