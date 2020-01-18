@@ -11,7 +11,9 @@ basic demo shape.
     - Port from `lispysnake2d` demo
  - Allow loading/setting the textures per-sprite-data (instead of everything being Ship.png..)
  - Let's kill the stupid plane demo and focus on recreating the `lispysnake2d` demo.
- - Bring back parsers for Tiled, but let's just focus on JSON now, not XML (future-maybe?)
+ - Bring back parsers for Tiled, but let's just focus on ~~JSON now, not XML (future-maybe?)~~
+   **Edit**: XML is more complete and can be sanity-checked, as well as offering space savings
+   via Base64/ZLib decoding. JSON is an export, not a primary format. Fully support TMX/TSX.
  - Bring back parsers for Tilesheet sprites, to get a player on screen
  - Implement tilemap renderer with commonality to sprite renderer.
  - Reintroduce animation framework through the Context Job system (perhaps stage -> static class?)
