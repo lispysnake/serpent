@@ -22,6 +22,8 @@
 
 module serpent.event.keyboard;
 
+public import std.stdint;
+
 import bindbc.sdl;
 
 /**
@@ -30,6 +32,11 @@ import bindbc.sdl;
 final struct KeyboardEvent
 {
 
+private:
+    SDL_Keycode _sym;
+    SDL_Scancode _scan;
+    uint16_t _mod;
+
 public:
 
     /**
@@ -37,6 +44,30 @@ public:
      */
     this(SDL_KeyboardEvent* origin)
     {
+        this._sym = origin.keysym.sym;
+        this._scan = origin.keysym.scancode;
+        this._mod = origin.keysym.mod;
+    }
+
+    /**
+     * Return read-only key/symbol for this event (physical key)
+     */
+    pure @property const SDL_Keycode symbol() @safe @nogc nothrow
+    {
+        return _sym;
+    }
+
+    /**
+     * Return read-only scancode for this event (virtual mapping)
+     */
+    pure @property const SDL_Scancode scancode() @safe @nogc nothrow
+    {
+        return _scan;
+    }
+
+    pure @property const uint16_t modifiers() @safe @nogc nothrow
+    {
+        return _mod;
     }
 
 }
