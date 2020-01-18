@@ -6,7 +6,9 @@ So, let's get this document in order now to organise this months work to get Ser
 basic demo shape.
 
  - Bring back basic keyboard handling (F, etc.)
+    - Expose underlying SDL_Event for now but in future expand to be more useful.
  - Bring back fullscreen switching/support
+    - Port from `lispysnake2d` demo
  - Allow loading/setting the textures per-sprite-data (instead of everything being Ship.png..)
  - Let's kill the stupid plane demo and focus on recreating the `lispysnake2d` demo.
  - Bring back parsers for Tiled, but let's just focus on JSON now, not XML (future-maybe?)
