@@ -1,7 +1,7 @@
 /*
  * This file is part of serpent.
  *
- * Copyright © 2019 Lispy Snake, Ltd.
+ * Copyright © 2019-2020 Lispy Snake, Ltd.
  *
  * This software is provided 'as-is', without any express or implied
  * warranty. In no event will the authors be held liable for any damages
