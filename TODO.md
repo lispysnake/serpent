@@ -5,21 +5,21 @@ online with the rest of the world due to various issues, health, etc.
 So, let's get this document in order now to organise this months work to get Serpent into
 basic demo shape.
 
- - Bring back basic keyboard handling (F, etc.)
+ - [ ] Bring back basic keyboard handling (F, etc.)
     - Expose underlying SDL_Event for now but in future expand to be more useful.
- - Bring back fullscreen switching/support
+ - [ ] Bring back fullscreen switching/support
     - Port from `lispysnake2d` demo
- - Allow loading/setting the textures per-sprite-data (instead of everything being Ship.png..)
- - Let's kill the stupid plane demo and focus on recreating the `lispysnake2d` demo.
- - Bring back parsers for Tiled, but let's just focus on ~~JSON now, not XML (future-maybe?)~~
+ - [ ] Allow loading/setting the textures per-sprite-data (instead of everything being Ship.png..)
+ - [ ] Let's kill the stupid plane demo and focus on recreating the `lispysnake2d` demo.
+ - [ ] Bring back parsers for Tiled, but let's just focus on ~~JSON now, not XML (future-maybe?)~~
    **Edit**: XML is more complete and can be sanity-checked, as well as offering space savings
    via Base64/ZLib decoding. JSON is an export, not a primary format. Fully support TMX/TSX.
- - Bring back parsers for Tilesheet sprites, to get a player on screen
- - Implement tilemap renderer with commonality to sprite renderer.
- - Reintroduce animation framework through the Context Job system (perhaps stage -> static class?)
- - Retain stateful approaches to per-level/stage concepts.
- - Stop relying on PNG assets + debugmode. Compile these assets and implement ResourceManager ZIPs
- - Fix crash on exit (unlink order of shader programs)
+ - [ ] Bring back parsers for Tilesheet sprites, to get a player on screen
+ - [ ] Implement tilemap renderer with commonality to sprite renderer.
+ - [ ] Reintroduce animation framework through the Context Job system (perhaps stage -> static class?)
+ - [ ] Retain stateful approaches to per-level/stage concepts.
+ - [ ] Stop relying on PNG assets + debugmode. Compile these assets and implement ResourceManager ZIPs
+ - [ ] Fix crash on exit (unlink order of shader programs)
 
 Nice to have:
 
