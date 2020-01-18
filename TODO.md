@@ -5,7 +5,7 @@ online with the rest of the world due to various issues, health, etc.
 So, let's get this document in order now to organise this months work to get Serpent into
 basic demo shape.
 
- - [ ] Bring back basic keyboard handling (F, etc.)
+ - [x] Bring back basic keyboard handling (F, etc.)
     - Expose underlying SDL_Event for now but in future expand to be more useful.
  - [ ] Bring back fullscreen switching/support
     - Port from `lispysnake2d` demo
