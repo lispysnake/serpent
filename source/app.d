@@ -99,6 +99,7 @@ private:
 
     final void onKeyReleased(KeyboardEvent e) @safe
     {
+        // TODO: Go fullscreen on F
         writefln("Key released");
     }
 
