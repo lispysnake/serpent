@@ -98,12 +98,13 @@ private:
         p.setPosition(0, e.x, e.y);
     }
 
-    final void onKeyReleased(KeyboardEvent e) @safe
+    final void onKeyReleased(KeyboardEvent e) @system
     {
         // TODO: Go fullscreen on F
         switch (e.scancode()) {
             case SDL_SCANCODE_F:
                 writeln("Fullscreen??");
+                context.display.fullscreen = !context.display.fullscreen;
                 break;
             case SDL_SCANCODE_Q:
                 writeln("Quitting time.");

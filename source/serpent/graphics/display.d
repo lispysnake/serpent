@@ -71,6 +71,7 @@ private:
     uint32_t _backgroundColor = 0x303030ff;
 
     bool _debugMode = false;
+    bool _fullscreen = false;
 
 private:
 
@@ -433,6 +434,28 @@ public:
         {
             SDL_HideWindow(window);
         }
+    }
+
+    /**
+     * Returns whether we're in fullscreen mode
+     */
+    pure @property final bool fullscreen() @nogc @safe nothrow
+    {
+        return _fullscreen;
+    }
+
+    @property final void fullscreen(bool b) @system
+    {
+        if (b == _fullscreen)
+        {
+            return;
+        }
+        /* Ensure pipeline is init'd */
+        _pipeline.init();
+        _fullscreen = b;
+        //SDL_SetWindowFullscreen(window, b ? SDL_WINDOW_FULLSCREEN_DESKTOP : SDL_WINDOW_SHOWN);
+        import std.stdio;
+        writefln("ERROR: Need to bgfx_reset and follow window changes. Check TODO!");
     }
 
     /**
