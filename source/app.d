@@ -158,7 +158,7 @@ public:
     {
         super.add();
         health ~= 100; /** Start with 100hp */
-        setPosition(0, vec3f(20, 20));
+        setPosition(0, vec2f(20.0f, 20.0f));
     }
 
     /**
