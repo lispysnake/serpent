@@ -1,0 +1,13 @@
+So, long story short, we have 2 repos (prior effort and current) and many, many private
+branches of this project. Add to that, we have 2 months where we ourselves weren't fully
+online with the rest of the world due to various issues, health, etc.
+
+So, let's get this document in order now to organise this months work to get Serpent into
+basic demo shape.
+
+ - Let's kill the stupid plane demo and focus on recreating the `lispysnake2d` demo.
+ - Bring back parsers for Tiled, but let's just focus on JSON now, not XML (future-maybe?)
+ - Bring back parsers for Tilesheet sprites, to get a player on screen
+ - Implement tilemap renderer with commonality to sprite renderer.
+ - Reintroduce animation framework through the Context Job system (perhaps stage -> static class?)
+ - Retain stateful approaches to per-level/stage concepts.
