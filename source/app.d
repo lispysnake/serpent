@@ -54,15 +54,20 @@ final class EnemyMovementProcessor : Processor!ReadWrite
         foreach (i; 0 .. ent.size())
         {
             auto pos = ent.getPosition(i);
-            if (inverted) {
+            if (inverted)
+            {
                 pos.y += 1.5;
-            } else {
+            }
+            else
+            {
                 pos.y -= 1.5;
             }
-            if (pos.y <= 0) {
+            if (pos.y <= 0)
+            {
                 pos.y = 0;
             }
-            if (pos.y >= 768 - 75) {
+            if (pos.y >= 768 - 75)
+            {
                 pos.y = 768 - 75;
             }
             ent.setPosition(i, pos);
@@ -101,22 +106,23 @@ private:
     final void onKeyReleased(KeyboardEvent e) @system
     {
         // TODO: Go fullscreen on F
-        switch (e.scancode()) {
-            case SDL_SCANCODE_F:
-                writeln("Fullscreen??");
-                context.display.fullscreen = !context.display.fullscreen;
-                break;
-            case SDL_SCANCODE_Q:
-                writeln("Quitting time.");
-                context.quit();
-                break;
-            case SDL_SCANCODE_D:
-                writeln("Flip debug.");
-                context.display.debugMode = !context.display.debugMode;
-                break;
-            default:
-                writeln("Key released");
-                break;
+        switch (e.scancode())
+        {
+        case SDL_SCANCODE_F:
+            writeln("Fullscreen??");
+            context.display.fullscreen = !context.display.fullscreen;
+            break;
+        case SDL_SCANCODE_Q:
+            writeln("Quitting time.");
+            context.quit();
+            break;
+        case SDL_SCANCODE_D:
+            writeln("Flip debug.");
+            context.display.debugMode = !context.display.debugMode;
+            break;
+        default:
+            writeln("Key released");
+            break;
         }
     }
 
