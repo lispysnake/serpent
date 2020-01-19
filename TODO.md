@@ -19,6 +19,10 @@ basic demo shape.
             - blob = entityManager.getComponentBlob(entity.supertype)
             - componentBlob = blob.getData!ComponentType()
         - No need for a runtime burst compiler. :P
+        - Need advanced query matching.. by archetype and individual component. Should
+          also work in a generator mode. This will automatically open up parallelism opportunities.
+          Thus, don't look to *return* copies, instead use function pointers to act upon *discovered*
+          data.
  - [ ] Allow loading/setting the textures per-sprite-data (instead of everything being Ship.png..)
  - [ ] Let's kill the stupid plane demo and focus on recreating the `lispysnake2d` demo.
  - [ ] Bring back parsers for Tiled, but let's just focus on ~~JSON now, not XML (future-maybe?)~~
