@@ -10,6 +10,15 @@ basic demo shape.
  - [x] Bring back fullscreen switching/support
     - [x] Port from `lispysnake2d` demo
     - [ ] Fix busted bgfx integration, ensure scaling ratio + track window changes
+ - [ ] Time to mature the ECS design to something ... not immature.
+        - Introduce integer-keyed entitys with an entity manager
+        - Have component *types* as tags to construct supertypes (archetypes)
+        - Group "same" archetypes to same-sized storage chunks for entity groups
+        - Each supertype chunk is statically sized (value-width) and indexed by component type.
+        - Each entity "group" (supertype chunk) is entity-indexed (int) storage
+            - blob = entityManager.getComponentBlob(entity.supertype)
+            - componentBlob = blob.getData!ComponentType()
+        - No need for a runtime burst compiler. :P
  - [ ] Allow loading/setting the textures per-sprite-data (instead of everything being Ship.png..)
  - [ ] Let's kill the stupid plane demo and focus on recreating the `lispysnake2d` demo.
  - [ ] Bring back parsers for Tiled, but let's just focus on ~~JSON now, not XML (future-maybe?)~~
