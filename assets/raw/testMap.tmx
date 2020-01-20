@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.3.1" orientation="orthogonal" renderorder="right-down" compressionlevel="-1" width="30" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="1">
+ <tileset firstgid="1" source="Overworld.tsx"/>
+ <layer id="1" name="Tile Layer 1" width="30" height="30">
+  <data encoding="base64" compression="zlib">
+   eJxjZGBgYBzFoxgNO7AwMDiykK9/HyMEk6ovA2hnJhn2wuxjhuKpZNhNKp6OZJ82FNPLXph9wVBML3th9slAMb3slUHDo/bS1l5NhpHl31F7aW8vLE2NFP+O2juarmhl70gtn/cyItp6tML7sdjLy8TAwEcHjG6vKVDMjA4YZh8A6iJGQQ==
+  </data>
+ </layer>
+ <layer id="2" name="Tile Layer 2" width="30" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztlEEOwUAUhl9rLoCbiA0WuAYWWgucAqfBDWyxxRWwxCX8ohJ9merMtCzkfcmXZtr+/efNokRxKv7zui4QbeAWNrFuGdpm2QdVn1J59V6QucIbHGI9MnTMsll6V2Rnlt73s7LtzeucvzHvHh40vUVFVIJleMT6ZOiZZXnvLupMmreGTB02VPy5bu/8Hs/anHOATAgHDr08a9LbwTvdD/Y033DJCELeqPRXEpl4RFM483LbjhFz9C3g0rI3+nU6z9xHXwDDH88rCIIg/Cd3T39dGA==
+  </data>
+ </layer>
+ <layer id="3" name="Tile Layer 3" width="30" height="30">
+  <data encoding="base64" compression="zlib">
+   eJxjYBh8QGqA9DoNkF4YsGeB0NJA7AzEd4H8e0B8H4gfsEDEpNHUUgOkI5mVDcSsrAwMbEDMDsQcrBAxbGqpBWSAeDIQ6wLt0gNifSA2YIWIyVDB/DYmBoZ2JkTYIYuBQCjQrjAgDgfiCFZMeRCQxiJGCKwDql3PRFiMUj2jYBSMglEwCkbBKBgFo2AUkAsAhlkU9w==
+  </data>
+ </layer>
+</map>
