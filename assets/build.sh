@@ -31,10 +31,16 @@ rm -rf "${BUILDDIR}"
 mkdir "${BUILDDIR}"
 mkdir "${BUILDDIR}/textures"
 mkdir "${BUILDDIR}/shaders"
+mkdir "${BUILDDIR}/maps"
 
 for i in raw/*.png ; do
     nom=$(basename "${i}")
     convert_texture "${nom}"
+done
+
+# Install maps
+for i in raw/*.{tsx,tmx}; do
+    install -m 0644 "${i}" "${BUILDDIR}/maps/."
 done
 
 for shader_type in "vertex" "fragment" ; do
