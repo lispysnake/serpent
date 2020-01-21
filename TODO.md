@@ -10,6 +10,7 @@ basic demo shape.
  - [x] Bring back fullscreen switching/support
     - [x] Port from `lispysnake2d` demo
     - [ ] Fix busted bgfx integration, ensure scaling ratio + track window changes
+ - [ ] Add non-crap file loading capabilities. i.e. asynchronous.
  - [ ] Time to mature the ECS design to something ... not immature.
         - Introduce integer-keyed entitys with an entity manager
         - Have component *types* as tags to construct supertypes (archetypes)
