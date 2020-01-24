@@ -130,9 +130,12 @@ public:
         blob[typeid(C)] = cast(void*) new ComponentBlob!C();
     }
 
-    final EntityRange withComponent(C)()
+    final auto withComponent(C)()
     {
-        return EntityRange();
+        static assert(hasUDA!(C, serpentComponent),
+                "'%s' is not a valid serpentComponent".format(C.stringof));
+        assert(typeid(C) in store, "'%s' is not a registered component".format(C.stringof));
+        return store[typeid(C)].mapping.byKey();
     }
 }
 
@@ -203,25 +206,5 @@ package:
     {
         assert(id in mapping, "Entity '%d' does not have component '%s'".format(id, C.stringof));
         return mapping[id];
-    }
-}
-
-final struct EntityRange
-{
-    bool didIt = false;
-
-    bool empty()
-    {
-        return didIt;
-    }
-
-    Entity front()
-    {
-        return Entity(1);
-    }
-
-    void popFront()
-    {
-        didIt = true;
     }
 }

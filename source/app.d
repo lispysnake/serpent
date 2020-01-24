@@ -91,11 +91,17 @@ public:
 
         initView.data!SpriteComponent(entity).texture = "ship.png";
 
+        auto entity2 = initView.createEntity();
+        initView.addComponent!TilemapComponent(entity2);
+        initView.addComponent!SpriteComponent(entity2);
+        initView.data!SpriteComponent(entity2).texture = "lol.png";
+
         writefln("Texture is %s", initView.data!SpriteComponent(entity).texture);
 
         foreach (ent; initView.withComponent!SpriteComponent)
         {
-            writefln("Got an entity: %d", ent.id);
+            writefln("Got an entity: %d, texture: %s", ent,
+                    initView.data!SpriteComponent(ent).texture);
         }
         return true;
     }
