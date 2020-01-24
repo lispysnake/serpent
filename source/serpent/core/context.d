@@ -75,6 +75,7 @@ private:
     ResourceManager _resource;
     InputManager _input;
     EntityManager _entity;
+    ComponentManager _component;
     App _app;
     Display _display;
     Info _info;
@@ -118,7 +119,8 @@ public:
         tp.isDaemon = false;
 
         /* Core ECS */
-        _entity = new EntityManager();
+        _component = new ComponentManager();
+        _entity = new EntityManager(_component);
 
         _systemGroup = new Group!ReadWrite("system").add(new InputProcessor)
             .add(new AppUpdateProcessor());
@@ -303,6 +305,14 @@ public:
     pure @property final EntityManager entity() @safe @nogc nothrow
     {
         return _entity;
+    }
+
+    /**
+     * Return the ComponentManager instance
+     */
+    pure @property final ComponentManager component() @safe @nogc nothrow
+    {
+        return _component;
     }
 
     /**

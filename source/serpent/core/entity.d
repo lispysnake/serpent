@@ -103,9 +103,9 @@ package:
      * Construct a new EntityManager. An instance of the EntityManager should
      * be obtained from the Context.
      */
-    this()
+    this(ComponentManager comp)
     {
-        _component = new ComponentManager();
+        _component = comp;
 
         /* In future consider greedy_realloc style behaviour. */
         deadEntities.reserve(100);

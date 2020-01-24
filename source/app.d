@@ -82,10 +82,20 @@ public:
         s.addCamera(new OrthographicCamera());
         s.camera.worldOrigin = WorldOrigin.TopLeft;
 
+        context.component.registerComponent!SpriteComponent;
+        context.component.registerComponent!TilemapComponent;
         auto entity = context.entity.create();
 
         return true;
     }
+}
+
+@serpentComponent final struct SpriteComponent
+{
+}
+
+@serpentComponent final struct TilemapComponent
+{
 }
 
 int main()

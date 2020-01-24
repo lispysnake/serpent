@@ -114,6 +114,7 @@ package:
         return cast(const C*) dataRW(id);
     }
 
+public:
     /**
      * Register a component with the system.
      * This will also allocate any storage for the component
@@ -193,7 +194,7 @@ package:
         mapping.remove(id);
     }
 
-    final C* get(EntityID id) @safe nothrow
+    final C* get(EntityID id) @safe
     {
         assert(id in mapping, "Entity '%d' does not have component '%s'".format(id, C.stringof));
         return mapping[id];
