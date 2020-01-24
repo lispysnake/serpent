@@ -25,6 +25,8 @@ module serpent.core.entity;
 public import serpent.core.component;
 public import std.stdint;
 
+import std.container : Array;
+
 /**
  * EntityID is the underlying handle to an entity
  */
@@ -88,6 +90,12 @@ final class EntityManager
 
 private:
     ComponentManager _component;
+    EntityID lastID = 0;
+    uint32_t allocatedEntities = 0;
+
+    /* Asked to kill. */
+    Array!EntityID deadEntities;
+    Array!EntityID killEntities;
 
 package:
 
@@ -98,6 +106,10 @@ package:
     this()
     {
         _component = new ComponentManager();
+
+        /* In future consider greedy_realloc style behaviour. */
+        deadEntities.reserve(100);
+        killEntities.reserve(100);
     }
 
     /**
@@ -110,7 +122,65 @@ package:
 
     }
 
+private:
+
+    /**
+     * Helper to clean up any killing.
+     * Note: If creating boatloads of IDs and then deleting them all,
+     * this list becomes very large. We'll improve this in future.
+     */
+    final void processKills() @system
+    {
+        /* Typical entity killage. */
+        foreach (i; 0 .. killEntities.length)
+        {
+            deadEntities.insertBack(killEntities[i]);
+            /* TODO: Clear component storage */
+            --allocatedEntities;
+        }
+
+        killEntities.clear();
+    }
+
+    /**
+     * Attempt to recycle a previously allocated ID.
+     */
+    final Entity recycle() @safe
+    {
+        if (deadEntities.length < 1)
+        {
+            return Entity(0);
+        }
+        auto ent = deadEntities.back();
+        deadEntities.removeBack();
+        return Entity(ent);
+    }
+
 public:
+
+    /**
+     * Create a new Entity
+     */
+    final Entity create() @safe
+    {
+        /* Try recycling first. */
+        auto ent = recycle();
+        if (ent.isValid())
+        {
+            ++allocatedEntities;
+            return ent;
+        }
+
+        /* New entity. */
+        ++lastID;
+        ++allocatedEntities;
+
+        return Entity(lastID);
+    }
+
+    /**
+     * Return the underlying component manager
+     */
     pure @property final ComponentManager component() @safe @nogc nothrow
     {
         return _component;
