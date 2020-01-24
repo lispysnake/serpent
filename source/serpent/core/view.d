@@ -56,6 +56,8 @@ public:
     static if (is(T : ReadOnly))
     {
 
+        /* READ-ONLY APIs */
+
         /**
          * Return data for the given entity ID
          */
@@ -76,6 +78,8 @@ public:
     else
     {
 
+        /* READ-WRITE APIs */
+
         /**
          * Return data for the given entity ID
          */
@@ -90,6 +94,38 @@ public:
         final C* data(C)(Entity ent)
         {
             return _component.dataRW(ent.id);
+        }
+
+        /**
+         * Add a component to the given entity ID
+         */
+        final void addComponent(C)(EntityID id)
+        {
+            return _component.addComponent!C(id);
+        }
+
+        /**
+         * Add a component to the given entity
+         */
+        final void addComponent(C)(Entity ent)
+        {
+            return _component.addComponent!C(ent.id);
+        }
+
+        /**
+         * Remove a component from the given entity ID
+         */
+        final void removeComponent(C)(EntityID id)
+        {
+            return _component.removeComponent!C(id);
+        }
+
+        /**
+         * Remove a component from the given entity
+         */
+        final void removeComponent(C)(Entity ent)
+        {
+            return _component.removeComponent!C(ent.id);
         }
     }
 }
