@@ -7,6 +7,8 @@ This is not *exactly* an engine.
 
 ### UNDER DEVELOPMENT
 
+SUPER SUPER UNSTABLE RIGHT NOW. Landing 2 months of changes is hard work! :P
+
 This is very much a work in progress and will continue to
 change daily. As such the document provides a rough roadmap and
 vision overview. Note this is a restart of efforts after our
