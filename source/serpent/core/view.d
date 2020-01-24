@@ -35,7 +35,7 @@ import serpent.core.entity;
  *
  * TODO: Make this actually useful.
  */
-final class View(T : DataPolicy)
+final struct View(T : DataPolicy)
 {
 
 private:
@@ -50,6 +50,8 @@ package:
     }
 
 public:
+
+    @disable this();
 
     static if (is(T : ReadOnly))
     {

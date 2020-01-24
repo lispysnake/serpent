@@ -142,13 +142,15 @@ package:
      */
     final void run(TaskPool tp) @system
     {
+        auto view = View!T(this.context.entity, this.context.component);
+
         /* If parallel is set+supported, execute units in parallel */
         if (this.parallel())
         {
             foreach (ref p; tp.parallel(processors))
             {
                 p.context = this.context;
-                p.run(null);
+                p.run(view);
             }
         }
 
@@ -158,7 +160,7 @@ package:
             foreach (ref p; processors)
             {
                 p.context = this.context;
-                p.run(null);
+                p.run(view);
             }
         }
     }
