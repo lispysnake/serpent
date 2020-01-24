@@ -127,5 +127,14 @@ public:
         {
             return _component.removeComponent!C(ent.id);
         }
+
+        /**
+         * Return an EntityRange helper that allows one to foreach
+         * over the underlying entity data.
+         */
+        final EntityRange withComponent(C)()
+        {
+            return _component.withComponent!C();
+        }
     }
 }
