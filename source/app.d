@@ -93,6 +93,10 @@ public:
 
         writefln("Texture is %s", initView.data!SpriteComponent(entity).texture);
 
+        foreach (ent; initView.withComponent!SpriteComponent)
+        {
+            writefln("Got an entity: %d", ent.id);
+        }
         return true;
     }
 }

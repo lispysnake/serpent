@@ -129,6 +129,11 @@ public:
         store[typeid(C)] = new ComponentStore();
         blob[typeid(C)] = cast(void*) new ComponentBlob!C();
     }
+
+    final EntityRange withComponent(C)()
+    {
+        return EntityRange();
+    }
 }
 
 /**
@@ -198,5 +203,25 @@ package:
     {
         assert(id in mapping, "Entity '%d' does not have component '%s'".format(id, C.stringof));
         return mapping[id];
+    }
+}
+
+final struct EntityRange
+{
+    bool didIt = false;
+
+    bool empty()
+    {
+        return didIt;
+    }
+
+    Entity front()
+    {
+        return Entity(1);
+    }
+
+    void popFront()
+    {
+        didIt = true;
     }
 }
