@@ -214,14 +214,20 @@ public:
     }
 
     /**
-     * Perform any required rendering
+     * Perform any pre-rendering we need to do, such as clearing the
+     * display.
      */
-    final void render() @system
+    final void prerender() @system
     {
         _pipeline.clear();
+        _pipeline.start();
+    }
 
-        _pipeline.render();
-
+    /**
+     * Perform any required rendering
+     */
+    final void postrender() @system
+    {
         /* Hella inefficient. Remove. */
         if (_scene.name == dummyScene.name)
         {
@@ -424,8 +430,6 @@ public:
         {
             return;
         }
-        /* Init the pipeline now */
-        _pipeline.init();
         if (b)
         {
             SDL_ShowWindow(window);
@@ -450,8 +454,6 @@ public:
         {
             return;
         }
-        /* Ensure pipeline is init'd */
-        _pipeline.init();
         _fullscreen = b;
         //SDL_SetWindowFullscreen(window, b ? SDL_WINDOW_FULLSCREEN_DESKTOP : SDL_WINDOW_SHOWN);
         import std.stdio;

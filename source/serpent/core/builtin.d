@@ -99,13 +99,9 @@ public:
 }
 
 /**
- * The RenderProcessor is responsible for getting the display
- * to actually render.
- *
- * Right now it lives on the main thread - but in future this
- * will just kick off a frame render for bgfx.
+ * The PrerenderProcessor will begin the frame.
  */
-final class RenderProcessor : Processor!ReadWrite
+final class PreRenderProcessor : Processor!ReadOnly
 {
 
 package:
@@ -115,10 +111,31 @@ package:
 
 public:
     /**
-     * Call render on the target display
+     * Call prerender on the target display
      */
     final override void run() @system
     {
-        context.display.render();
+        context.display.prerender();
+    }
+}
+
+/**
+ * The PrerenderProcessor will begin the frame.
+ */
+final class PostRenderProcessor : Processor!ReadOnly
+{
+
+package:
+    this()
+    {
+    }
+
+public:
+    /**
+     * Call postrender on the target display
+     */
+    final override void run() @system
+    {
+        context.display.postrender();
     }
 }

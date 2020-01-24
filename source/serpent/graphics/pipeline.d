@@ -22,6 +22,7 @@
 
 module serpent.graphics.pipeline;
 
+public import serpent.core.context;
 public import serpent.graphics.display;
 public import serpent.graphics.renderer;
 
@@ -39,7 +40,6 @@ final class Pipeline
 
 private:
     Display _display;
-    Renderer[] _renderers;
     Context _context;
     bool didInit = false;
 
@@ -47,8 +47,6 @@ package:
 
     this(Display display)
     {
-        /* Just try to optimise startup. */
-        _renderers.reserve(3);
         this._display = display;
     }
 
@@ -66,19 +64,14 @@ public:
     }
 
     /**
-     * Perform any real rendering logic through our Renderer instances
+     * Begin for the next scene.
      */
-    final void render() @system
+    final void start() @system
     {
         auto camera = display.scene.camera;
         if (camera !is null)
         {
             camera.apply();
-        }
-
-        foreach (ref r; _renderers)
-        {
-            r.render();
         }
     }
 
@@ -89,32 +82,6 @@ public:
     {
         /* Skip frame now */
         bgfx_frame(false);
-    }
-
-    /**
-     * Add a renderer to the pipeline
-     * At this point we'll attempt to init the renderer.
-     */
-    final void addRenderer(Renderer r) @system
-    {
-        r.pipeline = this;
-        this._renderers ~= r;
-    }
-
-    /**
-     * Begin init of all renderers
-     */
-    final void init() @system
-    {
-        if (didInit)
-        {
-            return;
-        }
-        didInit = true;
-        foreach (ren; _renderers)
-        {
-            ren.init();
-        }
     }
 
     /**
