@@ -84,7 +84,14 @@ public:
 
         context.component.registerComponent!SpriteComponent;
         context.component.registerComponent!TilemapComponent;
-        auto entity = context.entity.create();
+
+        /* Construct initial entity */
+        auto entity = initView.createEntity();
+        initView.addComponent!SpriteComponent(entity);
+
+        initView.data!SpriteComponent(entity).texture = "ship.png";
+
+        writefln("Texture is %s", initView.data!SpriteComponent(entity).texture);
 
         return true;
     }
@@ -92,6 +99,7 @@ public:
 
 @serpentComponent final struct SpriteComponent
 {
+    string texture;
 }
 
 @serpentComponent final struct TilemapComponent

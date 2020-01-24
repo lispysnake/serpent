@@ -156,7 +156,7 @@ private:
         return Entity(ent);
     }
 
-public:
+package:
 
     /**
      * Create a new Entity
@@ -177,6 +177,8 @@ public:
 
         return Entity(lastID);
     }
+
+public:
 
     /**
      * Return the underlying component manager

@@ -63,7 +63,7 @@ public:
          */
         final const C* data(C)(EntityID id)
         {
-            return _component.dataRO(id);
+            return _component.dataRO!C(id);
         }
 
         /**
@@ -71,7 +71,7 @@ public:
          */
         final const C* data(C)(Entity ent)
         {
-            return _component.dataRO(ent.id);
+            return _component.dataRO!C(ent.id);
         }
 
     }
@@ -79,13 +79,17 @@ public:
     {
 
         /* READ-WRITE APIs */
+        final Entity createEntity()
+        {
+            return _entity.create();
+        }
 
         /**
          * Return data for the given entity ID
          */
         final C* data(C)(EntityID id)
         {
-            return _component.dataRW(id);
+            return _component.dataRW!C(id);
         }
 
         /**
@@ -93,7 +97,7 @@ public:
          */
         final C* data(C)(Entity ent)
         {
-            return _component.dataRW(ent.id);
+            return _component.dataRW!C(ent.id);
         }
 
         /**
