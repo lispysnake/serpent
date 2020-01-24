@@ -67,6 +67,8 @@ package:
 
         /* Update membership */
         store[typeid(C)].set(id);
+        auto bl = cast(ComponentBlob!C) blob[typeid(C)];
+        bl.set(id, new C());
     }
 
     /**
@@ -80,6 +82,8 @@ package:
 
         /* Update membership */
         store[typeid(C)].unset(id);
+        auto bl = cast(ComponentBlob!C) blob[typeid(C)];
+        bl.unset(id);
     }
 
     /**
