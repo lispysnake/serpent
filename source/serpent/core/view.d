@@ -24,6 +24,9 @@ module serpent.core.view;
 
 public import serpent.core.policy;
 
+import serpent.core.component;
+import serpent.core.entity;
+
 /**
  * The view helps correctly control access to entities and components
  * to ensure the data policy is respected at the compiler level. This
@@ -34,4 +37,57 @@ public import serpent.core.policy;
  */
 final class View(T : DataPolicy)
 {
+
+private:
+    ComponentManager _component;
+    EntityManager _entity;
+
+package:
+    this(EntityManager ent, ComponentManager comp)
+    {
+        this._entity = ent;
+        this._component = comp;
+    }
+
+public:
+
+    static if (is(T : ReadOnly))
+    {
+
+        /**
+         * Return data for the given entity ID
+         */
+        final const C* data(C)(EntityID id)
+        {
+            return _component.dataRO(id);
+        }
+
+        /**
+         * Return data for the given entity ID
+         */
+        final const C* data(C)(Entity ent)
+        {
+            return _component.dataRO(ent.id);
+        }
+
+    }
+    else
+    {
+
+        /**
+         * Return data for the given entity ID
+         */
+        final C* data(C)(EntityID id)
+        {
+            return _component.dataRW(id);
+        }
+
+        /**
+         * Return data for the given entity
+         */
+        final C* data(C)(Entity ent)
+        {
+            return _component.dataRW(ent.id);
+        }
+    }
 }
