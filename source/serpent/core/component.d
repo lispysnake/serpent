@@ -22,6 +22,8 @@
 
 module serpent.core.component;
 
+public import serpent.core.entity;
+
 import std.traits : hasUDA;
 import std.format : format;
 
@@ -44,6 +46,8 @@ final struct serpentComponent
 final class ComponentManager
 {
 
+    void*[TypeInfo] store;
+
 package:
 
     this()
@@ -56,8 +60,9 @@ package:
      */
     final void addComponent(C)(EntityID id) @safe @nogc nothrow
     {
-        static assert(hasUDA!(i, serpentComponent),
-                "'%s' is not a valid serpentComponent".format(i.stringof));
+        static assert(hasUDA!(C, serpentComponent),
+                "'%s' is not a valid serpentComponent".format(C.stringof));
+        assert(typeid(C) in store, "'%s' is not a registered component".format(C.stringof));
     }
 
     /**
@@ -65,8 +70,9 @@ package:
      */
     final void removeComponent(C)(EntityID id) @safe @nogc nothrow
     {
-        static assert(hasUDA!(i, serpentComponent),
-                "'%s' is not a valid serpentComponent".format(i.stringof));
+        static assert(hasUDA!(C, serpentComponent),
+                "'%s' is not a valid serpentComponent".format(C.stringof));
+        assert(typeid(C) in store, "'%s' is not a registered component".format(C.stringof));
     }
 
     /**
@@ -77,9 +83,9 @@ package:
      */
     final C* dataRW(C)(EntityID id) @safe @nogc nothrow
     {
-        static assert(hasUDA!(i, serpentComponent),
-                "'%s' is not a valid serpentComponent".format(i.stringof));
-
+        static assert(hasUDA!(C, serpentComponent),
+                "'%s' is not a valid serpentComponent".format(C.stringof));
+        assert(typeid(C) in store, "'%s' is not a registered component".format(C.stringof));
         return null;
     }
 
@@ -91,9 +97,8 @@ package:
      */
     final const C* dataRO(C)(EntityID id) @safe @nogc nothrow
     {
-        static assert(hasUDA!(i, serpentComponent),
-                "'%s' is not a valid serpentComponent".format(i.stringof));
-
+        static assert(hasUDA!(C, serpentComponent),
+                "'%s' is not a valid serpentComponent".format(C.stringof));
         return cast(const C*) dataRW(id);
     }
 }
