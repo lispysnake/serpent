@@ -47,6 +47,7 @@ final class ComponentManager
 {
 
     ComponentStore[TypeInfo] store;
+    void*[TypeInfo] blob;
 
 package:
 
@@ -92,7 +93,8 @@ package:
         static assert(hasUDA!(C, serpentComponent),
                 "'%s' is not a valid serpentComponent".format(C.stringof));
         assert(typeid(C) in store, "'%s' is not a registered component".format(C.stringof));
-        return null;
+        auto bl = cast(ComponentBlob!C) blob[typeid(C)];
+        return bl.get(id);
     }
 
     /**
@@ -122,6 +124,7 @@ public:
 
         /* TODO: Improve allocator here. */
         store[typeid(C)] = new ComponentStore();
+        store[typeid(C)] = cast(void*) new ComponentBlob!C();
     }
 }
 
@@ -154,5 +157,43 @@ package:
     final void unset(EntityID id) @safe nothrow
     {
         mapping.remove(id);
+    }
+}
+
+/**
+ * The component blob stores a map per component from entityID to the
+ * actual component storage type.
+ */
+final class ComponentBlob(C)
+{
+
+private:
+    C*[EntityID] mapping;
+
+package:
+    this()
+    {
+        mapping.reserve(1);
+    }
+
+    /**
+     * Set the associated datum with the enttity ID
+     */
+    final void set(EntityID id, C* datum) @safe nothrow
+    {
+        mapping[id] = datum;
+    }
+
+    /**
+     * Unset the associated datum from the entity ID
+     */
+    final void unset(EntityID id) @safe nothrow
+    {
+        mapping.remove(id);
+    }
+
+    final C* get(EntityID id) @safe nothrow
+    {
+        return mapping[id];
     }
 }
