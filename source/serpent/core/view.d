@@ -20,12 +20,18 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.core;
+module serpent.core.view;
 
-public import serpent.core.component;
-public import serpent.core.context;
-public import serpent.core.entity;
-public import serpent.core.group;
 public import serpent.core.policy;
-public import serpent.core.processor;
-public import serpent.core.view;
+
+/**
+ * The view helps correctly control access to entities and components
+ * to ensure the data policy is respected at the compiler level. This
+ * effectively means a read-only view cannot modify any component membership
+ * or data, or destroy/create entities.
+ *
+ * TODO: Make this actually useful.
+ */
+final class View(T : DataPolicy)
+{
+}

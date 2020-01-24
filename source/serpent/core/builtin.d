@@ -24,6 +24,7 @@ module serpent.core.builtin;
 
 import serpent.core.policy;
 import serpent.core.processor;
+import serpent.core.view;
 import bindbc.sdl;
 
 /**
@@ -45,7 +46,7 @@ public:
     /**
      * Start consuming events, send them where they need to go.
      */
-    final override void run() @system
+    final override void run(View!ReadWrite dataView) @system
     {
         SDL_Event event;
 
@@ -92,7 +93,7 @@ public:
     /**
      * Call update on the App instance midloop
      */
-    final override void run() @system
+    final override void run(View!ReadWrite dataView) @system
     {
         context.app.update();
     }
@@ -113,7 +114,7 @@ public:
     /**
      * Call prerender on the target display
      */
-    final override void run() @system
+    final override void run(View!ReadOnly dataView) @system
     {
         context.display.prerender();
     }
@@ -134,7 +135,7 @@ public:
     /**
      * Call postrender on the target display
      */
-    final override void run() @system
+    final override void run(View!ReadOnly dataView) @system
     {
         context.display.postrender();
     }

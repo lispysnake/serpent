@@ -24,6 +24,7 @@ module serpent.core.processor;
 
 public import serpent.core.context;
 public import serpent.core.policy;
+public import serpent.core.view;
 
 /**
  * The virtual base class for any Processor (System) within the Serpent
@@ -47,7 +48,7 @@ private:
     Context _context;
 
 public:
-    abstract void run() @system;
+    abstract void run(View!T entityView) @system;
 
 package:
 
