@@ -23,6 +23,56 @@
 module serpent.core.entity;
 
 public import serpent.core.component;
+public import std.stdint;
+
+/**
+ * EntityID is the underlying handle to an entity
+ */
+alias EntityID = uint32_t;
+
+/**
+ * Entity wraps an ID and gives it fancy functions. No overhead.
+ * Eventually we'll want to make this a bit more advanced and have
+ * version fields to Entity ID, etc.
+ *
+ * For now, keep it simple.
+ */
+final struct Entity
+{
+
+private:
+    EntityID _id;
+
+protected:
+
+    /**
+     * Construct a new Entity from the given ID.
+     * Should not be retained as IDs can and will change.
+     */
+    this(EntityID id) @safe @nogc nothrow
+    {
+        _id = id;
+    }
+
+public:
+    @disable this();
+
+    /**
+     * Return true if the entity is valid.
+     */
+    public final bool isValid() @safe @nogc nothrow
+    {
+        return _id != 0;
+    }
+
+    /**
+     * Return the ID field of this Entity.
+     */
+    pragma(inline, true) pure @property const final EntityID id() @safe @nogc nothrow
+    {
+        return _id;
+    }
+}
 
 /**
  * The EntityManager is responsible for the lifecycle management of all
