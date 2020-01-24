@@ -22,6 +22,9 @@
 
 module serpent.core.component;
 
+import std.traits : hasUDA;
+import std.format : format;
+
 /**
  * Simple UDA decorator. May be used in future for runtime introspection,
  * but is an explicit requiremenet to ensure we don't add random objects
@@ -46,5 +49,51 @@ package:
     this()
     {
 
+    }
+
+    /**
+     * Adds a component (tag) to the given entity ID.
+     */
+    final void addComponent(C)(EntityID id) @safe @nogc nothrow
+    {
+        static assert(hasUDA!(i, serpentComponent),
+                "'%s' is not a valid serpentComponent".format(i.stringof));
+    }
+
+    /**
+     * Removes a component (and any data) from the given entity ID
+     */
+    final void removeComponent(C)(EntityID id) @safe @nogc nothrow
+    {
+        static assert(hasUDA!(i, serpentComponent),
+                "'%s' is not a valid serpentComponent".format(i.stringof));
+    }
+
+    /**
+     * Returns read-write access to component data.
+     *
+     * This is only compiler-level enforced. Derpy programming will
+     * always find a way around it.
+     */
+    final C* dataRW(C)(EntityID id) @safe @nogc nothrow
+    {
+        static assert(hasUDA!(i, serpentComponent),
+                "'%s' is not a valid serpentComponent".format(i.stringof));
+
+        return null;
+    }
+
+    /**
+     * Returns read-only access to component data.
+     *
+     * This is only compiler-level enforced. Derpy programming will
+     * always find a way around it.
+     */
+    final const C* dataRO(C)(EntityID id) @safe @nogc nothrow
+    {
+        static assert(hasUDA!(i, serpentComponent),
+                "'%s' is not a valid serpentComponent".format(i.stringof));
+
+        return cast(const C*) dataRW(id);
     }
 }
