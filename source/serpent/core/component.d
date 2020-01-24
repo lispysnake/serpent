@@ -46,7 +46,7 @@ final struct serpentComponent
 final class ComponentManager
 {
 
-    void*[TypeInfo] store;
+    ComponentStore[TypeInfo] store;
 
 package:
 
@@ -100,5 +100,53 @@ package:
         static assert(hasUDA!(C, serpentComponent),
                 "'%s' is not a valid serpentComponent".format(C.stringof));
         return cast(const C*) dataRW(id);
+    }
+
+public:
+
+    /**
+     * Register a component with the system.
+     * This will also allocate any storage for the component
+     */
+    final void registerComponent(C)() @safe
+    {
+        static assert(hasUDA!(C, serpentComponent),
+                "'%s' is not a valid serpentComponent".format(C.stringof));
+        assert(typeid(C) !in store, "'%s' is already a registered component".format(C.stringof));
+
+        /* TODO: Improve allocator here. */
+        store[typeid(C)] = new ComponentStore();
+    }
+}
+
+/**
+ * The component store is constructed per component as a means for storing
+ * component membership.
+ *
+ * Right now it's just a fancy map wrapper. Eventually we'll want better
+ * allocators and sparse integer sets.
+ */
+final class ComponentStore
+{
+
+private:
+    bool[EntityID] mapping;
+
+package:
+    this()
+    {
+    }
+
+    /**
+     * Set the entity as belonging to this component
+     */
+    final void set(EntityID id) @safe nothrow
+    {
+        mapping[id] = true;
+    }
+
+    final void unset(EntityID id) @safe nothrow
+    {
+        mapping.remove(id);
     }
 }
