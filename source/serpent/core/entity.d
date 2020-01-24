@@ -22,6 +22,8 @@
 
 module serpent.core.entity;
 
+public import serpent.core.component;
+
 /**
  * The EntityManager is responsible for the lifecycle management of all
  * entities (_things_) within the playable world. This takes an ECS-inspired
@@ -34,6 +36,9 @@ module serpent.core.entity;
 final class EntityManager
 {
 
+private:
+    ComponentManager _component;
+
 package:
 
     /**
@@ -42,6 +47,12 @@ package:
      */
     this()
     {
+        _component = new ComponentManager();
+    }
 
+public:
+    pure @property final ComponentManager component() @safe @nogc nothrow
+    {
+        return _component;
     }
 }

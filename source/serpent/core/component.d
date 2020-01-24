@@ -30,3 +30,21 @@ module serpent.core.component;
 final struct serpentComponent
 {
 }
+
+/**
+ * The ComponentManager is responsible for assigning and removing components
+ * (tags + data) from specific entities. In future it will evolve to have
+ * improved memory management, with Region allocation and entity sorting.
+ *
+ * For now, it will be simple to get us to demo stages.
+ */
+final class ComponentManager
+{
+
+package:
+
+    this()
+    {
+
+    }
+}
