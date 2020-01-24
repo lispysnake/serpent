@@ -20,9 +20,13 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.core;
+module serpent.core.component;
 
-public import serpent.core.entity;
-public import serpent.core.group;
-public import serpent.core.policy;
-public import serpent.core.processor;
+/**
+ * Simple UDA decorator. May be used in future for runtime introspection,
+ * but is an explicit requiremenet to ensure we don't add random objects
+ * and instances to entities.
+ */
+final struct serpentComponent
+{
+}

@@ -20,9 +20,28 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.core;
+module serpent.core.entity;
 
-public import serpent.core.entity;
-public import serpent.core.group;
-public import serpent.core.policy;
-public import serpent.core.processor;
+/**
+ * The EntityManager is responsible for the lifecycle management of all
+ * entities (_things_) within the playable world. This takes an ECS-inspired
+ * approached of using compositional building blocks, i.e. assigning tags and
+ * data to entities via _components_.
+ *
+ * The EntityManager should be used via the Context and Processor instances
+ * to maintain thread-safety through data mutability promises.
+ */
+final class EntityManager
+{
+
+package:
+
+    /**
+     * Construct a new EntityManager. An instance of the EntityManager should
+     * be obtained from the Context.
+     */
+    this()
+    {
+
+    }
+}

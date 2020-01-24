@@ -30,6 +30,7 @@ import std.path;
 import std.parallelism;
 
 import serpent.core.builtin;
+import serpent.core.entity;
 import serpent.core.group;
 import serpent.core.policy;
 
@@ -73,6 +74,7 @@ private:
 
     ResourceManager _resource;
     InputManager _input;
+    EntityManager _entity;
     App _app;
     Display _display;
     Info _info;
@@ -111,6 +113,9 @@ public:
         /* Sort out the scheduling cruft */
         tp = new TaskPool();
         tp.isDaemon = false;
+
+        /* Core ECS */
+        _entity = new EntityManager();
 
         _systemGroup = new Group!ReadWrite("system").add(new InputProcessor)
             .add(new AppUpdateProcessor()).add(new RenderProcessor);
@@ -259,6 +264,14 @@ public:
     pure @property final Group!ReadWrite systemGroup() @safe @nogc nothrow
     {
         return _systemGroup;
+    }
+
+    /**
+     * Return the EntityManager instance.
+     */
+    pure @property final EntityManager entity() @safe @nogc nothrow
+    {
+        return _entity;
     }
 
     /**
