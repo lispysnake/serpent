@@ -27,7 +27,6 @@ import std.string : format;
 
 import serpent.camera;
 import serpent.graphics.display;
-import serpent.entity;
 
 /**
  * A Game is composed of multiple scenes which in turn contain entities.
@@ -43,7 +42,6 @@ final class Scene
 
 private:
     string _name;
-    Entity[] ents;
     Camera[string] cameras;
     Camera _camera;
     Display _display;
@@ -62,16 +60,6 @@ public:
     }
 
     /**
-     * Add an entity to this scene.
-     * It should be noted that a singular Entity may be composed
-     * of many instances.
-     */
-    final void addEntity(Entity e) @safe
-    {
-        this.ents ~= e;
-    }
-
-    /**
      * Add a new Camera to the scene.
      *
      * If no camera is present, the new Camera will be activated
@@ -87,16 +75,6 @@ public:
         {
             _camera = c;
         }
-    }
-
-    /**
-     * Return the list of visible entities
-     * TODO: Add tag filtering
-     */
-    @property final Entity[] visibleEntities() @nogc @safe nothrow
-    {
-        /* TODO: Only return visible, not all. */
-        return this.ents;
     }
 
     /**

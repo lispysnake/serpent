@@ -26,7 +26,6 @@ import bindbc.bgfx;
 import gfm.math;
 import std.stdint;
 
-import serpent.entity;
 import serpent.camera : WorldOrigin;
 import serpent.graphics.blend;
 import serpent.graphics.pipeline;

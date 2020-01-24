@@ -26,7 +26,6 @@ public import serpent.app;
 public import serpent.camera;
 public import serpent.core;
 public import serpent.graphics;
-public import serpent.entity;
 public import serpent.event;
 public import serpent.input;
 public import serpent.resource;
