@@ -161,8 +161,13 @@ public:
         _running = true;
         display.visible = true;
 
+        /**
+         * Main run loop
+         */
         while (_running)
         {
+            /* Force stepping through the Entity system */
+            _entity.step();
             scheduledExecution();
         }
 

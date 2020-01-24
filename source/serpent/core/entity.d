@@ -100,6 +100,16 @@ package:
         _component = new ComponentManager();
     }
 
+    /**
+     * Protected function that will cause the EntityManager to step through
+     * updates for one cycle. Any entities marked dead in previous frames will
+     * now be scheduled for reclaiming.
+     */
+    final void step() @safe @nogc nothrow
+    {
+
+    }
+
 public:
     pure @property final ComponentManager component() @safe @nogc nothrow
     {
