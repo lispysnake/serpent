@@ -59,7 +59,7 @@ package:
     /**
      * Adds a component (tag) to the given entity ID.
      */
-    final void addComponent(C)(EntityID id) @safe @nogc nothrow
+    final void addComponent(C)(EntityID id) @trusted
     {
         static assert(hasUDA!(C, serpentComponent),
                 "'%s' is not a valid serpentComponent".format(C.stringof));
@@ -92,7 +92,7 @@ package:
      * This is only compiler-level enforced. Derpy programming will
      * always find a way around it.
      */
-    final C* dataRW(C)(EntityID id) @safe @nogc nothrow
+    final C* dataRW(C)(EntityID id) @trusted
     {
         static assert(hasUDA!(C, serpentComponent),
                 "'%s' is not a valid serpentComponent".format(C.stringof));
@@ -107,20 +107,18 @@ package:
      * This is only compiler-level enforced. Derpy programming will
      * always find a way around it.
      */
-    final const C* dataRO(C)(EntityID id) @safe @nogc nothrow
+    final const C* dataRO(C)(EntityID id) @trusted
     {
         static assert(hasUDA!(C, serpentComponent),
                 "'%s' is not a valid serpentComponent".format(C.stringof));
         return cast(const C*) dataRW(id);
     }
 
-public:
-
     /**
      * Register a component with the system.
      * This will also allocate any storage for the component
      */
-    final void registerComponent(C)() @safe
+    final void registerComponent(C)() @trusted
     {
         static assert(hasUDA!(C, serpentComponent),
                 "'%s' is not a valid serpentComponent".format(C.stringof));
@@ -128,7 +126,7 @@ public:
 
         /* TODO: Improve allocator here. */
         store[typeid(C)] = new ComponentStore();
-        store[typeid(C)] = cast(void*) new ComponentBlob!C();
+        blob[typeid(C)] = cast(void*) new ComponentBlob!C();
     }
 }
 
@@ -177,7 +175,6 @@ private:
 package:
     this()
     {
-        mapping.reserve(1);
     }
 
     /**
@@ -198,6 +195,7 @@ package:
 
     final C* get(EntityID id) @safe nothrow
     {
+        assert(id in mapping, "Entity '%d' does not have component '%s'".format(id, C.stringof));
         return mapping[id];
     }
 }

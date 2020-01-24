@@ -82,6 +82,8 @@ public:
         s.addCamera(new OrthographicCamera());
         s.camera.worldOrigin = WorldOrigin.TopLeft;
 
+        auto entity = context.entity.create();
+
         return true;
     }
 }
