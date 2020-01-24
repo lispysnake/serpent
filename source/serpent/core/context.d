@@ -161,7 +161,8 @@ public:
 
         _display.prepare();
 
-        if (!app.init())
+        auto view = View!ReadWrite(this.entity, this.component);
+        if (!app.init(view))
         {
             return 1;
         }

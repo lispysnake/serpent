@@ -24,6 +24,9 @@ module serpent.app;
 
 import serpent.core.context;
 
+public import serpent.core.policy;
+public import serpent.core.view;
+
 import std.exception : enforce;
 
 /**
@@ -63,8 +66,11 @@ public:
      *
      * At this point we safely have a rendering context and any
      * loading can begin.
+     *
+     * Additionally we're provided with a safe read-write view of
+     * entity storage so that any entity construction can be done.
      */
-    abstract bool init();
+    abstract bool init(View!ReadWrite initData);
 
     /**
      * Implementations should take care to clean up any resources
