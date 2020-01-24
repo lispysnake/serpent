@@ -31,7 +31,7 @@ public import gfm.math;
 public import std.stdint;
 
 import serpent : SystemException;
-import serpent.graphics.pipeline;
+import serpent.core.context;
 import serpent.scene;
 
 /**
@@ -55,7 +55,6 @@ private:
     bool _resizable = false;
     string _title = "serpent";
     bgfx_init_t bInit;
-    Pipeline _pipeline = null;
 
     /* Our scenes mapping */
     Scene[string] scenes;
@@ -187,8 +186,6 @@ public:
         this._width = width;
         this._height = height;
 
-        _pipeline = new Pipeline(this);
-
         auto flags = SDL_WINDOW_HIDDEN;
 
         window = SDL_CreateWindow(toStringz(_title), SDL_WINDOWPOS_UNDEFINED,
@@ -219,8 +216,17 @@ public:
      */
     final void prerender() @system
     {
-        _pipeline.clear();
-        _pipeline.start();
+        /* Set up sizing for view0  */
+        bgfx_set_view_rect(0, 0, 0, cast(ushort) width, cast(ushort) height);
+
+        /* Make sure view0 is drawn. */
+        bgfx_touch(0);
+
+        auto camera = scene.camera;
+        if (camera !is null)
+        {
+            camera.apply();
+        }
     }
 
     /**
@@ -237,7 +243,8 @@ public:
             bgfx_dbg_text_printf(2, 8, 0x08, "- Lispy Snake, Ltd");
         }
 
-        _pipeline.flush();
+        /* Skip frame now */
+        bgfx_frame(false);
     }
 
     final bool process(SDL_Event* event) @system
@@ -338,14 +345,6 @@ public:
     @property final void size(int w, int h) @system @nogc nothrow
     {
         size(vec2i(w, h));
-    }
-
-    /**
-     * Return the pipeline associated with this display
-     */
-    pure @property final Pipeline pipeline() @nogc @safe nothrow
-    {
-        return _pipeline;
     }
 
     /**
