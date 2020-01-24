@@ -63,6 +63,9 @@ package:
         static assert(hasUDA!(C, serpentComponent),
                 "'%s' is not a valid serpentComponent".format(C.stringof));
         assert(typeid(C) in store, "'%s' is not a registered component".format(C.stringof));
+
+        /* Update membership */
+        store[typeid(C)].set(id);
     }
 
     /**
@@ -73,6 +76,9 @@ package:
         static assert(hasUDA!(C, serpentComponent),
                 "'%s' is not a valid serpentComponent".format(C.stringof));
         assert(typeid(C) in store, "'%s' is not a registered component".format(C.stringof));
+
+        /* Update membership */
+        store[typeid(C)].unset(id);
     }
 
     /**
