@@ -103,17 +103,19 @@ public:
         /**
          * Add a component to the given entity ID
          */
-        final void addComponent(C)(EntityID id)
+        final C* addComponent(C)(EntityID id)
         {
-            return _component.addComponent!C(id);
+            _component.addComponent!C(id);
+            return _component.dataRW!C(ent.id);
         }
 
         /**
          * Add a component to the given entity
          */
-        final void addComponent(C)(Entity ent)
+        final C* addComponent(C)(Entity ent)
         {
-            return _component.addComponent!C(ent.id);
+            _component.addComponent!C(ent.id);
+            return _component.dataRW!C(ent.id);
         }
 
         /**
@@ -121,7 +123,7 @@ public:
          */
         final void removeComponent(C)(EntityID id)
         {
-            return _component.removeComponent!C(id);
+            _component.removeComponent!C(id);
         }
 
         /**
@@ -129,7 +131,7 @@ public:
          */
         final void removeComponent(C)(Entity ent)
         {
-            return _component.removeComponent!C(ent.id);
+            _component.removeComponent!C(ent.id);
         }
 
         /**

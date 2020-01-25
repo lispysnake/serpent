@@ -87,14 +87,11 @@ public:
 
         /* Construct initial entity */
         auto entity = initView.createEntity();
-        initView.addComponent!SpriteComponent(entity);
-
-        initView.data!SpriteComponent(entity).texture = "ship.png";
+        initView.addComponent!SpriteComponent(entity).texture = "ship.png";
 
         auto entity2 = initView.createEntity();
         initView.addComponent!TilemapComponent(entity2);
-        initView.addComponent!SpriteComponent(entity2);
-        initView.data!SpriteComponent(entity2).texture = "lol.png";
+        initView.addComponent!SpriteComponent(entity2).texture = "lol.png";
 
         writefln("Texture is %s", initView.data!SpriteComponent(entity).texture);
 
