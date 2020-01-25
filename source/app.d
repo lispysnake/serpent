@@ -82,8 +82,6 @@ public:
         //s.addCamera(new OrthographicCamera());
         //s.camera.worldOrigin = WorldOrigin.TopLeft;
 
-        context.component.registerComponent!SpriteComponent;
-
         /* Construct initial entity */
         auto entity = initView.createEntity();
         initView.addComponent!SpriteComponent(entity)

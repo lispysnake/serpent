@@ -87,6 +87,9 @@ public:
     /* Load shaders */
     final override void bootstrap(View!ReadOnly dataView) @system
     {
+
+        context.component.registerComponent!SpriteComponent;
+
         auto vp = context.resource.substitutePath(
                 context.resource.root ~ "/shaders/${shaderModel}/sprite_2d_vertex.bin");
         auto fp = context.resource.substitutePath(
