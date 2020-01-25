@@ -25,6 +25,8 @@ import std.stdio : writeln, writefln;
 import std.exception;
 import bindbc.sdl;
 
+import serpent.graphics.renderer.sprite;
+
 /**
  * Provided merely for demo purposes.
  */
@@ -116,19 +118,6 @@ public:
 
         return true;
     }
-
-    final override void update(View!ReadWrite dataView)
-    {
-        foreach (ent; dataView.withComponents!(SpriteComponent, TilemapComponent))
-        {
-            // writeln(ent);
-        }
-    }
-}
-
-@serpentComponent final struct SpriteComponent
-{
-    string texture;
 }
 
 @serpentComponent final struct TilemapComponent
@@ -143,5 +132,6 @@ int main()
     /* Set our root directory up */
     context.resource.root = context.resource.root ~ "/assets/built";
 
+    context.renderGroup.add(new SpriteRenderer);
     return context.run(new DemoGame());
 }

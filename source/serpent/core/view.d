@@ -134,28 +134,29 @@ public:
             _component.removeComponent!C(ent.id);
         }
 
-        /**
-         * Return an EntityRange helper that allows one to foreach
-         * over the underlying entity data.
-         */
-        final auto withComponent(C)()
-        {
-            return _component.withComponent!C();
-        }
+    }
 
-        /**
-         * Return a range helper that allows one to foreach over the
-         * underlying entity data when more than one component is
-         * specified.
-         */
-        final auto withComponents(C, D)()
-        {
-            return _component.withComponents!(C, D)();
-        }
+    /**
+     * Return an EntityRange helper that allows one to foreach
+     * over the underlying entity data.
+     */
+    final auto withComponent(C)()
+    {
+        return _component.withComponent!C();
+    }
 
-        final auto withComponents(C, D, E)()
-        {
-            return _component.withComponents!(C, D, E)();
-        }
+    /**
+     * Return a range helper that allows one to foreach over the
+     * underlying entity data when more than one component is
+     * specified.
+     */
+    final auto withComponents(C, D)()
+    {
+        return _component.withComponents!(C, D)();
+    }
+
+    final auto withComponents(C, D, E)()
+    {
+        return _component.withComponents!(C, D, E)();
     }
 }
