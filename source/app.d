@@ -83,9 +83,13 @@ public:
         //s.camera.worldOrigin = WorldOrigin.TopLeft;
 
         /* Construct initial entity */
-        auto entity = initView.createEntity();
-        initView.addComponent!SpriteComponent(entity)
-            .texture = new Texture("assets/raw/Overworld.png");
+        auto entity_logo = initView.createEntity();
+        initView.addComponent!SpriteComponent(entity_logo)
+            .texture = new Texture("assets/raw/logo.png");
+
+        auto entity_map = initView.createEntity();
+        initView.addComponent!SpriteComponent(entity_map);
+        initView.data!SpriteComponent(entity_map).texture = new Texture("assets/raw/Overworld.png");
 
         return true;
     }
