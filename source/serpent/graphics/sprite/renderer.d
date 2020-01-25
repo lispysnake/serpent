@@ -28,6 +28,8 @@ import std.stdint;
 
 import serpent.graphics.shader;
 import serpent.graphics.blend;
+import serpent.camera : WorldOrigin;
+import serpent.core.transform : TransformComponent;
 
 public import serpent.graphics.sprite;
 public import serpent.core.entity;
@@ -134,6 +136,25 @@ private:
         auto width = sprite.texture.width;
         auto height = sprite.texture.height;
 
+        /* Really need precomputed CameraTransform. */
+        auto transform = dataView.data!TransformComponent(entity);
+        auto position = context.display.scene.camera.unproject(transform.position);
+
+        position.x += width;
+        if (context.display.scene.camera.worldOrigin == WorldOrigin.BottomLeft)
+        {
+            position.y += height;
+        }
+        else
+        {
+            position.y -= height;
+        }
+
+        auto translation = mat4x4f.translation(position);
+        auto scale = mat4x4f.scaling(vec3f(width, height, 1.0f));
+        auto model = translation * scale;
+        model = model.transposed();
+
         /* Sort out the index buffer */
         bgfx_alloc_transient_index_buffer(&tib, 6);
         auto indexData = cast(uint16_t*) tib.data;
@@ -153,6 +174,8 @@ private:
         vertexData[1] = PosUVVertex(vec3f(1.0f, -1.0f, 0.0f), vec2f(clip.max.x, clip.max.y)); // Bottom right
         vertexData[2] = PosUVVertex(vec3f(-1.0f, -1.0f, 0.0f), vec2f(clip.min.x, clip.max.y)); // Bottom Left
         vertexData[3] = PosUVVertex(vec3f(-1.0f, 1.0f, 0.0f), vec2f(clip.min.x, clip.min.y)); // Top Left
+
+        bgfx_set_transform(model.ptr, 1);
 
         /* Set the stage */
         bgfx_set_transient_vertex_buffer(0, &tvb, 0, 4);

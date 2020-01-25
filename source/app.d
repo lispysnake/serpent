@@ -79,8 +79,8 @@ public:
         s = new Scene("sample");
         context.display.addScene(s);
         context.display.scene = "sample";
-        //s.addCamera(new OrthographicCamera());
-        //s.camera.worldOrigin = WorldOrigin.TopLeft;
+        s.addCamera(new OrthographicCamera());
+        s.camera.worldOrigin = WorldOrigin.TopLeft;
 
         /* Construct initial entity */
         auto entity_logo = initView.createEntity();
