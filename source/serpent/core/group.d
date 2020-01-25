@@ -70,7 +70,7 @@ public:
      */
     final Group!T add(Processor!T processor) @safe
     {
-        writefln("Adding processor: %s", processor.classinfo.name);
+        writefln("(%s) Adding processor: %s", name, processor.classinfo.name);
         enforce(!_context.running, "Cannot add Processor to running Context");
         processor.context = this.context;
         processors ~= processor;
