@@ -109,11 +109,6 @@ public:
             initView.addComponent!TilemapComponent(ent);
         }
 
-        foreach (ent; initView.withComponents!(SpriteComponent, TilemapComponent))
-        {
-            writefln("Got a multimatch entity: %d", ent);
-        }
-
         return true;
     }
 }
