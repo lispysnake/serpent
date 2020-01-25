@@ -142,5 +142,15 @@ public:
         {
             return _component.withComponent!C();
         }
+
+        /**
+         * Return a range helper that allows one to foreach over the
+         * underlying entity data when more than one component is
+         * specified.
+         */
+        final auto withComponents(C...)()
+        {
+            return _component.withComponents!(C)();
+        }
     }
 }

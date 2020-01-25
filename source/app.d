@@ -101,6 +101,9 @@ public:
             writefln("Got an entity: %d, texture: %s", ent,
                     initView.data!SpriteComponent(ent).texture);
         }
+
+        auto comp = initView.withComponents!(SpriteComponent, TilemapComponent)();
+
         return true;
     }
 }

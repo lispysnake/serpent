@@ -46,6 +46,7 @@ final struct serpentComponent
 final class ComponentManager
 {
 
+private:
     ComponentStore[TypeInfo] store;
     void*[TypeInfo] blob;
 
@@ -136,6 +137,11 @@ public:
                 "'%s' is not a valid serpentComponent".format(C.stringof));
         assert(typeid(C) in store, "'%s' is not a registered component".format(C.stringof));
         return store[typeid(C)].mapping.byKey();
+    }
+
+    final auto withComponents(C...)()
+    {
+        return null;
     }
 }
 
