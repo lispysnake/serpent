@@ -131,7 +131,7 @@ private:
     /**
      * reset bgfx buffer
      */
-    final void reset() @system @nogc nothrow
+    final void reset(uint flags = BGFX_RESET_NONE) @system @nogc nothrow
     {
         if (!didInit)
         {
@@ -278,7 +278,7 @@ public:
         /* TODO: Init on separate render thread */
         bInit.type = bgfx_renderer_type_t.BGFX_RENDERER_TYPE_VULKAN;
         bgfx_init(&bInit);
-        bgfx_reset(_width, _height, BGFX_RESET_VSYNC, bInit.resolution.format);
+        reset(BGFX_RESET_VSYNC);
         updateDebug();
 
         /* Set clearing of view0 background. */
