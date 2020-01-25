@@ -26,6 +26,7 @@ public import serpent.core.component;
 public import std.stdint;
 
 import std.container : Array;
+import serpent.core.transform : TransformComponent;
 
 /**
  * EntityID is the underlying handle to an entity
@@ -156,6 +157,19 @@ private:
         return Entity(ent);
     }
 
+    /**
+     * Perform initial configuration of a newly allocated Entity
+     * so that is already suitable for use.
+     *
+     * Currently this just means we add a TransformComponent so that
+     * every new entity has positional data.
+     */
+    final Entity configureEntity(Entity ent) @safe
+    {
+        _component.addComponent!TransformComponent(ent.id);
+        return ent;
+    }
+
 package:
 
     /**
@@ -168,14 +182,13 @@ package:
         if (ent.isValid())
         {
             ++allocatedEntities;
-            return ent;
+            return configureEntity(ent);
         }
 
         /* New entity. */
         ++lastID;
         ++allocatedEntities;
-
-        return Entity(lastID);
+        return configureEntity(Entity(lastID));
     }
 
 public:
