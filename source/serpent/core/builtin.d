@@ -43,6 +43,12 @@ package:
     }
 
 public:
+
+    /* No-op */
+    final override void bootstrap(View!ReadWrite dataView) @system
+    {
+    }
+
     /**
      * Start consuming events, send them where they need to go.
      */
@@ -90,6 +96,12 @@ package:
     }
 
 public:
+
+    /* No-op */
+    final override void bootstrap(View!ReadWrite dataView) @system
+    {
+    }
+
     /**
      * Call update on the App instance midloop
      */
@@ -111,6 +123,12 @@ package:
     }
 
 public:
+
+    /* No-op */
+    final override void bootstrap(View!ReadOnly dataView) @system
+    {
+    }
+
     /**
      * Call prerender on the target display
      */
@@ -132,6 +150,12 @@ package:
     }
 
 public:
+
+    /* No-op */
+    final override void bootstrap(View!ReadOnly dataView) @system
+    {
+    }
+
     /**
      * Call postrender on the target display
      */

@@ -139,6 +139,21 @@ public:
 package:
 
     /**
+     * Sequentially bootstrap all processors to ensure all systems are
+     * correctly loaded upon start of the rendering loop
+     */
+    final void bootstrap() @system
+    {
+        auto view = View!T(this.context.entity, this.context.component);
+
+        foreach (ref p; processors)
+        {
+            p.context = this.context;
+            p.bootstrap(view);
+        }
+    }
+
+    /**
      * Execute our full set of processors
      */
     final void run(TaskPool tp) @system

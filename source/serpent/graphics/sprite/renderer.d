@@ -76,6 +76,13 @@ final struct PosUVVertex
 final class SpriteRenderer : Processor!ReadOnly
 {
 
+public:
+
+    /* No-op */
+    final override void bootstrap(View!ReadOnly dataView) @system
+    {
+    }
+
     final override void run(View!ReadOnly dataView)
     {
         foreach (entity; dataView.withComponent!SpriteComponent)

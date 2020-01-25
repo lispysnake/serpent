@@ -90,6 +90,25 @@ private:
     Group!ReadOnly _renderGroup;
 
     /**
+     * Bootstrap (sequentially) all processor groups before
+     * we begin displaying anything.
+     */
+    final void bootstrapGroups() @system
+    {
+        foreach (ref g; groups)
+        {
+            if (g.rw)
+            {
+                g.layer.rw_group.bootstrap();
+            }
+            else
+            {
+                g.layer.ro_group.bootstrap();
+            }
+        }
+    }
+
+    /**
      * Step through groups for scheduled executions
      */
     final void scheduledExecution() @system
@@ -160,6 +179,9 @@ public:
         enforce(app !is null, "Cannot run context without a valid App");
 
         _display.prepare();
+
+        /* Bootstrap processor groups before app loads anything */
+        bootstrapGroups();
 
         auto view = View!ReadWrite(this.entity, this.component);
         if (!app.init(view))

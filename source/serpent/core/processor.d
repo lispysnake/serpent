@@ -48,6 +48,7 @@ private:
     Context _context;
 
 public:
+    abstract void bootstrap(View!T entityView) @system;
     abstract void run(View!T entityView) @system;
 
 package:
