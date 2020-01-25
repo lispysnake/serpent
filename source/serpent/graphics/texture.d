@@ -91,7 +91,7 @@ public:
     /**
      * Return the underlying bgfx handle.
      */
-    pure @property final bgfx_texture_handle_t handle() @nogc @safe nothrow
+    pure @property final const bgfx_texture_handle_t handle() @nogc @safe nothrow
     {
         return _handle;
     }
@@ -99,7 +99,7 @@ public:
     /**
      * Return texture width
      */
-    pure @property final float width() @nogc @safe nothrow
+    pure @property final const float width() @nogc @safe nothrow
     {
         return _width;
     }
@@ -107,7 +107,7 @@ public:
     /**
      * Return texture height
      */
-    pure @property final float height() @nogc @safe nothrow
+    pure @property final const float height() @nogc @safe nothrow
     {
         return _height;
     }
@@ -115,7 +115,7 @@ public:
     /**
      * Return the clipping region for drawing.
      */
-    pure @property box2f clip() @nogc @safe nothrow
+    pure @property final const box2f clip() @nogc @safe nothrow
     {
         return _clip;
     }
