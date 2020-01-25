@@ -69,9 +69,6 @@ final struct PosUVVertex
  * The SpriteRenderer will collect and draw all visible sprites within
  * the current scene.
  *
- * A Sprite is currently considered anything that is an Enity.
- * This will change in future to tag various base types.
- *
  * TODO: Optimise this into a batching sprite renderer. For now we're
  * going to be ugly and draw a quad at a time. This results in multiple
  * draw calls per frame, and is hella inefficient.
