@@ -61,7 +61,7 @@ public:
         /**
          * Return data for the given entity ID
          */
-        final pure immutable(C*) data(C)(EntityID id)
+        final pure immutable(C*) data(C)(EntityID id) @safe @nogc nothrow
         {
             return _component.dataRO!C(id);
         }
@@ -69,7 +69,7 @@ public:
         /**
          * Return data for the given entity ID
          */
-        final pure immutable(C*) data(C)(Entity ent)
+        final pure immutable(C*) data(C)(Entity ent) @safe @nogc nothrow
         {
             return _component.dataRO!C(ent.id);
         }
@@ -79,7 +79,7 @@ public:
     {
 
         /* READ-WRITE APIs */
-        final Entity createEntity()
+        final Entity createEntity() @safe
         {
             return _entity.create();
         }
@@ -87,7 +87,7 @@ public:
         /**
          * Return data for the given entity ID
          */
-        final pure C* data(C)(EntityID id)
+        final pure C* data(C)(EntityID id) @safe
         {
             return _component.dataRW!C(id);
         }
@@ -95,7 +95,7 @@ public:
         /**
          * Return data for the given entity
          */
-        final pure C* data(C)(Entity ent)
+        final pure C* data(C)(Entity ent) @safe
         {
             return _component.dataRW!C(ent.id);
         }
@@ -103,7 +103,7 @@ public:
         /**
          * Add a component to the given entity ID
          */
-        final C* addComponent(C)(EntityID id)
+        final C* addComponent(C)(EntityID id) @safe
         {
             _component.addComponent!C(id);
             return _component.dataRW!C(ent.id);
@@ -112,7 +112,7 @@ public:
         /**
          * Add a component to the given entity
          */
-        final C* addComponent(C)(Entity ent)
+        final C* addComponent(C)(Entity ent) @safe
         {
             _component.addComponent!C(ent.id);
             return _component.dataRW!C(ent.id);
@@ -121,7 +121,7 @@ public:
         /**
          * Remove a component from the given entity ID
          */
-        final void removeComponent(C)(EntityID id)
+        final void removeComponent(C)(EntityID id) @safe
         {
             _component.removeComponent!C(id);
         }
@@ -129,7 +129,7 @@ public:
         /**
          * Remove a component from the given entity
          */
-        final void removeComponent(C)(Entity ent)
+        final void removeComponent(C)(Entity ent) @safe
         {
             _component.removeComponent!C(ent.id);
         }
