@@ -454,7 +454,7 @@ public:
             return;
         }
         _fullscreen = b;
-        //SDL_SetWindowFullscreen(window, b ? SDL_WINDOW_FULLSCREEN_DESKTOP : SDL_WINDOW_SHOWN);
+        SDL_SetWindowFullscreen(window, b ? SDL_WINDOW_FULLSCREEN_DESKTOP : SDL_WINDOW_SHOWN);
         import std.stdio;
 
         writefln("ERROR: Need to bgfx_reset and follow window changes. Check TODO!");
