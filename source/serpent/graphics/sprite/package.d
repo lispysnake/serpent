@@ -24,6 +24,7 @@ module serpent.graphics.sprite;
 
 public import serpent.core.entity;
 public import serpent.graphics.sprite.renderer;
+public import serpent.graphics.texture;
 
 /**
  * SpriteComponent should be added to any entity that is rendered in a sprite
@@ -31,5 +32,5 @@ public import serpent.graphics.sprite.renderer;
  */
 @serpentComponent final struct SpriteComponent
 {
-    string texture;
+    Texture texture; /**Our texture handle. */
 }

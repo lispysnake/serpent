@@ -83,38 +83,13 @@ public:
         s.camera.worldOrigin = WorldOrigin.TopLeft;
 
         context.component.registerComponent!SpriteComponent;
-        context.component.registerComponent!TilemapComponent;
 
         /* Construct initial entity */
         auto entity = initView.createEntity();
-        initView.addComponent!SpriteComponent(entity).texture = "ship.png";
-
-        auto entity2 = initView.createEntity();
-        initView.addComponent!TilemapComponent(entity2);
-        auto sprite = initView.addComponent!SpriteComponent(entity2);
-        sprite.texture = "lol.png";
-
-        writefln("Texture is %s", initView.data!SpriteComponent(entity).texture);
-
-        foreach (ent; initView.withComponent!SpriteComponent)
-        {
-            writefln("Got an entity: %d, texture: %s", ent,
-                    initView.data!SpriteComponent(ent).texture);
-        }
-
-        foreach (i; 0 .. 1000)
-        {
-            auto ent = initView.createEntity();
-            initView.addComponent!SpriteComponent(ent);
-            initView.addComponent!TilemapComponent(ent);
-        }
+        initView.addComponent!SpriteComponent(entity).texture = new Texture("assets/raw/logo.png");
 
         return true;
     }
-}
-
-@serpentComponent final struct TilemapComponent
-{
 }
 
 int main()
