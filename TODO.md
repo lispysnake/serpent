@@ -12,7 +12,11 @@ basic demo shape.
     - [ ] Fix busted bgfx integration, ensure scaling ratio + track window changes
  - [ ] Add non-crap file loading capabilities. i.e. asynchronous.
  - [x] Time to mature the ECS design to something ... not immature.
- - [ ] Allow loading/setting the textures per-sprite-data (instead of everything being Ship.png..)
+ - [x] Allow loading/setting the textures per-sprite-data (instead of everything being Ship.png..)
+ - [ ] Restore camera support! `CameraProcessor`, `Transform`, `TransformComponent`, `CameraTransformComponent`
+       Camera system processes all entities with a `TransformComponent`, and builds `CameraTransformComponent`
+       for each entity, for things like `SpriteRenderer` to use. Only visible entities will have this
+       component so it's an implicit performance optimisation too.
  - [ ] Let's kill the stupid plane demo and focus on recreating the `lispysnake2d` demo.
  - [ ] Bring back parsers for Tiled, but let's just focus on ~~JSON now, not XML (future-maybe?)~~
    **Edit**: XML is more complete and can be sanity-checked, as well as offering space savings
