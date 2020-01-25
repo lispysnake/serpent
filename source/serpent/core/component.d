@@ -26,6 +26,7 @@ public import serpent.core.entity;
 
 import std.traits : hasUDA;
 import std.format : format;
+import std.algorithm.setops : setIntersection;
 
 /**
  * Simple UDA decorator. May be used in future for runtime introspection,
@@ -139,9 +140,20 @@ public:
         return store[typeid(C)].mapping.byKey();
     }
 
-    final auto withComponents(C...)()
+    /**
+     * Return all entities that have both components C & D
+     */
+    final auto withComponents(C, D)()
     {
-        return null;
+        return setIntersection(withComponent!C(), withComponent!D());
+    }
+
+    /**
+     * Return all entities that have components C, D and E
+     */
+    final auto withComponents(C, D, E)()
+    {
+        return setIntersection(withComponent!C(), withComponent!D(), withComponent!E());
     }
 }
 

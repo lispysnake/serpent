@@ -102,7 +102,10 @@ public:
                     initView.data!SpriteComponent(ent).texture);
         }
 
-        auto comp = initView.withComponents!(SpriteComponent, TilemapComponent)();
+        foreach (ent; initView.withComponents!(SpriteComponent, TilemapComponent))
+        {
+            writefln("Got a multimatch entity: %d", ent);
+        }
 
         return true;
     }

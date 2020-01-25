@@ -148,9 +148,14 @@ public:
          * underlying entity data when more than one component is
          * specified.
          */
-        final auto withComponents(C...)()
+        final auto withComponents(C, D)()
         {
-            return _component.withComponents!(C)();
+            return _component.withComponents!(C, D)();
+        }
+
+        final auto withComponents(C, D, E)()
+        {
+            return _component.withComponents!(C, D, E)();
         }
     }
 }
