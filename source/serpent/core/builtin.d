@@ -81,6 +81,11 @@ public:
             }
         }
     }
+
+    /* No-op */
+    final override void finish(View!ReadWrite dataView) @system
+    {
+    }
 }
 
 /**
@@ -109,6 +114,11 @@ public:
     {
         context.app.update(dataView);
     }
+
+    /* No-op */
+    final override void finish(View!ReadWrite dataView) @system
+    {
+    }
 }
 
 /**
@@ -136,6 +146,11 @@ public:
     {
         context.display.prerender();
     }
+
+    /* No-op */
+    final override void finish(View!ReadOnly dataView) @system
+    {
+    }
 }
 
 /**
@@ -162,5 +177,10 @@ public:
     final override void run(View!ReadOnly dataView) @system
     {
         context.display.postrender();
+    }
+
+    /* No-op */
+    final override void finish(View!ReadOnly dataView) @system
+    {
     }
 }

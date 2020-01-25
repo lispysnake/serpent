@@ -126,6 +126,24 @@ private:
         }
     }
 
+    /**
+     * Tell all groups to finish up while the context is valid.
+     */
+    final void finishGroups() @system
+    {
+        foreach (ref g; groups)
+        {
+            if (g.rw)
+            {
+                g.layer.rw_group.finish();
+            }
+            else
+            {
+                g.layer.ro_group.finish();
+            }
+        }
+    }
+
 public:
 
     /**
@@ -211,6 +229,8 @@ public:
             _entity.step();
             scheduledExecution();
         }
+
+        finishGroups();
 
         return 0;
     }

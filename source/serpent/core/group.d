@@ -182,6 +182,20 @@ package:
     }
 
     /**
+     * Make all of our processors finish up their work
+     */
+    final void finish() @system
+    {
+        auto view = View!T(this.context.entity, this.context.component);
+
+        foreach (ref p; processors)
+        {
+            p.context = this.context;
+            p.finish(view);
+        }
+    }
+
+    /**
      * Set the context for this Group
      */
     @property final void context(Context c) @safe @nogc nothrow

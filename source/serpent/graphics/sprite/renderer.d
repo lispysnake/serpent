@@ -83,7 +83,7 @@ private:
 
 public:
 
-    /* No-op */
+    /* Load shaders */
     final override void bootstrap(View!ReadOnly dataView) @system
     {
         auto vp = context.resource.substitutePath(
@@ -101,6 +101,11 @@ public:
         {
             drawOne(dataView, entity);
         }
+    }
+
+    /* No-op */
+    final override void finish(View!ReadOnly dataView) @system
+    {
     }
 
 private:

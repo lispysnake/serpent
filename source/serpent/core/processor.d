@@ -50,6 +50,7 @@ private:
 public:
     abstract void bootstrap(View!T entityView) @system;
     abstract void run(View!T entityView) @system;
+    abstract void finish(View!T entityView) @system;
 
 package:
 
