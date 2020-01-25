@@ -86,7 +86,8 @@ public:
 
         /* Construct initial entity */
         auto entity = initView.createEntity();
-        initView.addComponent!SpriteComponent(entity).texture = new Texture("assets/raw/logo.png");
+        initView.addComponent!SpriteComponent(entity)
+            .texture = new Texture("assets/raw/Overworld.png");
 
         return true;
     }
