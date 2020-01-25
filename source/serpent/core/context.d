@@ -184,7 +184,7 @@ public:
         bootstrapGroups();
 
         auto view = View!ReadWrite(this.entity, this.component);
-        if (!app.init(view))
+        if (!app.bootstrap(view))
         {
             return 1;
         }

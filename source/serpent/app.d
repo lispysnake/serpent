@@ -70,7 +70,7 @@ public:
      * Additionally we're provided with a safe read-write view of
      * entity storage so that any entity construction can be done.
      */
-    abstract bool init(View!ReadWrite initData);
+    abstract bool bootstrap(View!ReadWrite initData);
 
     /**
      * Implementations should take care to clean up any resources

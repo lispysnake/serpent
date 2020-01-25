@@ -68,7 +68,7 @@ private:
     }
 
 public:
-    final override bool init(View!ReadWrite initView) @system
+    final override bool bootstrap(View!ReadWrite initView) @system
     {
         writeln("Game Init");
 
