@@ -33,6 +33,7 @@ import serpent.core.builtin;
 import serpent.core.entity;
 import serpent.core.group;
 import serpent.core.policy;
+import serpent.core.transform;
 
 public import serpent.graphics.display;
 public import serpent.app;
@@ -158,6 +159,9 @@ public:
         /* Core ECS */
         _component = new ComponentManager();
         _entity = new EntityManager(_component);
+
+        /* Configure must-have storage */
+        _component.registerComponent!TransformComponent;
 
         _systemGroup = new Group!ReadWrite("system").add(new InputProcessor)
             .add(new AppUpdateProcessor());

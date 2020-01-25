@@ -20,13 +20,21 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.core;
+module serpent.core.transform;
 
-public import serpent.core.component;
-public import serpent.core.context;
-public import serpent.core.entity;
-public import serpent.core.group;
-public import serpent.core.policy;
-public import serpent.core.processor;
-public import serpent.core.transform;
-public import serpent.core.view;
+public import gfm.math;
+public import serpent.core.component : serpentComponent;
+
+/**
+ * A TransformComponent is used to provide position, scale and rotation
+ * information for entities within a 3D space.
+ *
+ * Note that even 2D entities must conform to this too, as they are expressed
+ * as 2D planes viewed orthographically. When using 2D APIs such as Sprites,
+ * X/Y will map to game-window coordinates, with Z becoming the depth.
+ */
+@serpentComponent final struct TransformComponent
+{
+    vec3f position = vec3f(0.0f, 0.0f, 0.0f);
+    vec3f scale = vec3f(1.0f, 1.0f, 1.0f);
+}
