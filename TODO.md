@@ -23,7 +23,6 @@ basic demo shape.
  - [ ] Retain stateful approaches to per-level/stage concepts.
  - [ ] Stop relying on PNG assets + debugmode. Compile these assets and implement ResourceManager ZIPs
  - [ ] Fix crash on exit (unlink order of shader programs)
- - [ ] Optimise event handling (recycle event structures instead of keep constructing them)
 
 Nice to have:
 
