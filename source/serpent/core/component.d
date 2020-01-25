@@ -94,7 +94,7 @@ package:
      * This is only compiler-level enforced. Derpy programming will
      * always find a way around it.
      */
-    final C* dataRW(C)(EntityID id) @trusted
+    final pure C* dataRW(C)(EntityID id) @trusted
     {
         static assert(hasUDA!(C, serpentComponent),
                 "'%s' is not a valid serpentComponent".format(C.stringof));
@@ -109,11 +109,12 @@ package:
      * This is only compiler-level enforced. Derpy programming will
      * always find a way around it.
      */
-    final const C* dataRO(C)(EntityID id) @trusted
+    final pure immutable(C*) dataRO(C)(EntityID id) @trusted
     {
         static assert(hasUDA!(C, serpentComponent),
                 "'%s' is not a valid serpentComponent".format(C.stringof));
-        return cast(const C*) dataRW(id);
+        auto bl = cast(ComponentBlob!C) blob[typeid(C)];
+        return bl.get(id);
     }
 
 public:

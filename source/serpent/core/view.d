@@ -61,7 +61,7 @@ public:
         /**
          * Return data for the given entity ID
          */
-        final const C* data(C)(EntityID id)
+        final pure immutable(C*) data(C)(EntityID id)
         {
             return _component.dataRO!C(id);
         }
@@ -69,7 +69,7 @@ public:
         /**
          * Return data for the given entity ID
          */
-        final const C* data(C)(Entity ent)
+        final pure immutable(C*) data(C)(Entity ent)
         {
             return _component.dataRO!C(ent.id);
         }
@@ -87,7 +87,7 @@ public:
         /**
          * Return data for the given entity ID
          */
-        final C* data(C)(EntityID id)
+        final pure C* data(C)(EntityID id)
         {
             return _component.dataRW!C(id);
         }
@@ -95,7 +95,7 @@ public:
         /**
          * Return data for the given entity
          */
-        final C* data(C)(Entity ent)
+        final pure C* data(C)(Entity ent)
         {
             return _component.dataRW!C(ent.id);
         }
