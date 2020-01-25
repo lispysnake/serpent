@@ -179,6 +179,10 @@ public:
         enforce(app !is null, "Cannot run context without a valid App");
 
         _display.prepare();
+        _info.update();
+
+        enforce(info.driverType != DriverType.Unsupported,
+                "Unsupported underlying driver. Please report this.");
 
         /* Bootstrap processor groups before app loads anything */
         bootstrapGroups();
@@ -194,11 +198,6 @@ public:
             tp.finish(true);
             _app.shutdown();
         }
-
-        _info.update();
-
-        enforce(info.driverType != DriverType.Unsupported,
-                "Unsupported underlying driver. Please report this.");
 
         _running = true;
         display.visible = true;
