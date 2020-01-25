@@ -27,12 +27,10 @@ public import std.stdint;
 
 import std.container : Array;
 
-public import std.typecons;
-
 /**
  * EntityID is the underlying handle to an entity
  */
-alias EntityID = Typedef!(uint32_t);
+alias EntityID = uint32_t;
 
 /**
  * Entity wraps an ID and gives it fancy functions. No overhead.
@@ -151,7 +149,7 @@ private:
     {
         if (deadEntities.length < 1)
         {
-            return Entity(cast(EntityID) 0);
+            return Entity(0);
         }
         auto ent = deadEntities.back();
         deadEntities.removeBack();
