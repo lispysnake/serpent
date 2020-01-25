@@ -86,6 +86,7 @@ public:
         auto entity_logo = initView.createEntity();
         initView.addComponent!SpriteComponent(entity_logo)
             .texture = new Texture("assets/raw/logo.png");
+        initView.data!TransformComponent(entity_logo).position = vec3f(700.0f, 100.0f, 0.0f);
 
         auto entity_map = initView.createEntity();
         initView.addComponent!SpriteComponent(entity_map);
