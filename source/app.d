@@ -91,7 +91,8 @@ public:
 
         auto entity2 = initView.createEntity();
         initView.addComponent!TilemapComponent(entity2);
-        initView.addComponent!SpriteComponent(entity2).texture = "lol.png";
+        auto sprite = initView.addComponent!SpriteComponent(entity2);
+        sprite.texture = "lol.png";
 
         writefln("Texture is %s", initView.data!SpriteComponent(entity).texture);
 
