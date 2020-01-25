@@ -22,7 +22,7 @@ basic demo shape.
  - [ ] Reintroduce animation framework through the Context Job system (perhaps stage -> static class?)
  - [ ] Retain stateful approaches to per-level/stage concepts.
  - [ ] Stop relying on PNG assets + debugmode. Compile these assets and implement ResourceManager ZIPs
- - [ ] Fix crash on exit (unlink order of shader programs)
+ - [x] Fix crash on exit (unlink order of shader programs)
 
 Nice to have:
 
