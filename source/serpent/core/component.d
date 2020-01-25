@@ -109,12 +109,12 @@ package:
      * This is only compiler-level enforced. Derpy programming will
      * always find a way around it.
      */
-    final pure immutable(C*) dataRO(C)(EntityID id) @trusted @nogc nothrow
+    final pure immutable(C*) dataRO(C)(EntityID id) @trusted
     {
         static assert(hasUDA!(C, serpentComponent),
                 "'%s' is not a valid serpentComponent".format(C.stringof));
         auto bl = cast(ComponentBlob!C) blob[typeid(C)];
-        return bl.get(id);
+        return cast(immutable(C*)) bl.get(id);
     }
 
 public:

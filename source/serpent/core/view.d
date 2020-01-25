@@ -61,7 +61,7 @@ public:
         /**
          * Return data for the given entity ID
          */
-        final pure immutable(C*) data(C)(EntityID id) @safe @nogc nothrow
+        final pure immutable(C*) data(C)(EntityID id) @safe
         {
             return _component.dataRO!C(id);
         }
@@ -69,7 +69,7 @@ public:
         /**
          * Return data for the given entity ID
          */
-        final pure immutable(C*) data(C)(Entity ent) @safe @nogc nothrow
+        final pure immutable(C*) data(C)(Entity ent) @safe
         {
             return _component.dataRO!C(ent.id);
         }
