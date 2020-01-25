@@ -102,12 +102,27 @@ public:
                     initView.data!SpriteComponent(ent).texture);
         }
 
+        foreach (i; 0 .. 1000)
+        {
+            auto ent = initView.createEntity();
+            initView.addComponent!SpriteComponent(ent);
+            initView.addComponent!TilemapComponent(ent);
+        }
+
         foreach (ent; initView.withComponents!(SpriteComponent, TilemapComponent))
         {
             writefln("Got a multimatch entity: %d", ent);
         }
 
         return true;
+    }
+
+    final override void update(View!ReadWrite dataView)
+    {
+        foreach (ent; dataView.withComponents!(SpriteComponent, TilemapComponent))
+        {
+            // writeln(ent);
+        }
     }
 }
 

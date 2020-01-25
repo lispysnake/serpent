@@ -95,7 +95,7 @@ public:
      */
     final override void run(View!ReadWrite dataView) @system
     {
-        context.app.update();
+        context.app.update(dataView);
     }
 }
 

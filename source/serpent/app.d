@@ -85,7 +85,7 @@ public:
      * hook directly into the game update loop. You can do so
      * by overriding this method.
      */
-    void update()
+    void update(View!ReadWrite dataView)
     {
 
     }
