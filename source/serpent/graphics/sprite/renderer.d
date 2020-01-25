@@ -151,7 +151,8 @@ private:
         }
 
         auto translation = mat4x4f.translation(position);
-        auto scale = mat4x4f.scaling(vec3f(width, height, 1.0f));
+        auto scale = mat4x4f.scaling(vec3f(width * transform.scale.x,
+                height * transform.scale.y, 1.0f));
         auto model = translation * scale;
         model = model.transposed();
 

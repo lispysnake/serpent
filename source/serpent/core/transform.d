@@ -36,4 +36,5 @@ public import serpent.core.component : serpentComponent;
 @serpentComponent final struct TransformComponent
 {
     vec3f position = vec3f(0.0f, 0.0f, 0.0f);
+    vec3f scale = vec3f(1.0f, 1.0f, 1.0f);
 }
