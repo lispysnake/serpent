@@ -25,8 +25,6 @@ import std.stdio : writeln, writefln;
 import std.exception;
 import bindbc.sdl;
 
-import serpent.graphics.renderer.sprite;
-
 /**
  * Provided merely for demo purposes.
  */
