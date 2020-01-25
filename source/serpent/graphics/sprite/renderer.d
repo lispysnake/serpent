@@ -103,9 +103,11 @@ public:
         }
     }
 
-    /* No-op */
+    /* Unload shaders while context is active  */
     final override void finish(View!ReadOnly dataView) @system
     {
+        shader.destroy();
+        shader = null;
     }
 
 private:
