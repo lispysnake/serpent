@@ -26,6 +26,8 @@ import bindbc.bgfx;
 import gfm.math;
 import std.stdint;
 
+import serpent.graphics.shader;
+
 public import serpent.graphics.sprite;
 public import serpent.core.entity;
 public import serpent.core.processor;
@@ -76,11 +78,21 @@ final struct PosUVVertex
 final class SpriteRenderer : Processor!ReadOnly
 {
 
+private:
+    Program shader = null;
+
 public:
 
     /* No-op */
     final override void bootstrap(View!ReadOnly dataView) @system
     {
+        auto vp = context.resource.substitutePath(
+                context.resource.root ~ "/shaders/${shaderModel}/sprite_2d_vertex.bin");
+        auto fp = context.resource.substitutePath(
+                context.resource.root ~ "/shaders/${shaderModel}/sprite_2d_fragment.bin");
+        auto vertex = new Shader(vp);
+        auto fragment = new Shader(fp);
+        shader = new Program(vertex, fragment);
     }
 
     final override void run(View!ReadOnly dataView)
