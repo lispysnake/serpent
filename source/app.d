@@ -24,6 +24,7 @@ import serpent;
 import std.stdio : writeln, writefln;
 import std.exception;
 import bindbc.sdl;
+import std.getopt;
 
 /**
  * Provided merely for demo purposes.
@@ -97,10 +98,31 @@ public:
     }
 }
 
-int main()
+int main(string[] args)
 {
+    bool openGL = false;
+    auto argp = getopt(args, std.getopt.config.bundling, "o|opengl",
+            "Use OpenGL instead of Vulkan", &openGL);
+
+    if (argp.helpWanted)
+    {
+        defaultGetoptPrinter("serpent demonstration\n", argp.options);
+        return 0;
+    }
+
     auto context = new Context();
     context.display.title("#serpent demo").size(1366, 768);
+
+    if (openGL)
+    {
+        writeln("Requesting OpenGL display mode");
+        context.display.driverType = DriverType.OpenGL;
+    }
+    else
+    {
+        writeln("Requesting Vulkan display mode");
+        context.display.driverType = DriverType.Vulkan;
+    }
 
     /* Set our root directory up */
     context.resource.root = context.resource.root ~ "/assets/built";
