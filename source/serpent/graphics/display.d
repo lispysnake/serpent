@@ -262,7 +262,19 @@ public:
 
         didInit = true;
 
-        auto flags = SDL_WINDOW_HIDDEN;
+        SDL_WindowFlags flags = cast(SDL_WindowFlags) 0;
+        if (fullscreen)
+        {
+            flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
+        }
+        if (visible)
+        {
+            flags |= SDL_WINDOW_SHOWN;
+        }
+        else
+        {
+            flags |= SDL_WINDOW_HIDDEN;
+        }
 
         window = SDL_CreateWindow(toStringz(_title), SDL_WINDOWPOS_UNDEFINED,
                 SDL_WINDOWPOS_UNDEFINED, _width, _height, flags);
@@ -342,9 +354,9 @@ public:
     /**
      * Set the size using integers
      */
-    @property final void size(int w, int h) @system @nogc nothrow
+    @property final Display size(int w, int h) @system @nogc nothrow
     {
-        size(vec2i(w, h));
+        return size(vec2i(w, h));
     }
 
     /**
@@ -409,6 +421,10 @@ public:
             return;
         }
         _resizable = b;
+        if (window == null)
+        {
+            return;
+        }
         SDL_SetWindowResizable(window, _resizable ? SDL_TRUE : SDL_FALSE);
     }
 
@@ -417,7 +433,7 @@ public:
      */
     pure @property final bool visible() @nogc @safe nothrow
     {
-        return _resizable;
+        return _visible;
     }
 
     /**
@@ -426,6 +442,11 @@ public:
     @property final void visible(bool b) @system
     {
         if (b == _visible)
+        {
+            return;
+        }
+        _visible = b;
+        if (window == null)
         {
             return;
         }
@@ -454,6 +475,10 @@ public:
             return;
         }
         _fullscreen = b;
+        if (window == null)
+        {
+            return;
+        }
         SDL_SetWindowFullscreen(window, b ? SDL_WINDOW_FULLSCREEN_DESKTOP : SDL_WINDOW_SHOWN);
         import std.stdio;
 
