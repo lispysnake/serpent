@@ -186,15 +186,6 @@ public:
         this._width = width;
         this._height = height;
 
-        auto flags = SDL_WINDOW_HIDDEN;
-
-        window = SDL_CreateWindow(toStringz(_title), SDL_WINDOWPOS_UNDEFINED,
-                SDL_WINDOWPOS_UNDEFINED, _width, _height, flags);
-        if (!window)
-        {
-            throw new SystemException("Couldn't create Window: %s".format(SDL_GetError()));
-        }
-
         /* Ensure we always have SOMETHING to render */
         dummyScene = new Scene("default_placeholder_scene");
         addScene(dummyScene);
@@ -270,6 +261,15 @@ public:
         import std.stdio;
 
         didInit = true;
+
+        auto flags = SDL_WINDOW_HIDDEN;
+
+        window = SDL_CreateWindow(toStringz(_title), SDL_WINDOWPOS_UNDEFINED,
+                SDL_WINDOWPOS_UNDEFINED, _width, _height, flags);
+        if (!window)
+        {
+            throw new SystemException("Couldn't create Window: %s".format(SDL_GetError()));
+        }
 
         bgfx_init_ctor(&bInit);
 
