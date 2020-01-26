@@ -96,7 +96,7 @@ package:
         _tileHeight = h;
     }
 
-    this()
+    this() @safe @nogc nothrow
     {
         tileWidth = 0;
         tileHeight = 0;
@@ -106,7 +106,7 @@ package:
 
 public:
 
-    this(uint tw, uint th, uint w, uint h)
+    this(uint tw, uint th, uint w, uint h) @safe @nogc nothrow
     {
         tileWidth = tw;
         tileHeight = th;
