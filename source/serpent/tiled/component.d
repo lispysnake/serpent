@@ -20,8 +20,18 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.tiled;
+module serpent.tiled.component;
 
-public import serpent.tiled.component;
-public import serpent.tiled.layer;
+public import serpent.core.component : serpentComponent;
 public import serpent.tiled.map;
+
+/**
+ * To place a Map on screen, you must first assign a MapComponent to
+ * an entity.
+ *
+ * Additionally, map must point to a valid Map instance.
+ */
+@serpentComponent final struct MapComponent
+{
+    Map map;
+}
