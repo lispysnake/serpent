@@ -24,6 +24,11 @@ module serpent.tiled.tmx;
 
 public import serpent.tiled.map;
 
+import std.file;
+import std.xml;
+import std.exception : enforce;
+import std.conv : to;
+
 /**
  * The TMXParser exists solely as a utility class to load TMX files.
  * Currently this is a janky utility class until such point as we have
@@ -31,6 +36,63 @@ public import serpent.tiled.map;
  */
 final class TMXParser
 {
+
+private:
+
+    /**
+     * Begin parsing the actual XML document.
+     */
+    static final Map parseMap(Document doc) @safe
+    {
+        enforce(doc.tag.name == "map", "First element should be <map>");
+        auto map = new Map();
+
+        /* Grab our basic map attributes */
+        foreach (attr, attrValue; doc.tag.attr)
+        {
+            switch (attr)
+            {
+            case "tileheight":
+                map.tileHeight = to!int(attrValue);
+                break;
+            case "tilewidth":
+                map.tileWidth = to!int(attrValue);
+                break;
+            case "width":
+                map.width = to!int(attrValue);
+                break;
+            case "height":
+                map.height = to!int(attrValue);
+                break;
+            case "orientation":
+                switch (attrValue)
+                {
+                case "orthogonal":
+                    map.orientation = MapOrientation.Orthogonal;
+                    break;
+                case "isometric":
+                    map.orientation = MapOrientation.Isometric;
+                    break;
+                case "staggered":
+                    map.orientation = MapOrientation.Staggered;
+                    break;
+                case "hexagonal":
+                    map.orientation = MapOrientation.Hexagonal;
+                    break;
+                default:
+                    enforce("Unknown orientation in Map");
+                    break;
+                }
+                break;
+            default:
+                break;
+            }
+        }
+
+        map.validate();
+
+        return map;
+    }
 
 public:
 
@@ -43,8 +105,12 @@ public:
      * Load a map from the given path.
      * In future we need to use crossplatform path + loading capabilities.
      */
-    static final Map loadTMX(string path) @safe @nogc nothrow
+    static final Map loadTMX(string path) @trusted
     {
-        return null;
+        auto r = cast(string) std.file.read(path);
+        std.xml.check(r);
+
+        auto doc = new Document(r);
+        return parseMap(doc);
     }
 }
