@@ -20,10 +20,31 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.tiled;
+module serpent.tiled.tmx;
 
-public import serpent.tiled.component;
-public import serpent.tiled.layer;
 public import serpent.tiled.map;
-public import serpent.tiled.renderer;
-public import serpent.tiled.tmx;
+
+/**
+ * The TMXParser exists solely as a utility class to load TMX files.
+ * Currently this is a janky utility class until such point as we have
+ * a proper loader mechanism in place.
+ */
+final class TMXParser
+{
+
+public:
+
+    /**
+     * As a static utility class, there is no point in constructing us.
+     */
+    @disable this();
+
+    /**
+     * Load a map from the given path.
+     * In future we need to use crossplatform path + loading capabilities.
+     */
+    static final Map loadTMX(string path) @safe @nogc nothrow
+    {
+        return null;
+    }
+}
