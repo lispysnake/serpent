@@ -57,7 +57,7 @@ private:
     mat4x4f _view = mat4x4f.identity();
     mat4x4f _combined = mat4x4f.identity();
     mat4x4f _inverse = mat4x4f.identity();
-    WorldOrigin _worldOrigin = WorldOrigin.BottomLeft;
+    WorldOrigin _worldOrigin = WorldOrigin.TopLeft;
 
 public:
 
