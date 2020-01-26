@@ -24,6 +24,7 @@ import serpent;
 import std.stdio : writeln, writefln;
 import std.exception;
 import bindbc.sdl;
+import serpent.tiled;
 
 /**
  * Provided merely for demo purposes.
@@ -107,6 +108,10 @@ public:
         auto entity_map = initView.createEntity();
         initView.addComponent!SpriteComponent(entity_map);
         initView.data!SpriteComponent(entity_map).texture = new Texture("assets/raw/Overworld.png");
+
+        auto entity_tilemap = initView.createEntity();
+        initView.addComponent!MapComponent(entity_tilemap);
+        /* TODO: Set the underlying tilemap */
 
         return true;
     }

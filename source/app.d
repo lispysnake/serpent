@@ -26,8 +26,6 @@ import serpent.core;
 import serpent.graphics.sprite;
 import std.stdio : writeln, writefln;
 
-import serpent.tiled;
-
 /**
  * Fairly typical entry-point code for a Serpent game.
  * Some CLI optons, set up the context, and ask it to run our
