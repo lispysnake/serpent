@@ -111,7 +111,8 @@ public:
 
         auto entity_tilemap = initView.createEntity();
         initView.addComponent!MapComponent(entity_tilemap);
-        initView.data!MapComponent(entity_map).map = TMXParser.loadTMX("assets/raw/testMap.tmx");
+        initView.data!MapComponent(entity_tilemap)
+            .map = TMXParser.loadTMX("assets/raw/testMap.tmx");
         /* TODO: Set the underlying tilemap */
 
         return true;
