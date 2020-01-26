@@ -26,6 +26,8 @@ import serpent.core;
 import serpent.graphics.sprite;
 import std.stdio : writeln, writefln;
 
+import serpent.tiled;
+
 /**
  * Fairly typical entry-point code for a Serpent game.
  * Some CLI optons, set up the context, and ask it to run our
@@ -63,6 +65,7 @@ int main(string[] args)
     context.resource.root = context.resource.root ~ "/assets/built";
 
     /* Without a SpriteRenderer, nothing will be drawn. */
+    context.renderGroup.add(new MapRenderer);
     context.renderGroup.add(new SpriteRenderer);
 
     /* Run the game now. */

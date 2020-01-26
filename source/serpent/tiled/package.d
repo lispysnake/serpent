@@ -25,3 +25,4 @@ module serpent.tiled;
 public import serpent.tiled.component;
 public import serpent.tiled.layer;
 public import serpent.tiled.map;
+public import serpent.tiled.renderer;
