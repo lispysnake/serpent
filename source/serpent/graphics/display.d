@@ -55,6 +55,8 @@ private:
     bool _resizable = false;
     string _title = "serpent";
     bgfx_init_t bInit;
+    /* Default to Vulkan. */
+    DriverType _driverType = DriverType.Vulkan;
 
     /* Our scenes mapping */
     Scene[string] scenes;
@@ -288,7 +290,7 @@ public:
         integrateWindowBgfx();
 
         /* TODO: Init on separate render thread */
-        bInit.type = bgfx_renderer_type_t.BGFX_RENDERER_TYPE_VULKAN;
+        bInit.type = context.info.convDriver(this._driverType);
         bgfx_init(&bInit);
         reset(BGFX_RESET_VSYNC);
         updateDebug();
@@ -550,6 +552,26 @@ public:
             return;
         }
         updateDebug();
+    }
+
+    /**
+     * Return the real driverType in use once the display is up and
+     * running
+     */
+    pure @property final DriverType driverType() @safe @nogc nothrow
+    {
+        return context.info.driverType();
+    }
+
+    /**
+     * Override the default Driver to use before the display is up
+     * and running. This allows forcibly switching to OpenGL, Vulkan, etc.
+     */
+    @property final Display driverType(DriverType d) @safe
+    {
+        enforce(!didInit, "Cannot change driverType when running.");
+        _driverType = d;
+        return this;
     }
 
 }

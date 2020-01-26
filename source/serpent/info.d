@@ -124,6 +124,36 @@ public:
     }
 
     /**
+     * Convert a DriverType to a bgfx_renderer_type_t
+     */
+    public static final bgfx_renderer_type_t convDriver(DriverType driverType) @nogc @safe nothrow
+    {
+        switch (driverType)
+        {
+        case DriverType.None:
+            return bgfx_renderer_type_t.BGFX_RENDERER_TYPE_NOOP;
+        case DriverType.Direct3D9:
+            return bgfx_renderer_type_t.BGFX_RENDERER_TYPE_DIRECT3D9;
+        case DriverType.Direct3D11:
+            return bgfx_renderer_type_t.BGFX_RENDERER_TYPE_DIRECT3D11;
+        case DriverType.Direct3D12:
+            return bgfx_renderer_type_t.BGFX_RENDERER_TYPE_DIRECT3D12;
+        case DriverType.Gnm:
+            return bgfx_renderer_type_t.BGFX_RENDERER_TYPE_GNM;
+        case DriverType.Metal:
+            return bgfx_renderer_type_t.BGFX_RENDERER_TYPE_METAL;
+        case DriverType.OpenGLES:
+            return bgfx_renderer_type_t.BGFX_RENDERER_TYPE_OPENGLES;
+        case DriverType.OpenGL:
+            return bgfx_renderer_type_t.BGFX_RENDERER_TYPE_OPENGL;
+        case DriverType.Vulkan:
+            return bgfx_renderer_type_t.BGFX_RENDERER_TYPE_VULKAN;
+        default:
+            return bgfx_renderer_type_t.BGFX_RENDERER_TYPE_COUNT;
+        }
+    }
+
+    /**
      * Convert a DriverType to the associated shader language
      */
     pure static final ShaderModel convShaderModel(DriverType driver) @nogc @safe nothrow
