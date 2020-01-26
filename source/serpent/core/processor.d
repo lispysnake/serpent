@@ -48,18 +48,42 @@ private:
     Context _context;
 
 public:
-    abstract void bootstrap(View!T entityView) @system;
+
+    /**
+     * Implementations may choose to perform any necessary setup code
+     * within the bootstrap function, obtaining their first data view.
+     */
+    void bootstrap(View!T entityView) @system
+    {
+    }
+
+    /**
+     * Implementations should perform their frame-step within this
+     * function and override it.
+     */
     abstract void run(View!T entityView) @system;
-    abstract void finish(View!T entityView) @system;
+
+    /**
+     * Upon display unload, the finish virtual call is executed
+     * sequentially for each processor. Any assets should be unloaded
+     * here.
+     */
+    void finish(View!T entityView) @system
+    {
+    }
 
 package:
 
+    /**
+     * Set the underlying context object.
+     */
     final void context(Context c) @safe @nogc nothrow
     {
         _context = c;
     }
 
 public:
+
     /**
      * Return the underlying context for this processor
      */
