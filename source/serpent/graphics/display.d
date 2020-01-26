@@ -133,13 +133,13 @@ private:
     /**
      * reset bgfx buffer
      */
-    final void reset(uint flags = BGFX_RESET_NONE) @system @nogc nothrow
+    final void reset(uint flags = BGFX_RESET_VSYNC) @system @nogc nothrow
     {
         if (!didInit)
         {
             return;
         }
-        bgfx_reset(_width, _height, BGFX_RESET_NONE, bInit.resolution.format);
+        bgfx_reset(_width, _height, flags, bInit.resolution.format);
     }
 
     /**
@@ -292,7 +292,7 @@ public:
         /* TODO: Init on separate render thread */
         bInit.type = context.info.convDriver(this._driverType);
         bgfx_init(&bInit);
-        reset(BGFX_RESET_VSYNC);
+        reset();
         updateDebug();
 
         /* Set clearing of view0 background. */
