@@ -5,7 +5,8 @@
 	"configurations": [
 		{
 			"excludedSourceFiles": [
-				"source/app.d"
+				"source/app.d",
+				"source/game.d",
 			],
 			"name": "library",
 			"targetType": "none"
