@@ -9,7 +9,7 @@ basic demo shape.
     - Expose underlying SDL_Event for now but in future expand to be more useful.
  - [x] Bring back fullscreen switching/support
     - [x] Port from `lispysnake2d` demo
-    - [ ] Fix busted bgfx integration, ensure scaling ratio + track window changes
+    - [ ] Fix busted bgfx integration, ensure scaling ratio + track window changes (Note: Only broken on Vulkan)
  - [ ] Add non-crap file loading capabilities. i.e. asynchronous.
  - [x] Time to mature the ECS design to something ... not immature.
  - [x] Allow loading/setting the textures per-sprite-data (instead of everything being Ship.png..)
