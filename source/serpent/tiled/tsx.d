@@ -20,12 +20,20 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.tiled;
+module serpent.tiled.tsx;
 
-public import serpent.tiled.component;
-public import serpent.tiled.layer;
-public import serpent.tiled.map;
-public import serpent.tiled.renderer;
-public import serpent.tiled.tileset;
-public import serpent.tiled.tmx;
-public import serpent.tiled.tsx;
+/**
+ * The TSXParser is a utility class that exists solely to parse TSX files
+ * and TSX fragments contained within TMX files.
+ */
+final class TSXParser
+{
+
+public:
+
+    /**
+     * As a static utility class, there is no point in constructing us.
+     */
+    @disable this();
+
+}
