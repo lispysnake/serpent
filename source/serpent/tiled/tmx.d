@@ -122,8 +122,34 @@ private:
      * Handle each layer in the map, assigning a MapLayer instance to the
      * map.layers array.
      */
-    static final void parseLayer(Map map, Element e) @safe @nogc nothrow
+    static final void parseLayer(Map map, Element e) @safe
     {
+        auto layer = new MapLayer();
+        foreach (attr, attrValue; e.tag.attr)
+        {
+            switch (attr)
+            {
+            case "id":
+                layer.id = attrValue;
+                break;
+            case "name":
+                layer.name = attrValue;
+                break;
+            case "width":
+                layer.width = to!int(attrValue);
+                break;
+            case "height":
+                layer.height = to!int(attrValue);
+                break;
+            default:
+                break;
+            }
+        }
+
+        enforce(layer.height > 0, "Layer height should be more than zero");
+        enforce(layer.width > 0, "Layer width should be more than zero");
+
+        layer.allocateBlob();
     }
 
 public:

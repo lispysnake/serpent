@@ -33,6 +33,8 @@ enum LayerEncoding
     Base64, /**< Base64 encoded binary data */
     XML, /**< Hella inefficient. */
 
+
+
 };
 
 /**
@@ -44,6 +46,8 @@ enum LayerCompression
     None = 1,
     ZLib, /**<Compressed using zlib */
     GZip, /**<Compressed using gzip */
+
+
 
 };
 
@@ -58,17 +62,52 @@ private:
     uint32_t[] _data;
     uint _width;
     uint _height;
+    string _id = "";
+    string _name = "";
+
+package:
+
+    /**
+     * private constructor
+     */
+    this() @safe @nogc nothrow
+    {
+    }
+
+    /**
+     * Allocate underlying storage
+     */
+    void allocateBlob() @safe
+    {
+        this._data = new uint32_t[width * height];
+    }
+
+    /**
+     * Set the layer width
+     */
+    pure final @property void width(int width) @safe @nogc nothrow
+    {
+        this._width = width;
+    }
+
+    /**
+     * Set the layer height
+     */
+    pure final @property void height(int height) @safe @nogc nothrow
+    {
+        this._height = height;
+    }
 
 public:
 
     /**
      * Construct a new MapLayer with the given width and height
      */
-    this(uint width, uint height)
+    this(uint width, uint height) @safe
     {
         this._width = width;
         this._height = height;
-        this._data = new uint32_t[width * height];
+        allocateBlob();
     }
 
     /**
@@ -102,4 +141,37 @@ public:
     {
         return cast(immutable(uint32_t[])) _data;
     }
+
+    /**
+     * Return the ID for this layer
+     */
+    pure @property final const string id() @safe @nogc nothrow
+    {
+        return _id;
+    }
+
+    /**
+     * Set the ID for this layer
+     */
+    pure final @property void id(string id) @safe @nogc nothrow
+    {
+        this._id = id;
+    }
+
+    /**
+     * Return the name for this layer
+     */
+    pure @property final const string name() @safe @nogc nothrow
+    {
+        return _name;
+    }
+
+    /**
+     * Set the name of this layer
+     */
+    pure final @property void name(string name) @safe @nogc nothrow
+    {
+        this._name = name;
+    }
+
 }
