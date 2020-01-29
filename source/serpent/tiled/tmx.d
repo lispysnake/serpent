@@ -91,7 +91,39 @@ private:
 
         map.validate();
 
+        foreach (ref element; doc.elements)
+        {
+            switch (element.tag.name)
+            {
+            case "tileset":
+                parseTileset(map, element);
+                break;
+            case "layer":
+                parseLayer(map, element);
+                break;
+            default:
+                /* Unknown */
+                break;
+            }
+        }
+
         return map;
+    }
+
+    /**
+     * In future we'll actually need to do something with the tilesheet,
+     * determine if it is embedded, etc. For now, skip it.
+     */
+    static final void parseTileset(Map map, Element e) @safe @nogc nothrow
+    {
+    }
+
+    /**
+     * Handle each layer in the map, assigning a MapLayer instance to the
+     * map.layers array.
+     */
+    static final void parseLayer(Map map, Element e) @safe @nogc nothrow
+    {
     }
 
 public:
