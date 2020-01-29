@@ -22,12 +22,27 @@
 
 module serpent.tiled.tsx;
 
+public import serpent.tiled.tileset;
+
+import std.xml;
+import std.file;
+
 /**
  * The TSXParser is a utility class that exists solely to parse TSX files
  * and TSX fragments contained within TMX files.
  */
 final class TSXParser
 {
+
+private:
+
+    /**
+     * Attempt to parse the given document and return a TileSet instance
+     */
+    static TileSet parseTileSet(Document document)
+    {
+        return null;
+    }
 
 public:
 
@@ -36,4 +51,15 @@ public:
      */
     @disable this();
 
+    /**
+     * Load a .tsx file from disk and return a TileSet instance for it.
+     */
+    static final TileSet loadTSX(string path) @trusted
+    {
+        auto r = cast(string) std.file.read(path);
+        std.xml.check(r);
+
+        auto doc = new Document(r);
+        return parseTileSet(doc);
+    }
 }
