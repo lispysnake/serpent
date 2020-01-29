@@ -44,7 +44,7 @@ enum LayerEncoding
 enum LayerCompression
 {
     None = 1,
-    ZLib, /**<Compressed using zlib */
+    Deflate, /**<Compressed using zlib */
     GZip, /**<Compressed using gzip */
 
 
