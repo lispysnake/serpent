@@ -29,6 +29,9 @@ import std.xml;
 import std.exception : enforce;
 import std.conv : to;
 import std.format;
+import std.base64;
+import std.string;
+import std.zlib;
 
 /**
  * The TMXParser exists solely as a utility class to load TMX files.
@@ -202,8 +205,49 @@ private:
         }
 
         /* TODO: Parse the blob now. */
+        switch (encoding)
+        {
+        case LayerEncoding.Base64:
+            parseLayerDataBase64(data, layer, compression);
+            break;
+        default:
+            enforce("Currently we only support Base64 decoing");
+            break;
+        }
 
         map.appendLayer(layer);
+    }
+
+    /**
+     * Handle the actual layer data. Step through it and update the MapLayer
+     * as appropriate.
+     */
+    static final void parseLayerDataBase64(Element data, MapLayer layer,
+            LayerCompression compression) @trusted
+    {
+        import std.stdio;
+
+        enforce(data.texts.length == 1, "Base64 layer requires 1 data text");
+
+        auto layerData = std.string.strip(data.texts[0].toString());
+        auto decoded = Base64.decode(layerData);
+        ubyte[] binaryData = null;
+
+        switch (compression)
+        {
+        case LayerCompression.None:
+            binaryData = decoded;
+            break;
+        case LayerCompression.GZip:
+        case LayerCompression.Deflate:
+            binaryData = cast(ubyte[]) uncompress(decoded);
+            break;
+        default:
+            break;
+        }
+
+        /* Ensure our data payload is actually valid */
+        enforce(binaryData.length == layer.width * layer.height * 4, "Invalid map data");
     }
 
 public:
