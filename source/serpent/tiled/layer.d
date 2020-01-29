@@ -25,6 +25,29 @@ module serpent.tiled.layer;
 public import std.stdint;
 
 /**
+ * Each layer may be encoded in a number of ways.
+ */
+enum LayerEncoding
+{
+    CSV = 1, /**< Comma-separated-values */
+    Base64, /**< Base64 encoded binary data */
+    XML, /**< Hella inefficient. */
+
+};
+
+/**
+ * Additionally, each layer may be compressed in one of multiple
+ * ways.
+ */
+enum LayerCompression
+{
+    None = 1,
+    ZLib, /**<Compressed using zlib */
+    GZip, /**<Compressed using gzip */
+
+};
+
+/**
  * The MapLayer contains data within a visible layer.
  * Essentially it is a wrapper around the underlying tile-data.
  */
