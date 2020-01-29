@@ -248,6 +248,22 @@ private:
 
         /* Ensure our data payload is actually valid */
         enforce(binaryData.length == layer.width * layer.height * 4, "Invalid map data");
+
+        uint tileIndex = 0;
+
+        foreach (y; 0 .. layer.height)
+        {
+            foreach (x; 0 .. layer.width)
+            {
+                uint guid = binaryData[tileIndex] | binaryData[tileIndex + 1] << 8
+                    | binaryData[tileIndex + 2] << 16 | binaryData[tileIndex + 3] << 24;
+
+                layer.set(x, y, guid);
+
+                /* Stride 4 */
+                tileIndex += 4;
+            }
+        }
     }
 
 public:
