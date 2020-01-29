@@ -18,9 +18,10 @@ basic demo shape.
        for each entity, for things like `SpriteRenderer` to use. Only visible entities will have this
        component so it's an implicit performance optimisation too.
  - [ ] Let's kill the stupid plane demo and focus on recreating the `lispysnake2d` demo.
- - [ ] Bring back parsers for Tiled, but let's just focus on ~~JSON now, not XML (future-maybe?)~~
+ - [x] Bring back parsers for Tiled, but let's just focus on ~~JSON now, not XML (future-maybe?)~~
    **Edit**: XML is more complete and can be sanity-checked, as well as offering space savings
    via Base64/ZLib decoding. JSON is an export, not a primary format. Fully support TMX/TSX.
+ - [ ] Implement a TSX parser
  - [ ] Bring back parsers for Tilesheet sprites, to get a player on screen
  - [ ] Implement tilemap renderer with commonality to sprite renderer.
  - [ ] Reintroduce animation framework through the Context Job system (perhaps stage -> static class?)
