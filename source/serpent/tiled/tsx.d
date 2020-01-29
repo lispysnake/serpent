@@ -26,6 +26,7 @@ public import serpent.tiled.tileset;
 
 import std.xml;
 import std.file;
+import std.exception : enforce;
 
 /**
  * The TSXParser is a utility class that exists solely to parse TSX files
@@ -34,13 +35,15 @@ import std.file;
 final class TSXParser
 {
 
-private:
+package:
 
     /**
-     * Attempt to parse the given document and return a TileSet instance
+     * This function actually handles the <tileset> tag fully and builds a
+     * TileSet from it.
      */
-    static TileSet parseTileSet(Document document)
+    static TileSet parseTileSetElement(Element e)
     {
+        enforce(e.tag.name == "tileset", "Expected 'tileset' element");
         return null;
     }
 
@@ -60,6 +63,6 @@ public:
         std.xml.check(r);
 
         auto doc = new Document(r);
-        return parseTileSet(doc);
+        return parseTileSetElement(doc);
     }
 }
