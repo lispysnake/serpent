@@ -200,6 +200,10 @@ private:
                 break;
             }
         }
+
+        /* TODO: Parse the blob now. */
+
+        map.appendLayer(layer);
     }
 
 public:
