@@ -115,6 +115,10 @@ public:
             .map = TMXParser.loadTMX("assets/raw/testMap.tmx");
         /* TODO: Set the underlying tilemap */
 
+        /* HAX: Test TSX parser */
+        auto t = TSXParser.loadTSX("assets/raw/Overworld.tsx");
+        writeln(t);
+
         return true;
     }
 }
