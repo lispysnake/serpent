@@ -28,6 +28,7 @@ import std.file;
 import std.xml;
 import std.exception : enforce;
 import std.conv : to;
+import std.format;
 
 /**
  * The TMXParser exists solely as a utility class to load TMX files.
@@ -125,6 +126,9 @@ private:
     static final void parseLayer(Map map, Element e) @safe
     {
         auto layer = new MapLayer();
+        auto encoding = LayerEncoding.XML;
+        auto compression = LayerCompression.None;
+
         foreach (attr, attrValue; e.tag.attr)
         {
             switch (attr)
@@ -150,6 +154,52 @@ private:
         enforce(layer.width > 0, "Layer width should be more than zero");
 
         layer.allocateBlob();
+
+        /* TODO: Find out if these enforce s work across all data payloads. */
+        enforce(e.elements.length == 1, "Layer payload should contain 1 data blob");
+        auto data = e.elements[0];
+        enforce(data.tag.name == "data", "Payload element should be named 'data'");
+
+        /* Determine the payload encoding + compression */
+        foreach (attr, attrValue; data.tag.attr)
+        {
+            switch (attr)
+            {
+            case "encoding":
+                switch (attrValue)
+                {
+                case "base64":
+                    encoding = LayerEncoding.Base64;
+                    break;
+                case "csv":
+                    encoding = LayerEncoding.CSV;
+                    break;
+                case "xml":
+                    encoding = LayerEncoding.XML;
+                    break;
+                default:
+                    enforce("Unknown encoding: %s".format(attrValue));
+                    break;
+                }
+                break;
+            case "compression":
+                switch (attrValue)
+                {
+                case "zlib":
+                    compression = LayerCompression.Deflate;
+                    break;
+                case "gzip":
+                    compression = LayerCompression.GZip;
+                    break;
+                default:
+                    enforce("Uknown compression: %s".format(attrValue));
+                    break;
+                }
+                break;
+            default:
+                break;
+            }
+        }
     }
 
 public:
