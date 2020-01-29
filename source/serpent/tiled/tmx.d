@@ -204,7 +204,7 @@ private:
             }
         }
 
-        /* TODO: Parse the blob now. */
+        /* Now parse the payload */
         switch (encoding)
         {
         case LayerEncoding.Base64:
