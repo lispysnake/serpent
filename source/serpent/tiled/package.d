@@ -26,4 +26,5 @@ public import serpent.tiled.component;
 public import serpent.tiled.layer;
 public import serpent.tiled.map;
 public import serpent.tiled.renderer;
+public import serpent.tiled.tileset;
 public import serpent.tiled.tmx;
