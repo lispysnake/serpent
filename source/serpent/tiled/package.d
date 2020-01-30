@@ -29,3 +29,17 @@ public import serpent.tiled.renderer;
 public import serpent.tiled.tileset;
 public import serpent.tiled.tmx;
 public import serpent.tiled.tsx;
+
+/**
+ * FlipMode stores the high-bit-values for Tiled map guids.
+ * Each guid stores any FlipMode internaly.
+ */
+final enum FlipMode
+{
+    Horizontal = 0x80000000, /**< Tile is flipped horizontally */
+    Vertical = 0x40000000, /**< Tile is flipped vertically */
+    Diagonal = 0x20000000, /**< Tile is flipped diagonally */
+
+    /** Mask can be used to trivially unmask a guid. */
+    Mask = FlipMode.Horizontal | FlipMode.Vertical | FlipMode.Diagonal,
+};
