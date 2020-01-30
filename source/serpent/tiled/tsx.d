@@ -28,6 +28,7 @@ import std.xml;
 import std.file;
 import std.exception : enforce;
 import std.conv : to;
+import std.format;
 
 /**
  * The TSXParser is a utility class that exists solely to parse TSX files
@@ -81,7 +82,7 @@ package:
             {
             case "image":
                 tileset.collection = false;
-                parseRootImage(item);
+                parseRootImage(tileset, item);
                 break;
             case "tile":
                 parseTile(item);
@@ -104,7 +105,7 @@ package:
     /**
      * Parse the root image (tilesheet) for this tileset.
      */
-    static final void parseRootImage(Element element) @safe
+    static final void parseRootImage(TileSet tileset, Element element) @trusted
     {
         string source = "";
         int width = 0;
@@ -127,6 +128,39 @@ package:
                 break;
             default:
                 break;
+            }
+        }
+
+        /* Start at MARGIN gap (X/Y) */
+        int x = tileset.margin;
+        int y = tileset.margin;
+        int column = 0;
+
+        enforce(tileset.columns > 0, "Column number must be greater than zero");
+        enforce(tileset.tileCount > 0, "tileCount must be greater than zero");
+
+        /* Step through all potential tile regions */
+        foreach (tileID; 0 .. tileset.tileCount)
+        {
+            auto region = rectanglef(x, y, tileset.tileWidth, tileset.tileHeight);
+
+            ++column;
+
+            /* At this point we need to insert the region + tile.. */
+
+            /* When we exceed the columns, start a new row */
+            if (column >= tileset.columns)
+            {
+                column = 0;
+                auto computeWidth = x + tileset.tileWidth + tileset.margin;
+                enforce(computeWidth == width,
+                        "Expect image width of %d, got %d".format(width, computeWidth));
+                x = tileset.margin;
+                y += tileset.spacing + tileset.tileHeight;
+            }
+            else
+            {
+                x += tileset.tileWidth + tileset.spacing;
             }
         }
     }
