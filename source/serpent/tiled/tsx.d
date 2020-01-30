@@ -80,6 +80,7 @@ package:
             switch (item.tag.name)
             {
             case "image":
+                tileset.collection = false;
                 parseImage(item);
                 break;
             case "tile":
