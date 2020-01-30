@@ -128,6 +128,8 @@ private:
         pd.backBuffer = null;
         pd.backBufferDS = null;
         bgfx_set_platform_data(&pd);
+
+        bgfx_render_frame(-1);
     }
 
     /**
@@ -140,6 +142,7 @@ private:
             return;
         }
         bgfx_reset(_width, _height, flags, bInit.resolution.format);
+        bgfx_touch(0);
     }
 
     /**
