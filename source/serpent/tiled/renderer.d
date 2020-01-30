@@ -77,25 +77,30 @@ private:
         float drawY = 0.0f;
         auto transformScale = vec3f(1.0f, 1.0f, 1.0f);
 
-        /* Step the layer */
         foreach (layer; mapComponent.map.layers)
         {
 
-            /* Step the row */
             foreach (y; 0 .. layer.height)
             {
 
-                /* Step the column */
                 foreach (x; 0 .. layer.width)
                 {
                     auto gid = layer.data[x + y * layer.width];
                     auto tile = gid & ~FlipMode.Mask;
-                    auto t2 = mapComponent.tileset.getTile(tile);
+                    if (tile == 0)
+                    {
+                        drawX += mapComponent.map.tileWidth;
+                        continue;
+                    }
+                    auto t2 = mapComponent.tileset.getTile(tile - 1);
 
                     auto transformPosition = vec3f(drawX, drawY, 0.0f);
+                    auto inputRegion = t2.region;
+                    auto region = rectanglef(inputRegion.min.x / mapComponent.texture.width,
+                            inputRegion.min.y / mapComponent.texture.height,
+                            mapComponent.map.tileWidth / mapComponent.texture.width, mapComponent.map.tileHeight / mapComponent.texture.height);
                     sb.drawSprite(mapComponent.texture, transformPosition, transformScale,
-                            mapComponent.map.tileWidth, mapComponent.map.tileHeight,
-                            mapComponent.texture.clip);
+                            mapComponent.map.tileWidth, mapComponent.map.tileHeight, region);
                     drawX += mapComponent.map.tileWidth;
                 }
                 drawY += mapComponent.map.tileHeight;
