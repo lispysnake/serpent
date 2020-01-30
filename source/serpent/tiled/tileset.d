@@ -35,10 +35,12 @@ final class TileSet
 private:
 
     string _name = "";
-    int _tileWidth;
-    int _tileHeight;
-    int _tileCount;
-    int _columns;
+    int _tileWidth = 0;
+    int _tileHeight = 0;
+    int _tileCount = 0;
+    int _columns = 0;
+    int _spacing = 0;
+    int _margin = 0;
 
 public:
 
@@ -80,6 +82,22 @@ public:
     pure @property final const string name() @safe @nogc nothrow
     {
         return _name;
+    }
+
+    /**
+     * Return the spacing between tiles in the tileset image
+     */
+    pure @property final const int spacing() @safe @nogc nothrow
+    {
+        return _spacing;
+    }
+
+    /**
+     * Return the margin for the tileset image.
+     */
+    pure @property final const int margin() @safe @nogc nothrow
+    {
+        return _margin;
     }
 
     /**
@@ -140,5 +158,21 @@ package:
     pure @property final void name(string name) @safe @nogc nothrow
     {
         _name = name;
+    }
+
+    /**
+     * Set the spacing between tiles in the tileset image
+     */
+    pure @property final void spacing(int spacing) @safe @nogc nothrow
+    {
+        _spacing = spacing;
+    }
+
+    /**
+     * Set the margin of the tileset image
+     */
+    pure @property final void margin(int margin) @safe @nogc nothrow
+    {
+        _margin = margin;
     }
 }
