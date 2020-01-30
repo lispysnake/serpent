@@ -24,12 +24,12 @@ module serpent.tiled.renderer;
 
 import serpent.tiled.component;
 
-public import serpent.graphics.sprite;
 public import serpent.core.entity;
 public import serpent.core.processor;
 public import serpent.core.view;
 
 import serpent.tiled : FlipMode;
+import serpent.graphics.sprite.batch;
 
 /**
  * MapRenderer walks through a tilemap and dispatches relevant drawing
@@ -38,6 +38,9 @@ import serpent.tiled : FlipMode;
 final class MapRenderer : Processor!ReadOnly
 {
 
+private:
+    SpriteBatch sb = null;
+
 public:
 
     /* Load shaders */
@@ -45,6 +48,7 @@ public:
     {
 
         context.component.registerComponent!MapComponent;
+        sb = new SpriteBatch(context);
     }
 
     final override void run(View!ReadOnly dataView)
@@ -53,6 +57,12 @@ public:
         {
             drawMap(dataView, entity);
         }
+    }
+
+    final override void finish(View!ReadOnly dataView) @system
+    {
+        sb.destroy();
+        sb = null;
     }
 
 private:
