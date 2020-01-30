@@ -233,14 +233,13 @@ private:
 
         switch (compression)
         {
-        case LayerCompression.None:
-            binaryData = decoded;
-            break;
         case LayerCompression.GZip:
         case LayerCompression.Deflate:
             binaryData = cast(ubyte[]) uncompress(decoded);
             break;
+        case LayerCompression.None:
         default:
+            binaryData = decoded;
             break;
         }
 
