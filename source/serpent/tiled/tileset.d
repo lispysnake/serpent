@@ -57,7 +57,7 @@ private:
     bool _collection = false;
 
     Array!Tile _tilesGUID; /*GUID-indexed tile array */
-    Tile[string] _tilesMap; /* ID-to-Tile string mapping (slower) */
+    Tile[int] _tilesMap; /* ID-to-Tile mapping (slower) */
 
 public:
 
