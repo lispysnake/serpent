@@ -35,9 +35,9 @@ import serpent.tiled;
  */
 int main(string[] args)
 {
-    bool openGL = false;
-    auto argp = getopt(args, std.getopt.config.bundling, "o|opengl",
-            "Use OpenGL instead of Vulkan", &openGL);
+    bool vulkan = false;
+    auto argp = getopt(args, std.getopt.config.bundling, "v|vulkan",
+            "Use Vulkan instead of OpenGL", &vulkan);
 
     if (argp.helpWanted)
     {
@@ -50,15 +50,15 @@ int main(string[] args)
     context.display.title("#serpent demo").size(1366, 768);
 
     /* We want OpenGL or Vulkan? */
-    if (openGL)
-    {
-        writeln("Requesting OpenGL display mode");
-        context.display.driverType = DriverType.OpenGL;
-    }
-    else
+    if (vulkan)
     {
         writeln("Requesting Vulkan display mode");
         context.display.driverType = DriverType.Vulkan;
+    }
+    else
+    {
+        writeln("Requesting OpenGL display mode");
+        context.display.driverType = DriverType.OpenGL;
     }
 
     /* Set our root directory up */
