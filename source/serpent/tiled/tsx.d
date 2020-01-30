@@ -65,7 +65,7 @@ package:
                 tileset.tileCount = to!int(attrValue);
                 break;
             case "columns":
-                tileset.tileCount = to!int(attrValue);
+                tileset.columns = to!int(attrValue);
                 break;
             default:
                 break;
