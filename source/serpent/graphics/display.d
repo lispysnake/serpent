@@ -142,6 +142,10 @@ private:
             return;
         }
         bgfx_reset(_width, _height, flags, bInit.resolution.format);
+        if (scene !is null && scene.camera !is null)
+        {
+            scene.camera.update();
+        }
         bgfx_touch(0);
     }
 
