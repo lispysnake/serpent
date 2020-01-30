@@ -23,7 +23,6 @@
 module serpent.graphics.sprite.batch;
 
 import bindbc.bgfx;
-import gfm.math;
 import std.stdint;
 
 import serpent.camera : WorldOrigin;
@@ -33,7 +32,7 @@ import serpent.graphics.vertex;
 
 public import serpent.core.context;
 public import serpent.graphics.texture;
-public import serpent.core.transform : TransformComponent;
+public import gfm.math;
 
 /**
  * Eventually this will become a batching Sprite renderer, that is, something
@@ -88,34 +87,36 @@ public:
      * Draw a sprite with the given texture and transform. The default clip region
      * is assumed as are the width and height
      */
-    final void drawSprite(immutable(Texture) texture, immutable(TransformComponent*) transform) @trusted
+    final void drawSprite(immutable(Texture) texture, vec3f transformPosition, vec3f transformScale) @trusted
     {
-        drawSprite(texture, transform, texture.width, texture.height, texture.clip());
+        drawSprite(texture, transformPosition, transformScale, texture.width,
+                texture.height, texture.clip());
     }
 
     /**
      * Draw a sprite with the given width and height, texture and transform.
      * The default clip region is assumed.
      */
-    final void drawSprite(immutable(Texture) texture,
-            immutable(TransformComponent*) transform, float width, float height) @trusted
+    final void drawSprite(immutable(Texture) texture, vec3f transformPosition,
+            vec3f transformScale, float width, float height) @trusted
     {
-        drawSprite(texture, transform, width, height, texture.clip());
+        drawSprite(texture, transformPosition, transformScale, width, height, texture.clip());
     }
 
     /**
      * Draw the sprite texture using the given transform, width, height and clip region.
      */
-    final void drawSprite(immutable(Texture) texture,
-            immutable(TransformComponent*) transform, float width, float height, box2f clip) @trusted
+    final void drawSprite(immutable(Texture) texture, vec3f transformPosition,
+            vec3f transformScale, float width, float height, box2f clip) @trusted
     {
         bgfx_transient_index_buffer_t tib;
         bgfx_transient_vertex_buffer_t tvb;
         uint32_t max = 6; /* 6 vertices */
 
         /* Really need precomputed CameraTransform. */
-        auto position = context.display.scene.camera.unproject(transform.position);
+        auto position = context.display.scene.camera.unproject(transformPosition);
 
+        /* TODO: Have camera stuff cached + anchors */
         position.x += width;
         if (context.display.scene.camera.worldOrigin == WorldOrigin.BottomLeft)
         {
@@ -127,8 +128,8 @@ public:
         }
 
         auto translation = mat4x4f.translation(position);
-        auto scale = mat4x4f.scaling(vec3f(width * transform.scale.x,
-                height * transform.scale.y, 1.0f));
+        auto scale = mat4x4f.scaling(vec3f(width * transformScale.x,
+                height * transformScale.y, 1.0f));
         auto model = translation * scale;
         model = model.transposed();
 

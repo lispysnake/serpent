@@ -57,8 +57,9 @@ public:
     {
         foreach (entity; dataView.withComponent!SpriteComponent)
         {
+            auto transform = dataView.data!TransformComponent(entity);
             sb.drawSprite(dataView.data!SpriteComponent(entity).texture,
-                    dataView.data!TransformComponent(entity));
+                    transform.position, transform.scale);
         }
     }
 
