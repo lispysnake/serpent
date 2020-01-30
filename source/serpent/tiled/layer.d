@@ -106,7 +106,6 @@ package:
         this._name = name;
     }
 
-
     /**
      * Set the ID for this layer
      */
@@ -166,7 +165,7 @@ public:
     {
         return _id;
     }
-    
+
     /**
      * Return the name for this layer
      */

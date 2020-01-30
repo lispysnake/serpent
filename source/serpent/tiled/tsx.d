@@ -72,6 +72,8 @@ package:
             }
         }
 
+        tileset.validate();
+
         return tileset;
     }
 

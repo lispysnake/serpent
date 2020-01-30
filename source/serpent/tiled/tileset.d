@@ -22,6 +22,8 @@
 
 module serpent.tiled.tileset;
 
+import std.exception : enforce;
+
 /**
  * A TileSet describes the images, or drawable regions, of a Map.
  * Internally this can be achieved with a collection of images, or by
@@ -78,6 +80,15 @@ public:
     pure @property final const string name() @safe @nogc nothrow
     {
         return _name;
+    }
+
+    /**
+     * Perform some basic sanity checking
+     */
+    final void validate() @safe
+    {
+        enforce(tileWidth > 0, "tileWidth should be more than zero");
+        enforce(tileHeight > 0, "tileHeight should be more than zero");
     }
 
 package:
