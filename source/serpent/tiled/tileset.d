@@ -54,6 +54,7 @@ private:
     int _columns = 0;
     int _spacing = 0;
     int _margin = 0;
+    bool _collection = false;
 
     Array!Tile _tilesGUID; /*GUID-indexed tile array */
     Tile[string] _tilesMap; /* ID-to-Tile string mapping (slower) */
@@ -114,6 +115,15 @@ public:
     pure @property final const int margin() @safe @nogc nothrow
     {
         return _margin;
+    }
+
+    /**
+     * Return true if this tileset is based on a collection of images.
+     * Will return false if it is based on a tilesheet image.
+     */
+    pure @property final const bool collection() @safe @nogc nothrow
+    {
+        return _collection;
     }
 
     /**
@@ -190,5 +200,13 @@ package:
     pure @property final void margin(int margin) @safe @nogc nothrow
     {
         _margin = margin;
+    }
+
+    /**
+     * Set this tileset as a collection of images or simple sheet
+     */
+    pure @property final void collection(bool collection) @safe @nogc nothrow
+    {
+        _collection = collection;
     }
 }
