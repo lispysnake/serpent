@@ -15,9 +15,9 @@ vision overview. Note this is a restart of efforts after our
 lispysnake2d repo (also public)
 
 Do note that we're initially only focusing on Linux development,
-with a strong bias towards Vulkan. After some initial stability
-begins to appear, we'll focus on OpenGL, then other platforms such
-as Android, macOS (Metal) and Windows (DX/OpenGL/Vulkan).
+with a strong bias towards Vulkan and OpenGL. Currently there are some
+issues in the `bgfx` vulkan renderer so the demo defaults to OpenGL.
+Note that we do regularly test Vulkan as we look for fixes.
 
 Whilst we develop, it will appear we're developing a mini game
 in-tree. This is to help steer direction of the project. Eventually
