@@ -98,7 +98,8 @@ private:
                     auto inputRegion = t2.region;
                     auto region = rectanglef(inputRegion.min.x / mapComponent.texture.width,
                             inputRegion.min.y / mapComponent.texture.height,
-                            mapComponent.map.tileWidth / mapComponent.texture.width, mapComponent.map.tileHeight / mapComponent.texture.height);
+                            mapComponent.map.tileWidth / mapComponent.texture.width,
+                            mapComponent.map.tileHeight / mapComponent.texture.height);
                     sb.drawSprite(mapComponent.texture, transformPosition, transformScale,
                             mapComponent.map.tileWidth, mapComponent.map.tileHeight, region);
                     drawX += mapComponent.map.tileWidth;
