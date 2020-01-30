@@ -225,8 +225,6 @@ private:
     static final void parseLayerDataBase64(Element data, MapLayer layer,
             LayerCompression compression) @trusted
     {
-        import std.stdio;
-
         enforce(data.texts.length == 1, "Base64 layer requires 1 data text");
 
         auto layerData = std.string.strip(data.texts[0].toString());
