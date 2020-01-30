@@ -87,27 +87,29 @@ public:
      * Draw a sprite with the given texture and transform. The default clip region
      * is assumed as are the width and height
      */
-    final void drawSprite(immutable(Texture) texture, vec3f transformPosition, vec3f transformScale) @trusted
+    final void drawSprite(bgfx_encoder_t* encoder, immutable(Texture) texture,
+            vec3f transformPosition, vec3f transformScale) @trusted
     {
-        drawSprite(texture, transformPosition, transformScale, texture.width,
-                texture.height, texture.clip());
+        drawSprite(encoder, texture, transformPosition, transformScale,
+                texture.width, texture.height, texture.clip());
     }
 
     /**
      * Draw a sprite with the given width and height, texture and transform.
      * The default clip region is assumed.
      */
-    final void drawSprite(immutable(Texture) texture, vec3f transformPosition,
-            vec3f transformScale, float width, float height) @trusted
+    final void drawSprite(bgfx_encoder_t* encoder, immutable(Texture) texture,
+            vec3f transformPosition, vec3f transformScale, float width, float height) @trusted
     {
-        drawSprite(texture, transformPosition, transformScale, width, height, texture.clip());
+        drawSprite(encoder, texture, transformPosition, transformScale, width,
+                height, texture.clip());
     }
 
     /**
      * Draw the sprite texture using the given transform, width, height and clip region.
      */
-    final void drawSprite(immutable(Texture) texture, vec3f transformPosition,
-            vec3f transformScale, float width, float height, box2f clip) @trusted
+    final void drawSprite(bgfx_encoder_t* encoder, immutable(Texture) texture,
+            vec3f transformPosition, vec3f transformScale, float width, float height, box2f clip) @trusted
     {
         bgfx_transient_index_buffer_t tib;
         bgfx_transient_vertex_buffer_t tvb;
