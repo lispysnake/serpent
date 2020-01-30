@@ -98,15 +98,36 @@ package:
      */
     static final void parseTile(Element element) @safe @nogc nothrow
     {
-
     }
 
     /**
      * Parse an image
      */
-    static final void parseImage(Element element) @safe @nogc nothrow
+    static final void parseImage(Element element) @safe
     {
+        string source = "";
+        int width = 0;
+        int height = 0;
 
+        /* Step attributes */
+        foreach (attr, attrValue; element.tag.attr)
+        {
+            switch (attr)
+            {
+
+            case "source":
+                source = attrValue;
+                break;
+            case "width":
+                width = to!int(attrValue);
+                break;
+            case "height":
+                height = to!int(attrValue);
+                break;
+            default:
+                break;
+            }
+        }
     }
 
 public:
