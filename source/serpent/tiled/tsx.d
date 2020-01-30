@@ -68,6 +68,12 @@ package:
             case "columns":
                 tileset.columns = to!int(attrValue);
                 break;
+            case "spacing":
+                tileset.spacing = to!int(attrValue);
+                break;
+            case "margin":
+                tileset.margin = to!int(attrValue);
+                break;
             default:
                 break;
             }
