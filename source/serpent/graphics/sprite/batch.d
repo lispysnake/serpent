@@ -90,12 +90,28 @@ public:
      */
     final void drawSprite(immutable(Texture) texture, immutable(TransformComponent*) transform) @trusted
     {
+        drawSprite(texture, transform, texture.width, texture.height, texture.clip());
+    }
+
+    /**
+     * Draw a sprite with the given width and height, texture and transform.
+     * The default clip region is assumed.
+     */
+    final void drawSprite(immutable(Texture) texture,
+            immutable(TransformComponent*) transform, float width, float height) @trusted
+    {
+        drawSprite(texture, transform, width, height, texture.clip());
+    }
+
+    /**
+     * Draw the sprite texture using the given transform, width, height and clip region.
+     */
+    final void drawSprite(immutable(Texture) texture,
+            immutable(TransformComponent*) transform, float width, float height, box2f clip) @trusted
+    {
         bgfx_transient_index_buffer_t tib;
         bgfx_transient_vertex_buffer_t tvb;
         uint32_t max = 6; /* 6 vertices */
-
-        auto width = texture.width;
-        auto height = texture.height;
 
         /* Really need precomputed CameraTransform. */
         auto position = context.display.scene.camera.unproject(transform.position);
@@ -125,8 +141,6 @@ public:
         indexData[3] = 1;
         indexData[4] = 2;
         indexData[5] = 3;
-
-        auto clip = texture.clip();
 
         /* Sort out the vertex buffer */
         bgfx_alloc_transient_vertex_buffer(&tvb, max, &PosUVVertex.layout);
