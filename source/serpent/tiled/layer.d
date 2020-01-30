@@ -137,7 +137,7 @@ public:
     /**
      * Return the width for this layer
      */
-    pure @property final uint width() @safe @nogc nothrow
+    pure @property final const uint width() @safe @nogc nothrow
     {
         return _width;
     }
@@ -145,7 +145,7 @@ public:
     /**
      * Return the height for this layer
      */
-    pure @property final uint height() @safe @nogc nothrow
+    pure @property final const uint height() @safe @nogc nothrow
     {
         return _height;
     }
