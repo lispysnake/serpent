@@ -23,6 +23,19 @@
 module serpent.tiled.tileset;
 
 import std.exception : enforce;
+import std.container.array;
+
+public import gfm.math;
+
+/**
+ * The underlying storage defines how to actually draw a Tile
+ * Each Tile is stored according to the guid (index)
+ */
+final struct Tile
+{
+    box2f region; /**<Defines the renderable region for the tile */
+    /* TODO: Add some kind of texture handle..? */
+};
 
 /**
  * A TileSet describes the images, or drawable regions, of a Map.
@@ -41,6 +54,9 @@ private:
     int _columns = 0;
     int _spacing = 0;
     int _margin = 0;
+
+    Array!Tile _tilesGUID; /*GUID-indexed tile array */
+    Tile[string] _tilesMap; /* ID-to-Tile string mapping (slower) */
 
 public:
 
@@ -115,9 +131,9 @@ package:
      * Currently we only allow TileSet construction from the tiled package
      * but that may change in future.
      */
-    this() @safe @nogc nothrow
+    this(int numTiles = 10) @trusted @nogc nothrow
     {
-
+        _tilesGUID.reserve(numTiles);
     }
 
     /**
