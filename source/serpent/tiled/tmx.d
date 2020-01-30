@@ -234,8 +234,10 @@ private:
         switch (compression)
         {
         case LayerCompression.GZip:
+            binaryData = cast(ubyte[]) new UnCompress(HeaderFormat.gzip).uncompress(decoded);
+            break;
         case LayerCompression.Deflate:
-            binaryData = cast(ubyte[]) uncompress(decoded);
+            binaryData = cast(ubyte[]) new UnCompress(HeaderFormat.deflate).uncompress(decoded);
             break;
         case LayerCompression.None:
         default:
