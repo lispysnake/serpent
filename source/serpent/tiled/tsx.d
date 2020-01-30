@@ -42,7 +42,7 @@ package:
      * This function actually handles the <tileset> tag fully and builds a
      * TileSet from it.
      */
-    static TileSet parseTileSetElement(Element e) @safe
+    static final TileSet parseTileSetElement(Element e) @safe
     {
         enforce(e.tag.name == "tileset", "Expected 'tileset' element");
         auto tileset = new TileSet();
@@ -74,7 +74,39 @@ package:
 
         tileset.validate();
 
+        /* Step through child elements now */
+        foreach (item; e.elements)
+        {
+            switch (item.tag.name)
+            {
+            case "image":
+                parseImage(item);
+                break;
+            case "tile":
+                parseTile(item);
+                break;
+            default:
+                break;
+            }
+        }
+
         return tileset;
+    }
+
+    /**
+     * Parse a singular tile.
+     */
+    static final void parseTile(Element element) @safe @nogc nothrow
+    {
+
+    }
+
+    /**
+     * Parse an image
+     */
+    static final void parseImage(Element element) @safe @nogc nothrow
+    {
+
     }
 
 public:
