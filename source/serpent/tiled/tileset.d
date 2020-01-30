@@ -40,8 +40,6 @@ private:
 
 public:
 
-    @disable this();
-
     /**
      * Return the width of each tile, in pixels
      */
@@ -72,5 +70,64 @@ public:
     pure @property final const int columns() @safe @nogc nothrow
     {
         return _columns;
+    }
+
+    /**
+     * Return the name of this tileset
+     */
+    pure @property final const string name() @safe @nogc nothrow
+    {
+        return _name;
+    }
+
+package:
+
+    /**
+     * Currently we only allow TileSet construction from the tiled package
+     * but that may change in future.
+     */
+    this() @safe @nogc nothrow
+    {
+
+    }
+
+    /**
+     * Set the width of each tile, in pixels
+     */
+    pure @property final void tileWidth(int tileWidth) @safe @nogc nothrow
+    {
+        _tileWidth = tileWidth;
+    }
+
+    /**
+     * Set the height of each tile, in pixels
+     */
+    pure @property final void tileHeight(int tileHeight) @safe @nogc nothrow
+    {
+        _tileHeight = tileHeight;
+    }
+
+    /**
+     * Set the number of tiles in this tileset
+     */
+    pure @property final void tileCount(int tileCount) @safe @nogc nothrow
+    {
+        _tileCount = tileCount;
+    }
+
+    /**
+     * Set the number of columns in this tileset
+     */
+    pure @property final void columns(int columns) @safe @nogc nothrow
+    {
+        _columns = columns;
+    }
+
+    /**
+     * Set the name of this tileset
+     */
+    pure @property final void name(string name) @safe @nogc nothrow
+    {
+        _name = name;
     }
 }

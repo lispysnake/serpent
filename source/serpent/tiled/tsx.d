@@ -27,6 +27,7 @@ public import serpent.tiled.tileset;
 import std.xml;
 import std.file;
 import std.exception : enforce;
+import std.conv : to;
 
 /**
  * The TSXParser is a utility class that exists solely to parse TSX files
@@ -41,9 +42,36 @@ package:
      * This function actually handles the <tileset> tag fully and builds a
      * TileSet from it.
      */
-    static TileSet parseTileSetElement(Element e)
+    static TileSet parseTileSetElement(Element e) @safe
     {
         enforce(e.tag.name == "tileset", "Expected 'tileset' element");
+        auto tileset = new TileSet();
+
+        /* Step through <tileset> attributes */
+        foreach (attr, attrValue; e.tag.attr)
+        {
+            switch (attr)
+            {
+            case "name":
+                tileset.name = attrValue;
+                break;
+            case "tilewidth":
+                tileset.tileWidth = to!int(attrValue);
+                break;
+            case "tileheight":
+                tileset.tileHeight = to!int(attrValue);
+                break;
+            case "tilecount":
+                tileset.tileCount = to!int(attrValue);
+                break;
+            case "columns":
+                tileset.tileCount = to!int(attrValue);
+                break;
+            default:
+                break;
+            }
+        }
+
         return null;
     }
 
