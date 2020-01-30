@@ -51,7 +51,15 @@ final class SpriteBatch
 private:
 
     Program shader = null;
-    Context context = null;
+    Context _context = null;
+
+    /**
+     * Update the current Context
+     */
+    pure @property final void context(Context context) @safe @nogc nothrow
+    {
+        _context = context;
+    }
 
 public:
 
@@ -139,5 +147,13 @@ public:
         /* Submit draw call */
         bgfx_set_state(0UL | BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BlendState.Alpha, 0);
         bgfx_submit(0, shader.handle, 0, false);
+    }
+
+    /**
+     * Return the underlying Context for this SpriteBatch instance
+     */
+    pure @property final Context context() @safe @nogc nothrow
+    {
+        return _context;
     }
 }
