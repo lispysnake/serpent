@@ -60,5 +60,22 @@ private:
      */
     final void drawMap(View!ReadOnly dataView, EntityID entity)
     {
+        auto mapComponent = dataView.data!MapComponent(entity);
+
+        /* Step the layer */
+        foreach (layer; mapComponent.map.layers)
+        {
+
+            /* Step the row */
+            foreach (y; 0 .. layer.height)
+            {
+
+                /* Step the column */
+                foreach (x; 0 .. layer.width)
+                {
+                    auto gid = layer.data[x + y * layer.width];
+                }
+            }
+        }
     }
 }
