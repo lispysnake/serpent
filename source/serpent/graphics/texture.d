@@ -74,9 +74,9 @@ public:
 
         /* TODO: Optimise to the platform. */
         auto fmt = bgfx_texture_format_t.BGFX_TEXTURE_FORMAT_RGBA8;
-        _handle = bgfx_create_texture_2d(cast(ushort) surface.w, cast(ushort) surface.h,
-                false, 1, fmt, 0, bgfx_make_ref(surface.pixels,
-                    surface.w * surface.h * surface.pitch));
+        _handle = bgfx_create_texture_2d(cast(ushort) surface.w, cast(ushort) surface.h, false, 1, fmt,
+                BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP,
+                bgfx_make_ref(surface.pixels, surface.w * surface.h * surface.pitch));
     }
 
     ~this()
