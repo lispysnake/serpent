@@ -23,6 +23,7 @@
 module serpent.tiled.map;
 
 import std.exception : enforce;
+public import std.container.array;
 
 public import serpent.tiled.layer;
 
@@ -51,7 +52,7 @@ private:
     int _tileWidth = 0;
     int _width = 0;
     int _height = 0;
-    MapLayer[] _layers;
+    Array!MapLayer _layers;
     MapOrientation _orientation = MapOrientation.Unknown;
 
 package:
@@ -157,9 +158,9 @@ public:
     /**
      * Append a map layer
      */
-    final void appendLayer(MapLayer layer) @safe
+    final void appendLayer(MapLayer layer) @trusted
     {
-        _layers ~= layer;
+        _layers.insert(layer);
     }
 
     /**
@@ -175,10 +176,10 @@ public:
     }
 
     /**
-     * Return a layer by index
+     * Read-only access to underlying layers.
      */
-    pure final immutable(MapLayer) layer(const uint index) @trusted
+    pure const final @property immutable(Array!MapLayer) layers() @trusted
     {
-        return cast(immutable(MapLayer)) _layers[index];
+        return cast(immutable(Array!MapLayer)) _layers;
     }
 }
