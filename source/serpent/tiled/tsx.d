@@ -81,7 +81,7 @@ package:
             {
             case "image":
                 tileset.collection = false;
-                parseImage(item);
+                parseRootImage(item);
                 break;
             case "tile":
                 parseTile(item);
@@ -102,9 +102,9 @@ package:
     }
 
     /**
-     * Parse an image
+     * Parse the root image (tilesheet) for this tileset.
      */
-    static final void parseImage(Element element) @safe
+    static final void parseRootImage(Element element) @safe
     {
         string source = "";
         int width = 0;
