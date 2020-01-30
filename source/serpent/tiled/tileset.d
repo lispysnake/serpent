@@ -35,6 +35,13 @@ final struct Tile
 {
     box2f region; /**<Defines the renderable region for the tile */
     /* TODO: Add some kind of texture handle..? */
+
+    this(box2f region) @safe @nogc nothrow
+    {
+        this.region = region;
+    }
+
+    @disable this();
 };
 
 /**
@@ -208,5 +215,32 @@ package:
     pure @property final void collection(bool collection) @safe @nogc nothrow
     {
         _collection = collection;
+    }
+
+    /**
+     * Set the tile at GID to tile T
+     *
+     * Note this is fully expected to happen *sequentially* by the owning
+     * parser as the underlying storage is an array! This must remain
+     * contiguous in memory.
+     */
+    pure final void setTile(uint gid, ref Tile t) @safe @nogc nothrow
+    {
+        _tilesGUID[gid] = t;
+    }
+
+    /**
+     * Ensure we have enough storage allocated ahead-of-time for all
+     * tiles. Cheekily this allocates a large struct-pointer blob for
+     * all of our Tile regions when not using a collection.
+     */
+    pure final void reserve() @trusted @nogc nothrow
+    {
+        if (collection)
+        {
+            return;
+        }
+        _tilesGUID.reserve(tileCount);
+        _tilesGUID.length = tileCount;
     }
 }

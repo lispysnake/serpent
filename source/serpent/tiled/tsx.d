@@ -136,6 +136,7 @@ package:
         int y = tileset.margin;
         int column = 0;
 
+        tileset.reserve();
         enforce(tileset.columns > 0, "Column number must be greater than zero");
         enforce(tileset.tileCount > 0, "tileCount must be greater than zero");
 
@@ -143,6 +144,8 @@ package:
         foreach (tileID; 0 .. tileset.tileCount)
         {
             auto region = rectanglef(x, y, tileset.tileWidth, tileset.tileHeight);
+            Tile t = Tile(region);
+            tileset.setTile(tileID, t);
 
             ++column;
 
