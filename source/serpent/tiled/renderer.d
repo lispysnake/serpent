@@ -29,6 +29,8 @@ public import serpent.core.entity;
 public import serpent.core.processor;
 public import serpent.core.view;
 
+import serpent.tiled : FlipMode;
+
 /**
  * MapRenderer walks through a tilemap and dispatches relevant drawing
  * of quads through Sprite APIs.
@@ -61,6 +63,8 @@ private:
     final void drawMap(View!ReadOnly dataView, EntityID entity)
     {
         auto mapComponent = dataView.data!MapComponent(entity);
+        int drawX = 0;
+        int drawY = 0;
 
         /* Step the layer */
         foreach (layer; mapComponent.map.layers)
@@ -74,8 +78,15 @@ private:
                 foreach (x; 0 .. layer.width)
                 {
                     auto gid = layer.data[x + y * layer.width];
+                    auto tile = gid & ~FlipMode.Mask;
+                    auto t2 = mapComponent.tileset.getTile(tile);
+
+                    drawX += mapComponent.map.tileWidth;
                 }
             }
+
+            drawY += mapComponent.map.tileHeight;
+            drawX = 0;
         }
     }
 }

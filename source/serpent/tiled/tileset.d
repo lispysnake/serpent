@@ -230,6 +230,19 @@ package:
     }
 
     /**
+     * Return the Tile data for the given guid
+     */
+    final const Tile getTile(uint guid) @trusted @nogc nothrow
+    {
+        if (collection)
+        {
+            return Tile(rectanglef(0.0f, 0.0f, 0.0f, 0.0f));
+        }
+
+        return _tilesGUID[guid];
+    }
+
+    /**
      * Ensure we have enough storage allocated ahead-of-time for all
      * tiles. Cheekily this allocates a large struct-pointer blob for
      * all of our Tile regions when not using a collection.
