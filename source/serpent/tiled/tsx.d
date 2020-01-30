@@ -72,7 +72,7 @@ package:
             }
         }
 
-        return null;
+        return tileset;
     }
 
 public:
