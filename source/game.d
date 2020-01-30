@@ -104,20 +104,12 @@ public:
         initView.data!TransformComponent(entity_logo)
             .position = vec3f(1366.0f - tex.width - 10.0f, 768.0f - tex.height - 10.0f, 0.0f);
 
-        /* Now stick a large picture on screen */
+        /* Hack! */
         auto entity_map = initView.createEntity();
-        initView.addComponent!SpriteComponent(entity_map);
-        initView.data!SpriteComponent(entity_map).texture = new Texture("assets/raw/Overworld.png");
-
-        auto entity_tilemap = initView.createEntity();
-        initView.addComponent!MapComponent(entity_tilemap);
-        initView.data!MapComponent(entity_tilemap)
-            .map = TMXParser.loadTMX("assets/raw/testMap.tmx");
-        /* TODO: Set the underlying tilemap */
-
-        /* HAX: Test TSX parser */
-        auto t = TSXParser.loadTSX("assets/raw/Overworld.tsx");
-        writeln(t);
+        auto map = initView.addComponent!MapComponent(entity_map);
+        map.texture = new Texture("assets/raw/Overworld.png");
+        map.map = TMXParser.loadTMX("assets/raw/testMap.tmx");
+        map.tileset = TSXParser.loadTSX("assets/raw/Overworld.tsx");
 
         return true;
     }

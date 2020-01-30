@@ -25,6 +25,10 @@ module serpent.tiled.component;
 public import serpent.core.component : serpentComponent;
 public import serpent.tiled.map;
 
+/* HAX */
+public import serpent.tiled.tileset;
+public import serpent.graphics.texture;
+
 /**
  * To place a Map on screen, you must first assign a MapComponent to
  * an entity.
@@ -33,5 +37,10 @@ public import serpent.tiled.map;
  */
 @serpentComponent final struct MapComponent
 {
-    Map map;
+    Map map; /**< The map and layers to draw */
+
+    /* HAX: These will become part of Map. We're just testing! */
+
+    TileSet tileset; /**<The TileSet to draw with */
+    Texture texture; /**<The texture the TileSet is using */
 }
