@@ -73,8 +73,9 @@ private:
     final void drawMap(View!ReadOnly dataView, EntityID entity)
     {
         auto mapComponent = dataView.data!MapComponent(entity);
-        int drawX = 0;
-        int drawY = 0;
+        float drawX = 0.0f;
+        float drawY = 0.0f;
+        auto transformScale = vec3f(1.0f, 1.0f, 1.0f);
 
         /* Step the layer */
         foreach (layer; mapComponent.map.layers)
@@ -91,12 +92,17 @@ private:
                     auto tile = gid & ~FlipMode.Mask;
                     auto t2 = mapComponent.tileset.getTile(tile);
 
+                    auto transformPosition = vec3f(drawX, drawY, 0.0f);
+                    sb.drawSprite(mapComponent.texture, transformPosition, transformScale,
+                            mapComponent.map.tileWidth, mapComponent.map.tileHeight,
+                            mapComponent.texture.clip);
                     drawX += mapComponent.map.tileWidth;
                 }
+                drawY += mapComponent.map.tileHeight;
+                drawX = 0;
             }
-
-            drawY += mapComponent.map.tileHeight;
             drawX = 0;
+            drawY = 0;
         }
     }
 }
