@@ -115,7 +115,7 @@ public:
         bgfx_transient_vertex_buffer_t tvb;
         uint32_t max = 6; /* 6 vertices */
 
-        /* Really need precomputed CameraTransform. */
+        /* Really need precomputed CameraTransform. NOT THREADSAFE */
         auto position = context.display.scene.camera.unproject(transformPosition);
 
         /* TODO: Have camera stuff cached + anchors */
@@ -153,17 +153,18 @@ public:
         vertexData[2] = PosUVVertex(vec3f(-1.0f, -1.0f, 0.0f), vec2f(clip.min.x, clip.max.y)); // Bottom Left
         vertexData[3] = PosUVVertex(vec3f(-1.0f, 1.0f, 0.0f), vec2f(clip.min.x, clip.min.y)); // Top Left
 
-        bgfx_set_transform(model.ptr, 1);
+        bgfx_encoder_set_transform(encoder, model.ptr, 1);
 
         /* Set the stage */
-        bgfx_set_transient_vertex_buffer(0, &tvb, 0, 4);
-        bgfx_set_transient_index_buffer(&tib, 0, 6);
-        bgfx_set_texture(0, cast(bgfx_uniform_handle_t) 0, texture.handle,
-                BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP);
+        bgfx_encoder_set_transient_vertex_buffer(encoder, 0, &tvb, 0, 4, tvb.layoutHandle);
+        bgfx_encoder_set_transient_index_buffer(encoder, &tib, 0, 6);
+        bgfx_encoder_set_texture(encoder, 0, cast(bgfx_uniform_handle_t) 0,
+                texture.handle, BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP);
 
         /* Submit draw call */
-        bgfx_set_state(0UL | BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BlendState.Alpha, 0);
-        bgfx_submit(0, shader.handle, 0, false);
+        bgfx_encoder_set_state(encoder,
+                0UL | BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BlendState.Alpha, 0);
+        bgfx_encoder_submit(encoder, 0, shader.handle, 0, false);
     }
 
     /**
