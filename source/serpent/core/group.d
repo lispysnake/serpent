@@ -166,18 +166,26 @@ package:
             foreach (ref p; tp.parallel(processors))
             {
                 p.context = this.context;
+                p.encoder = bgfx_encoder_begin(true);
                 p.run(view);
+                bgfx_encoder_end(p.encoder);
+                p.encoder = null;
             }
         }
 
         /* Otherwise, just execute sequentially. */
         else
         {
+            auto encoder = bgfx_encoder_begin(false);
+
             foreach (ref p; processors)
             {
                 p.context = this.context;
+                p.encoder = encoder;
                 p.run(view);
+                p.encoder = null;
             }
+            bgfx_encoder_end(encoder);
         }
     }
 
