@@ -98,6 +98,23 @@ package:
         this._height = height;
     }
 
+    /**
+     * Set the name of this layer
+     */
+    pure final @property void name(string name) @safe @nogc nothrow
+    {
+        this._name = name;
+    }
+
+
+    /**
+     * Set the ID for this layer
+     */
+    pure final @property void id(string id) @safe @nogc nothrow
+    {
+        this._id = id;
+    }
+
 public:
 
     /**
@@ -149,15 +166,7 @@ public:
     {
         return _id;
     }
-
-    /**
-     * Set the ID for this layer
-     */
-    pure final @property void id(string id) @safe @nogc nothrow
-    {
-        this._id = id;
-    }
-
+    
     /**
      * Return the name for this layer
      */
@@ -165,13 +174,4 @@ public:
     {
         return _name;
     }
-
-    /**
-     * Set the name of this layer
-     */
-    pure final @property void name(string name) @safe @nogc nothrow
-    {
-        this._name = name;
-    }
-
 }
