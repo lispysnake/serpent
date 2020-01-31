@@ -145,8 +145,8 @@ public:
         /* Allow 1000 sprites, 6000 indices, 4000 vertices */
         drawOps.reserve(maxSprites);
         drawOps.length = maxSprites;
-        maxVertices = numVertices * cast(uint) drawOps.length;
-        maxIndices = numIndices * cast(uint) drawOps.length;
+        maxVertices = numVertices * maxQuadsPerDraw;
+        maxIndices = numIndices * maxQuadsPerDraw;
     }
 
     ~this()
