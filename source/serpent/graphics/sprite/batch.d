@@ -97,7 +97,6 @@ private:
 
         bgfx_alloc_transient_index_buffer(&tib, numIndices);
         bgfx_alloc_transient_vertex_buffer(&tvb, numVertices, &PosUVVertex.layout);
-        renderIndex = 0;
     }
 
     /**
@@ -120,6 +119,8 @@ private:
         bgfx_encoder_set_state(encoder,
                 0UL | BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BlendState.Alpha, 0);
         bgfx_encoder_submit(encoder, 0, shader.handle, 0, false);
+
+        renderIndex = 0;
     }
 
 public:
