@@ -125,20 +125,6 @@ public:
         bgfx_transient_vertex_buffer_t tvb;
         uint32_t max = 6; /* 6 vertices */
 
-        /* Really need precomputed CameraTransform. NOT THREADSAFE */
-        auto position = context.display.scene.camera.unproject(transformPosition);
-
-        /* TODO: Have camera stuff cached + anchors */
-        position.x += width;
-        if (context.display.scene.camera.worldOrigin == WorldOrigin.BottomLeft)
-        {
-            position.y += height;
-        }
-        else
-        {
-            position.y -= height;
-        }
-
         /* Sort out the index buffer */
         bgfx_alloc_transient_index_buffer(&tib, 6);
         auto indexData = cast(uint16_t*) tib.data;
@@ -160,13 +146,13 @@ public:
         bgfx_alloc_transient_vertex_buffer(&tvb, 4, &PosUVVertex.layout);
         auto vertexData = cast(PosUVVertex*) tvb.data;
         vertexData[0] = PosUVVertex(vec3f(transformPosition.x,
-                transformPosition.y, 0.0f), vec2f(u1, v1)); // Top right
+                transformPosition.y, 0.0f), vec2f(u1, v1));
         vertexData[1] = PosUVVertex(vec3f(transformPosition.x + width,
-                transformPosition.y, 0.0f), vec2f(u2, v1)); // Bottom right
+                transformPosition.y, 0.0f), vec2f(u2, v1));
         vertexData[2] = PosUVVertex(vec3f(transformPosition.x + width,
-                transformPosition.y + height, 0.0f), vec2f(u2, v2)); // Bottom Left
+                transformPosition.y + height, 0.0f), vec2f(u2, v2));
         vertexData[3] = PosUVVertex(vec3f(transformPosition.x,
-                transformPosition.y + height, 0.0f), vec2f(u1, v2)); // Top Left
+                transformPosition.y + height, 0.0f), vec2f(u1, v2));
 
         flush(encoder);
 
