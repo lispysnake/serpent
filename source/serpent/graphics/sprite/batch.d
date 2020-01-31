@@ -95,8 +95,8 @@ private:
     {
         /* Could do without the reallocation. Work it out later. */
         drawOps.clear();
-        drawOps.reserve(1000);
-        drawOps.length = 1000;
+        drawOps.reserve(maxSprites);
+        drawOps.length = maxSprites;
 
         bgfx_alloc_transient_index_buffer(&tib, numIndices);
         bgfx_alloc_transient_vertex_buffer(&tvb, numVertices, &PosUVVertex.layout);
@@ -143,8 +143,8 @@ public:
         shader = new Program(vertex, fragment);
 
         /* Allow 1000 sprites, 6000 indices, 4000 vertices */
-        drawOps.reserve(1000);
-        drawOps.length = 1000;
+        drawOps.reserve(maxSprites);
+        drawOps.length = maxSprites;
         maxVertices = numVertices * cast(uint) drawOps.length;
         maxIndices = numIndices * cast(uint) drawOps.length;
     }
