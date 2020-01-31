@@ -90,6 +90,11 @@ private:
      */
     final void begin() @trusted @nogc nothrow
     {
+        /* Could do without the reallocation. Work it out later. */
+        drawOps.clear();
+        drawOps.reserve(1000);
+        drawOps.length = 1000;
+
         bgfx_alloc_transient_index_buffer(&tib, numIndices);
         bgfx_alloc_transient_vertex_buffer(&tvb, numVertices, &PosUVVertex.layout);
         renderIndex = 0;
