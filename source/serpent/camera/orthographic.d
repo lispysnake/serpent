@@ -37,7 +37,7 @@ class OrthographicCamera : Camera
 {
 
 private:
-    float _zoomLevel = 1.0f;
+    float _zoomLevel = 0.5f;
     float _nearPlane = 0.0f;
     float _farPlane = 1.0f;
 
@@ -75,13 +75,13 @@ public:
     {
         if (invertedY)
         {
-            up.y = -1.0;
-            direction.z = 1.0f;
+            up.y = 1.0;
+            direction.z = -1.0f;
         }
         else
         {
-            up.y = 1.0f;
-            direction.z = 1.0f;
+            up.y = -1.0f;
+            direction.z = -1.0f;
         }
 
         vec3f eyes = position + direction;
