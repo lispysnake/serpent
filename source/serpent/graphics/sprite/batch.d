@@ -60,6 +60,16 @@ private:
         _context = context;
     }
 
+    /**
+     * Finish our batch encoding
+     */
+    final void flush(bgfx_encoder_t* encoder) @trusted @nogc nothrow
+    {
+        /* Ensure our model scales plane to the whole view */
+        auto model = mat4x4f.identity();
+        bgfx_encoder_set_transform(encoder, model.ptr, 1);
+    }
+
 public:
 
     /**
@@ -129,31 +139,36 @@ public:
             position.y -= height;
         }
 
-        auto translation = mat4x4f.translation(position);
-        auto scale = mat4x4f.scaling(vec3f(width * transformScale.x,
-                height * transformScale.y, 1.0f));
-        auto model = translation * scale;
-        model = model.transposed();
-
         /* Sort out the index buffer */
         bgfx_alloc_transient_index_buffer(&tib, 6);
         auto indexData = cast(uint16_t*) tib.data;
         indexData[0] = 0;
         indexData[1] = 1;
-        indexData[2] = 3;
-        indexData[3] = 1;
-        indexData[4] = 2;
-        indexData[5] = 3;
+        indexData[2] = 2;
+        indexData[3] = 2;
+        indexData[4] = 3;
+        indexData[5] = 0;
+
+        auto invWidth = 1.0f / texture.width;
+        auto invHeight = 1.0f / texture.height;
+        auto u1 = clip.min.x * invWidth;
+        auto v1 = clip.min.y * invHeight;
+        auto u2 = (clip.min.x + width) * invWidth;
+        auto v2 = (clip.min.y + height) * invHeight;
 
         /* Sort out the vertex buffer */
-        bgfx_alloc_transient_vertex_buffer(&tvb, max, &PosUVVertex.layout);
+        bgfx_alloc_transient_vertex_buffer(&tvb, 4, &PosUVVertex.layout);
         auto vertexData = cast(PosUVVertex*) tvb.data;
-        vertexData[0] = PosUVVertex(vec3f(1.0f, 1.0f, 0.0f), vec2f(clip.max.x, clip.min.y)); // Top right
-        vertexData[1] = PosUVVertex(vec3f(1.0f, -1.0f, 0.0f), vec2f(clip.max.x, clip.max.y)); // Bottom right
-        vertexData[2] = PosUVVertex(vec3f(-1.0f, -1.0f, 0.0f), vec2f(clip.min.x, clip.max.y)); // Bottom Left
-        vertexData[3] = PosUVVertex(vec3f(-1.0f, 1.0f, 0.0f), vec2f(clip.min.x, clip.min.y)); // Top Left
+        vertexData[0] = PosUVVertex(vec3f(transformPosition.x,
+                transformPosition.y, 0.0f), vec2f(u1, v1)); // Top right
+        vertexData[1] = PosUVVertex(vec3f(transformPosition.x + width,
+                transformPosition.y, 0.0f), vec2f(u2, v1)); // Bottom right
+        vertexData[2] = PosUVVertex(vec3f(transformPosition.x + width,
+                transformPosition.y + height, 0.0f), vec2f(u2, v2)); // Bottom Left
+        vertexData[3] = PosUVVertex(vec3f(transformPosition.x,
+                transformPosition.y + height, 0.0f), vec2f(u1, v2)); // Top Left
 
-        bgfx_encoder_set_transform(encoder, model.ptr, 1);
+        flush(encoder);
 
         /* Set the stage */
         bgfx_encoder_set_transient_vertex_buffer(encoder, 0, &tvb, 0, 4, tvb.layoutHandle);

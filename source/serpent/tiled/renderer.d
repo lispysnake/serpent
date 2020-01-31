@@ -95,13 +95,8 @@ private:
                     auto t2 = mapComponent.tileset.getTile(tile - 1);
 
                     auto transformPosition = vec3f(drawX, drawY, 0.0f);
-                    auto inputRegion = t2.region;
-                    auto region = rectanglef(inputRegion.min.x / mapComponent.texture.width,
-                            inputRegion.min.y / mapComponent.texture.height,
-                            mapComponent.map.tileWidth / mapComponent.texture.width,
-                            mapComponent.map.tileHeight / mapComponent.texture.height);
                     sb.drawSprite(encoder, mapComponent.texture, transformPosition, transformScale,
-                            mapComponent.map.tileWidth, mapComponent.map.tileHeight, region);
+                            mapComponent.map.tileWidth, mapComponent.map.tileHeight, t2.region);
                     drawX += mapComponent.map.tileWidth;
                 }
                 drawY += mapComponent.map.tileHeight;
