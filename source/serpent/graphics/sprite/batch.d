@@ -167,6 +167,10 @@ public:
         auto u2 = (clip.min.x + width) * invWidth;
         auto v2 = (clip.min.y + height) * invHeight;
 
+        /* Put the texture start from top left corner */
+        transformPosition.x -= (context.display.width / 2.0f);
+        transformPosition.y -= (context.display.height / 2.0f);
+
         /* Sort out the vertex buffer */
         auto vertexData = cast(PosUVVertex*) tvb.data;
         vertexData[0] = PosUVVertex(vec3f(transformPosition.x,
