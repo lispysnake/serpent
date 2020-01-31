@@ -75,6 +75,9 @@ private:
     bgfx_transient_vertex_buffer_t tvb;
     ulong renderIndex = 0;
 
+    uint _maxSprites = 3000; /**<Default to caching 3000 sprites before implicit flush */
+    uint _maxQuadsPerDraw = 1000; /**<Default to 1000 quads per call */
+
     Array!TexturedQuad drawOps;
 
     /**
@@ -232,5 +235,24 @@ public:
     pure @property final Context context() @safe @nogc nothrow
     {
         return _context;
+    }
+
+    /**
+     * The absolute top number of sprites we'll cache before attempting to
+     * batch.
+     */
+    pure @property final const uint maxSprites() @safe @nogc nothrow
+    {
+        return _maxSprites;
+    }
+
+    /**
+     * The maximum number of quads to attempt in any draw call. Note this
+     * does not directly control the maximum calls per frame, but it certainly
+     * ooes influence it.
+     */
+    pure @property final const uint maxQuadsPerDraw() @safe @nogc nothrow
+    {
+        return _maxQuadsPerDraw;
     }
 }
