@@ -51,6 +51,13 @@ private:
 
     Program shader = null;
     Context _context = null;
+    uint maxVertices = 4; /* 4 vertices per quad */
+    static const uint numVertices = 4;
+    uint maxIndices = 6; /* 6 indices per quad */
+    static const uint numIndices = 6;
+
+    bgfx_transient_index_buffer_t tib;
+    bgfx_transient_vertex_buffer_t tvb;
 
     /**
      * Update the current Context
@@ -61,13 +68,34 @@ private:
     }
 
     /**
-     * Finish our batch encoding
+     * begin the frame
      */
-    final void flush(bgfx_encoder_t* encoder) @trusted @nogc nothrow
+    final void begin() @trusted @nogc nothrow
+    {
+        bgfx_alloc_transient_index_buffer(&tib, numIndices);
+        bgfx_alloc_transient_vertex_buffer(&tvb, numVertices, &PosUVVertex.layout);
+    }
+
+    /**
+     * Finish our batch encoding for the current texture
+     */
+    final void flush(bgfx_encoder_t* encoder, immutable(Texture) texture) @trusted @nogc nothrow
     {
         /* Ensure our model scales plane to the whole view */
         auto model = mat4x4f.identity();
         bgfx_encoder_set_transform(encoder, model.ptr, 1);
+
+        /* Set the stage */
+        bgfx_encoder_set_transient_vertex_buffer(encoder, 0, &tvb, 0,
+                maxVertices, tvb.layoutHandle);
+        bgfx_encoder_set_transient_index_buffer(encoder, &tib, 0, maxIndices);
+        bgfx_encoder_set_texture(encoder, 0, cast(bgfx_uniform_handle_t) 0,
+                texture.handle, BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP);
+
+        /* Submit draw call */
+        bgfx_encoder_set_state(encoder,
+                0UL | BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BlendState.Alpha, 0);
+        bgfx_encoder_submit(encoder, 0, shader.handle, 0, false);
     }
 
 public:
@@ -121,12 +149,9 @@ public:
     final void drawSprite(bgfx_encoder_t* encoder, immutable(Texture) texture,
             vec3f transformPosition, vec3f transformScale, float width, float height, box2f clip) @trusted
     {
-        bgfx_transient_index_buffer_t tib;
-        bgfx_transient_vertex_buffer_t tvb;
-        uint32_t max = 6; /* 6 vertices */
+        begin();
 
         /* Sort out the index buffer */
-        bgfx_alloc_transient_index_buffer(&tib, 6);
         auto indexData = cast(uint16_t*) tib.data;
         indexData[0] = 0;
         indexData[1] = 1;
@@ -143,7 +168,6 @@ public:
         auto v2 = (clip.min.y + height) * invHeight;
 
         /* Sort out the vertex buffer */
-        bgfx_alloc_transient_vertex_buffer(&tvb, 4, &PosUVVertex.layout);
         auto vertexData = cast(PosUVVertex*) tvb.data;
         vertexData[0] = PosUVVertex(vec3f(transformPosition.x,
                 transformPosition.y, 0.0f), vec2f(u1, v1));
@@ -154,18 +178,7 @@ public:
         vertexData[3] = PosUVVertex(vec3f(transformPosition.x,
                 transformPosition.y + height, 0.0f), vec2f(u1, v2));
 
-        flush(encoder);
-
-        /* Set the stage */
-        bgfx_encoder_set_transient_vertex_buffer(encoder, 0, &tvb, 0, 4, tvb.layoutHandle);
-        bgfx_encoder_set_transient_index_buffer(encoder, &tib, 0, 6);
-        bgfx_encoder_set_texture(encoder, 0, cast(bgfx_uniform_handle_t) 0,
-                texture.handle, BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP);
-
-        /* Submit draw call */
-        bgfx_encoder_set_state(encoder,
-                0UL | BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BlendState.Alpha, 0);
-        bgfx_encoder_submit(encoder, 0, shader.handle, 0, false);
+        flush(encoder, texture);
     }
 
     /**
