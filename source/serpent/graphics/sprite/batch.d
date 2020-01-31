@@ -181,6 +181,14 @@ public:
     {
         begin();
 
+        /* Straight up copy it into the draw queue */
+        drawOps[renderIndex].texture = cast(Texture) texture;
+        drawOps[renderIndex].transformPosition = transformPosition;
+        drawOps[renderIndex].transformScale = transformPosition;
+        drawOps[renderIndex].width = width;
+        drawOps[renderIndex].height = height;
+        drawOps[renderIndex].clip = clip;
+
         /* Sort out the index buffer */
         auto indexData = cast(uint16_t*) tib.data;
         indexData[renderIndex + 0] = cast(ushort)(0 + renderIndex);
