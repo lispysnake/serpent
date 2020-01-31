@@ -40,6 +40,7 @@ private:
     SDL_Surface* surface = null;
     float _width = 0;
     float _height = 0;
+    string _path = null;
 
     /**
      * Default clip is to use the whole size.
@@ -59,6 +60,7 @@ public:
     this(string filename)
     {
         surface = IMG_Load(toStringz(filename));
+        _path = filename;
         if (!surface)
         {
             return;
@@ -118,5 +120,13 @@ public:
     pure @property final const box2f clip() @nogc @safe nothrow
     {
         return _clip;
+    }
+
+    /**
+     * Return the path used for this texture (for sorting)
+     */
+    pure @property final const string path() @nogc @safe nothrow
+    {
+        return _path;
     }
 }
