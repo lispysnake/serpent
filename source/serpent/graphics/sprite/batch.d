@@ -24,6 +24,7 @@ module serpent.graphics.sprite.batch;
 
 import bindbc.bgfx;
 import std.stdint;
+import std.container.array;
 
 import serpent.camera : WorldOrigin;
 import serpent.graphics.shader;
@@ -33,6 +34,20 @@ import serpent.graphics.vertex;
 public import serpent.core.context;
 public import serpent.graphics.texture;
 public import gfm.math;
+
+/**
+ * TexturedQuad is a stacked drawing operation that helps us
+ * to batch-draw multiple textured quads (i.e. sprites)
+ */
+static final struct TexturedQuad
+{
+    Texture texture;
+    box2f clip;
+    vec3f transformPosition;
+    vec3f transformScale;
+    float width;
+    float height;
+};
 
 /**
  * Eventually this will become a batching Sprite renderer, that is, something
@@ -59,6 +74,8 @@ private:
     bgfx_transient_index_buffer_t tib;
     bgfx_transient_vertex_buffer_t tvb;
     ulong renderIndex = 0;
+
+    Array!TexturedQuad drawOps;
 
     /**
      * Update the current Context
@@ -115,6 +132,12 @@ public:
         auto vertex = new Shader(vp);
         auto fragment = new Shader(fp);
         shader = new Program(vertex, fragment);
+
+        /* Allow 1000 sprites, 6000 indices, 4000 vertices */
+        drawOps.reserve(1000);
+        drawOps.length = 1000;
+        maxVertices = numVertices * cast(uint) drawOps.length;
+        maxIndices = numIndices * cast(uint) drawOps.length;
     }
 
     ~this()
