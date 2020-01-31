@@ -24,7 +24,8 @@ module serpent.graphics.sprite.renderer;
 
 import serpent.core.transform : TransformComponent;
 
-public import serpent.graphics.sprite;
+public import serpent.graphics.batch;
+public import serpent.graphics.sprite : SpriteComponent;
 public import serpent.core.entity;
 public import serpent.core.processor;
 public import serpent.core.view;
@@ -41,7 +42,7 @@ final class SpriteRenderer : Processor!ReadOnly
 {
 
 private:
-    SpriteBatch sb;
+    QuadBatch qb;
 
 public:
 
@@ -49,7 +50,7 @@ public:
     final override void bootstrap(View!ReadOnly dataView) @system
     {
         context.component.registerComponent!SpriteComponent;
-        sb = new SpriteBatch(context);
+        qb = new QuadBatch(context);
 
     }
 
@@ -58,7 +59,7 @@ public:
         foreach (entity; dataView.withComponent!SpriteComponent)
         {
             auto transform = dataView.data!TransformComponent(entity);
-            sb.drawSprite(encoder, dataView.data!SpriteComponent(entity)
+            qb.drawTexturedQuad(encoder, dataView.data!SpriteComponent(entity)
                     .texture, transform.position, transform.scale);
         }
     }
@@ -66,7 +67,7 @@ public:
     /* Unload shaders while context is active  */
     final override void finish(View!ReadOnly dataView) @system
     {
-        sb.destroy();
-        sb = null;
+        qb.destroy();
+        qb = null;
     }
 }

@@ -20,7 +20,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.graphics.sprite.batch;
+module serpent.graphics.batch;
 
 import bindbc.bgfx;
 import std.stdint;
@@ -50,16 +50,13 @@ static final struct TexturedQuad
 };
 
 /**
- * Eventually this will become a batching Sprite renderer, that is, something
- * that is a textured quad.
- *
- * Right now it just blits a texture with no regard for optimisation or
- * ordering.
- *
- * TODO: Make suck less.
+ * A batched sprite renderer (textured quads) for 2D perspectives.
+ * Draws are ordered based on the textures to minimise expensive
+ * texture switches, thus it is far cheaper to use a QuadBatch
+ * in conjunction with spritesheets.
  */
 
-final class SpriteBatch
+final class QuadBatch
 {
 
 private:
@@ -75,7 +72,7 @@ private:
     bgfx_transient_vertex_buffer_t tvb;
     ulong renderIndex = 0;
 
-    uint _maxSprites = 3000; /**<Default to caching 3000 sprites before implicit flush */
+    uint _maxQuads = 3000; /**<Default to caching 3000 sprites before implicit flush */
     uint _maxQuadsPerDraw = 1000; /**<Default to 1000 quads per call */
 
     Array!TexturedQuad drawOps;
@@ -95,8 +92,8 @@ private:
     {
         /* Could do without the reallocation. Work it out later. */
         drawOps.clear();
-        drawOps.reserve(maxSprites);
-        drawOps.length = maxSprites;
+        drawOps.reserve(maxQuads);
+        drawOps.length = maxQuads;
 
         bgfx_alloc_transient_index_buffer(&tib, numIndices);
         bgfx_alloc_transient_vertex_buffer(&tvb, numVertices, &PosUVVertex.layout);
@@ -129,7 +126,7 @@ private:
 public:
 
     /**
-     * Construct a new SpriteBatch helper
+     * Construct a new QuadBatch helper
      */
     this(Context context)
     {
@@ -143,8 +140,8 @@ public:
         shader = new Program(vertex, fragment);
 
         /* Allow 1000 sprites, 6000 indices, 4000 vertices */
-        drawOps.reserve(maxSprites);
-        drawOps.length = maxSprites;
+        drawOps.reserve(maxQuads);
+        drawOps.length = maxQuads;
         maxVertices = numVertices * maxQuadsPerDraw;
         maxIndices = numIndices * maxQuadsPerDraw;
     }
@@ -159,10 +156,10 @@ public:
      * Draw a sprite with the given texture and transform. The default clip region
      * is assumed as are the width and height
      */
-    final void drawSprite(bgfx_encoder_t* encoder, immutable(Texture) texture,
-            vec3f transformPosition, vec3f transformScale) @trusted
+    final void drawTexturedQuad(bgfx_encoder_t* encoder,
+            immutable(Texture) texture, vec3f transformPosition, vec3f transformScale) @trusted
     {
-        drawSprite(encoder, texture, transformPosition, transformScale,
+        drawTexturedQuad(encoder, texture, transformPosition, transformScale,
                 texture.width, texture.height, texture.clip());
     }
 
@@ -170,17 +167,17 @@ public:
      * Draw a sprite with the given width and height, texture and transform.
      * The default clip region is assumed.
      */
-    final void drawSprite(bgfx_encoder_t* encoder, immutable(Texture) texture,
+    final void drawTexturedQuad(bgfx_encoder_t* encoder, immutable(Texture) texture,
             vec3f transformPosition, vec3f transformScale, float width, float height) @trusted
     {
-        drawSprite(encoder, texture, transformPosition, transformScale, width,
-                height, texture.clip());
+        drawTexturedQuad(encoder, texture, transformPosition, transformScale,
+                width, height, texture.clip());
     }
 
     /**
      * Draw the sprite texture using the given transform, width, height and clip region.
      */
-    final void drawSprite(bgfx_encoder_t* encoder, immutable(Texture) texture,
+    final void drawTexturedQuad(bgfx_encoder_t* encoder, immutable(Texture) texture,
             vec3f transformPosition, vec3f transformScale, float width, float height, box2f clip) @trusted
     {
         begin();
@@ -230,7 +227,7 @@ public:
     }
 
     /**
-     * Return the underlying Context for this SpriteBatch instance
+     * Return the underlying Context for this QuadBatch instance
      */
     pure @property final Context context() @safe @nogc nothrow
     {
@@ -238,12 +235,12 @@ public:
     }
 
     /**
-     * The absolute top number of sprites we'll cache before attempting to
+     * The absolute top number of quads we'll cache before attempting to
      * batch.
      */
-    pure @property final const uint maxSprites() @safe @nogc nothrow
+    pure @property final const uint maxQuads() @safe @nogc nothrow
     {
-        return _maxSprites;
+        return _maxQuads;
     }
 
     /**

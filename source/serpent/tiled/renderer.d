@@ -29,7 +29,7 @@ public import serpent.core.processor;
 public import serpent.core.view;
 
 import serpent.tiled : FlipMode;
-import serpent.graphics.sprite.batch;
+import serpent.graphics.batch;
 
 /**
  * MapRenderer walks through a tilemap and dispatches relevant drawing
@@ -39,7 +39,7 @@ final class MapRenderer : Processor!ReadOnly
 {
 
 private:
-    SpriteBatch sb = null;
+    QuadBatch qb = null;
 
 public:
 
@@ -48,7 +48,7 @@ public:
     {
 
         context.component.registerComponent!MapComponent;
-        sb = new SpriteBatch(context);
+        qb = new QuadBatch(context);
     }
 
     final override void run(View!ReadOnly dataView)
@@ -61,8 +61,8 @@ public:
 
     final override void finish(View!ReadOnly dataView) @system
     {
-        sb.destroy();
-        sb = null;
+        qb.destroy();
+        qb = null;
     }
 
 private:
@@ -95,7 +95,7 @@ private:
                     auto t2 = mapComponent.tileset.getTile(tile - 1);
 
                     auto transformPosition = vec3f(drawX, drawY, 0.0f);
-                    sb.drawSprite(encoder, mapComponent.texture, transformPosition, transformScale,
+                    qb.drawTexturedQuad(encoder, mapComponent.texture, transformPosition, transformScale,
                             mapComponent.map.tileWidth, mapComponent.map.tileHeight, t2.region);
                     drawX += mapComponent.map.tileWidth;
                 }

@@ -22,6 +22,7 @@
 
 module serpent.graphics;
 
+public import serpent.graphics.batch;
 public import serpent.graphics.blend;
 public import serpent.graphics.display;
 public import serpent.graphics.shader;
