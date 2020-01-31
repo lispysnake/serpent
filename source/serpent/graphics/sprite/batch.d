@@ -58,6 +58,7 @@ private:
 
     bgfx_transient_index_buffer_t tib;
     bgfx_transient_vertex_buffer_t tvb;
+    ulong renderIndex = 0;
 
     /**
      * Update the current Context
@@ -74,6 +75,7 @@ private:
     {
         bgfx_alloc_transient_index_buffer(&tib, numIndices);
         bgfx_alloc_transient_vertex_buffer(&tvb, numVertices, &PosUVVertex.layout);
+        renderIndex = 0;
     }
 
     /**
@@ -153,12 +155,12 @@ public:
 
         /* Sort out the index buffer */
         auto indexData = cast(uint16_t*) tib.data;
-        indexData[0] = 0;
-        indexData[1] = 1;
-        indexData[2] = 2;
-        indexData[3] = 2;
-        indexData[4] = 3;
-        indexData[5] = 0;
+        indexData[renderIndex + 0] = cast(ushort)(0 + renderIndex);
+        indexData[renderIndex + 1] = cast(ushort)(1 + renderIndex);
+        indexData[renderIndex + 2] = cast(ushort)(2 + renderIndex);
+        indexData[renderIndex + 3] = cast(ushort)(2 + renderIndex);
+        indexData[renderIndex + 4] = cast(ushort)(3 + renderIndex);
+        indexData[renderIndex + 5] = cast(ushort)(0 + renderIndex);
 
         auto invWidth = 1.0f / texture.width;
         auto invHeight = 1.0f / texture.height;
@@ -173,14 +175,16 @@ public:
 
         /* Sort out the vertex buffer */
         auto vertexData = cast(PosUVVertex*) tvb.data;
-        vertexData[0] = PosUVVertex(vec3f(transformPosition.x,
+        vertexData[renderIndex + 0] = PosUVVertex(vec3f(transformPosition.x,
                 transformPosition.y, 0.0f), vec2f(u1, v1));
-        vertexData[1] = PosUVVertex(vec3f(transformPosition.x + width,
+        vertexData[renderIndex + 1] = PosUVVertex(vec3f(transformPosition.x + width,
                 transformPosition.y, 0.0f), vec2f(u2, v1));
-        vertexData[2] = PosUVVertex(vec3f(transformPosition.x + width,
+        vertexData[renderIndex + 2] = PosUVVertex(vec3f(transformPosition.x + width,
                 transformPosition.y + height, 0.0f), vec2f(u2, v2));
-        vertexData[3] = PosUVVertex(vec3f(transformPosition.x,
+        vertexData[renderIndex + 3] = PosUVVertex(vec3f(transformPosition.x,
                 transformPosition.y + height, 0.0f), vec2f(u1, v2));
+
+        ++renderIndex;
 
         flush(encoder, texture);
     }
