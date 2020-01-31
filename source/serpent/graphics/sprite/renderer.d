@@ -56,12 +56,14 @@ public:
 
     final override void run(View!ReadOnly dataView)
     {
+        qb.begin();
         foreach (entity; dataView.withComponent!SpriteComponent)
         {
             auto transform = dataView.data!TransformComponent(entity);
             qb.drawTexturedQuad(encoder, dataView.data!SpriteComponent(entity)
                     .texture, transform.position, transform.scale);
         }
+        qb.flush(encoder);
     }
 
     /* Unload shaders while context is active  */

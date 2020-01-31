@@ -77,12 +77,11 @@ private:
         float drawY = 0.0f;
         auto transformScale = vec3f(1.0f, 1.0f, 1.0f);
 
+        qb.begin();
         foreach (layer; mapComponent.map.layers)
         {
-
             foreach (y; 0 .. layer.height)
             {
-
                 foreach (x; 0 .. layer.width)
                 {
                     auto gid = layer.data[x + y * layer.width];
@@ -95,6 +94,7 @@ private:
                     auto t2 = mapComponent.tileset.getTile(tile - 1);
 
                     auto transformPosition = vec3f(drawX, drawY, 0.0f);
+
                     qb.drawTexturedQuad(encoder, mapComponent.texture, transformPosition, transformScale,
                             mapComponent.map.tileWidth, mapComponent.map.tileHeight, t2.region);
                     drawX += mapComponent.map.tileWidth;
@@ -104,6 +104,10 @@ private:
             }
             drawX = 0;
             drawY = 0;
+
+            /* Flush between layers to preserve depth. */
+            qb.flush(encoder);
         }
+        qb.flush(encoder);
     }
 }

@@ -25,6 +25,7 @@ module serpent.graphics.batch;
 import bindbc.bgfx;
 import std.stdint;
 import std.container.array;
+import std.container.binaryheap;
 
 import serpent.camera : WorldOrigin;
 import serpent.graphics.shader;
@@ -70,7 +71,7 @@ private:
 
     bgfx_transient_index_buffer_t tib;
     bgfx_transient_vertex_buffer_t tvb;
-    ulong renderIndex = 0;
+    ulong quadIndex = 0;
 
     uint _maxQuads = 3000; /**<Default to caching 3000 sprites before implicit flush */
     uint _maxQuadsPerDraw = 1000; /**<Default to 1000 quads per call */
@@ -83,44 +84,6 @@ private:
     pure @property final void context(Context context) @safe @nogc nothrow
     {
         _context = context;
-    }
-
-    /**
-     * begin the frame
-     */
-    final void begin() @trusted @nogc nothrow
-    {
-        /* Could do without the reallocation. Work it out later. */
-        drawOps.clear();
-        drawOps.reserve(maxQuads);
-        drawOps.length = maxQuads;
-
-        bgfx_alloc_transient_index_buffer(&tib, numIndices);
-        bgfx_alloc_transient_vertex_buffer(&tvb, numVertices, &PosUVVertex.layout);
-    }
-
-    /**
-     * Finish our batch encoding for the current texture
-     */
-    final void flush(bgfx_encoder_t* encoder, immutable(Texture) texture) @trusted @nogc nothrow
-    {
-        /* Ensure our model scales plane to the whole view */
-        auto model = mat4x4f.identity();
-        bgfx_encoder_set_transform(encoder, model.ptr, 1);
-
-        /* Set the stage */
-        bgfx_encoder_set_transient_vertex_buffer(encoder, 0, &tvb, 0,
-                maxVertices, tvb.layoutHandle);
-        bgfx_encoder_set_transient_index_buffer(encoder, &tib, 0, maxIndices);
-        bgfx_encoder_set_texture(encoder, 0, cast(bgfx_uniform_handle_t) 0,
-                texture.handle, BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP);
-
-        /* Submit draw call */
-        bgfx_encoder_set_state(encoder,
-                0UL | BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BlendState.Alpha, 0);
-        bgfx_encoder_submit(encoder, 0, shader.handle, 0, false);
-
-        renderIndex = 0;
     }
 
 public:
@@ -175,57 +138,143 @@ public:
     }
 
     /**
+     * Begin a frame step. At this point we'll simply allocate necessary resources
+     * to complete a whole frame.
+     */
+    final void begin() @trusted
+    {
+
+        bgfx_alloc_transient_index_buffer(&tib, maxIndices);
+        bgfx_alloc_transient_vertex_buffer(&tvb, maxVertices, &PosUVVertex.layout);
+    }
+
+    /**
      * Draw the sprite texture using the given transform, width, height and clip region.
      */
     final void drawTexturedQuad(bgfx_encoder_t* encoder, immutable(Texture) texture,
             vec3f transformPosition, vec3f transformScale, float width, float height, box2f clip) @trusted
     {
-        begin();
-
         /* Straight up copy it into the draw queue */
-        drawOps[renderIndex].texture = cast(Texture) texture;
-        drawOps[renderIndex].transformPosition = transformPosition;
-        drawOps[renderIndex].transformScale = transformPosition;
-        drawOps[renderIndex].width = width;
-        drawOps[renderIndex].height = height;
-        drawOps[renderIndex].clip = clip;
+        drawOps[quadIndex].texture = cast(Texture) texture;
+        drawOps[quadIndex].transformPosition = transformPosition;
+        drawOps[quadIndex].transformScale = transformScale;
+        drawOps[quadIndex].width = width;
+        drawOps[quadIndex].height = height;
+        drawOps[quadIndex].clip = clip;
 
-        /* Sort out the index buffer */
-        auto indexData = cast(uint16_t*) tib.data;
-        indexData[renderIndex + 0] = cast(ushort)(0 + renderIndex);
-        indexData[renderIndex + 1] = cast(ushort)(1 + renderIndex);
-        indexData[renderIndex + 2] = cast(ushort)(2 + renderIndex);
-        indexData[renderIndex + 3] = cast(ushort)(2 + renderIndex);
-        indexData[renderIndex + 4] = cast(ushort)(3 + renderIndex);
-        indexData[renderIndex + 5] = cast(ushort)(0 + renderIndex);
+        ++quadIndex;
 
-        auto invWidth = 1.0f / texture.width;
-        auto invHeight = 1.0f / texture.height;
-        auto u1 = clip.min.x * invWidth;
-        auto v1 = clip.min.y * invHeight;
-        auto u2 = (clip.min.x + width) * invWidth;
-        auto v2 = (clip.min.y + height) * invHeight;
+        /* When too many quads are added, force a flush */
+        if (quadIndex >= maxQuads)
+        {
+            flush(encoder);
+            quadIndex = 0;
+        }
+    }
 
-        /* Put the texture start from top left corner */
+    /**
+     * Finish our batch encoding for the current texture
+     */
+    final void flush(bgfx_encoder_t* encoder) @trusted
+    {
+        if (quadIndex < 1)
+        {
+            return;
+        }
+
+        auto heap = heapify!("a.texture.path < b.texture.path")(drawOps[0 .. quadIndex]);
+        uint drawIndex = 0;
+        Texture lastTexture = null;
+        foreach (ref item; heap)
+        {
+            if (drawIndex >= maxQuadsPerDraw)
+            {
+                blitQuads(encoder, drawIndex + 1, lastTexture);
+                drawIndex = 0;
+            }
+            if (lastTexture != item.texture)
+            {
+                if (lastTexture !is null)
+                {
+                    blitQuads(encoder, drawIndex + 1, lastTexture);
+                    drawIndex = 0;
+                }
+                lastTexture = item.texture;
+            }
+
+            renderQuad(encoder, drawIndex, item);
+            ++drawIndex;
+        }
+        heap.release();
+        blitQuads(encoder, drawIndex + 1, lastTexture);
+
+        /* Finished now, set the quadIndex. */
+        quadIndex = 0;
+    }
+
+    final void renderQuad(bgfx_encoder_t* encoder, uint drawIndex, ref TexturedQuad quad) @trusted
+    {
+        auto invWidth = 1.0f / quad.texture.width;
+        auto invHeight = 1.0f / quad.texture.height;
+        auto u1 = quad.clip.min.x * invWidth;
+        auto v1 = quad.clip.min.y * invHeight;
+        auto u2 = (quad.clip.min.x + quad.width) * invWidth;
+        auto v2 = (quad.clip.min.y + quad.height) * invHeight;
+
+        auto transformPosition = quad.transformPosition;
         transformPosition.x -= (context.display.width / 2.0f);
         transformPosition.y -= (context.display.height / 2.0f);
 
-        /* Sort out the vertex buffer */
+        /* index position */
+        auto i = drawIndex * numIndices;
+
+        /* vertex position */
+        auto v = drawIndex * numVertices;
+        auto indexData = cast(uint16_t*) tib.data;
+
+        /* update indices */
+        indexData[i] = cast(ushort)(v);
+        indexData[i + 1] = cast(ushort)(v + 1);
+        indexData[i + 2] = cast(ushort)(v + 2);
+        indexData[i + 3] = cast(ushort)(v + 2);
+        indexData[i + 4] = cast(ushort)(v + 3);
+        indexData[i + 5] = cast(ushort)(v);
+
+        /* update vertices */
         auto vertexData = cast(PosUVVertex*) tvb.data;
-        vertexData[renderIndex + 0] = PosUVVertex(vec3f(transformPosition.x,
+        vertexData[v] = PosUVVertex(vec3f(transformPosition.x,
                 transformPosition.y, 0.0f), vec2f(u1, v1));
-        vertexData[renderIndex + 1] = PosUVVertex(vec3f(transformPosition.x + width,
+        vertexData[v + 1] = PosUVVertex(vec3f(transformPosition.x + quad.width,
                 transformPosition.y, 0.0f), vec2f(u2, v1));
-        vertexData[renderIndex + 2] = PosUVVertex(vec3f(transformPosition.x + width,
-                transformPosition.y + height, 0.0f), vec2f(u2, v2));
-        vertexData[renderIndex + 3] = PosUVVertex(vec3f(transformPosition.x,
-                transformPosition.y + height, 0.0f), vec2f(u1, v2));
-
-        ++renderIndex;
-
-        flush(encoder, texture);
+        vertexData[v + 2] = PosUVVertex(vec3f(transformPosition.x + quad.width,
+                transformPosition.y + quad.height, 0.0f), vec2f(u2, v2));
+        vertexData[v + 3] = PosUVVertex(vec3f(transformPosition.x,
+                transformPosition.y + quad.height, 0.0f), vec2f(u1, v2));
     }
 
+    final void blitQuads(bgfx_encoder_t* encoder, uint numQuads, Texture texture) @trusted
+    {
+        if (numQuads < 1 || texture is null)
+        {
+            return;
+        }
+
+        auto model = mat4x4f.identity();
+        bgfx_encoder_set_transform(encoder, model.ptr, 1);
+
+        bgfx_encoder_set_transient_vertex_buffer(encoder, 0, &tvb, 0,
+                numVertices * numQuads, tvb.layoutHandle);
+        bgfx_encoder_set_transient_index_buffer(encoder, &tib, 0, numIndices * numQuads);
+        bgfx_encoder_set_texture(encoder, 0, cast(bgfx_uniform_handle_t) 0,
+                texture.handle, BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP);
+
+        bgfx_encoder_set_state(encoder,
+                0UL | BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BlendState.Alpha, 0);
+        bgfx_encoder_submit(encoder, 0, shader.handle, 0, false);
+
+        /* Allocate a new VB/IB pair */
+        begin();
+    }
     /**
      * Return the underlying Context for this QuadBatch instance
      */
