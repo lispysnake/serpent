@@ -96,16 +96,6 @@ public:
         context.display.addScene(s);
         s.addCamera(new OrthographicCamera());
 
-        /* Construct initial entity */
-        auto tex = new Texture("assets/raw/logo.png");
-        auto entity_logo = initView.createEntity();
-        initView.addComponent!SpriteComponent(entity_logo).texture = tex;
-
-        /* Set the logo location */
-        initView.data!TransformComponent(entity_logo).position = vec3f(
-                context.display.logicalWidth - tex.width - 10.0f,
-                context.display.logicalHeight - tex.height - 10.0f, 0.0f);
-
         /* Hack! */
         auto entity_map = initView.createEntity();
         auto map = initView.addComponent!MapComponent(entity_map);
