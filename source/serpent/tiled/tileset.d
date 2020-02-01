@@ -34,7 +34,6 @@ public import gfm.math;
 final struct Tile
 {
     box2f region; /**<Defines the renderable region for the tile */
-    /* TODO: Add some kind of texture handle..? */
 
     this(box2f region) @safe @nogc nothrow
     {
@@ -66,6 +65,7 @@ private:
 
     Array!Tile _tilesGUID; /*GUID-indexed tile array */
     Tile[int] _tilesMap; /* ID-to-Tile mapping (slower) */
+    string _baseDir = ".";
 
 public:
 
@@ -140,6 +140,15 @@ public:
     pure @property final const int firstGID() @safe @nogc nothrow
     {
         return _firstGID;
+    }
+
+    /**
+     * Return the base directory of the tileset for loading relative
+     * assets.
+     */
+    pure @property final const string baseDir() @safe @nogc nothrow
+    {
+        return _baseDir;
     }
 
     /**
@@ -257,6 +266,14 @@ package:
     pure @property final void firstGID(int firstGID) @safe @nogc nothrow
     {
         _firstGID = firstGID;
+    }
+
+    /**
+     * Update the baseDir property
+     */
+    pure @property final void baseDir(string baseDir) @safe @nogc nothrow
+    {
+        this.baseDir = baseDir;
     }
 
     /**

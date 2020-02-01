@@ -139,7 +139,7 @@ private:
         }
         else
         {
-            tsx = TSXParser.parseTileSetElement(e);
+            tsx = TSXParser.parseTileSetElement(map.baseDir, e);
         }
 
         tsx.firstGID = firstGID;

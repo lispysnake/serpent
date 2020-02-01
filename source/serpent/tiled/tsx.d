@@ -29,6 +29,7 @@ import std.file;
 import std.exception : enforce;
 import std.conv : to;
 import std.format;
+import std.path : dirName;
 
 /**
  * The TSXParser is a utility class that exists solely to parse TSX files
@@ -43,10 +44,11 @@ package:
      * This function actually handles the <tileset> tag fully and builds a
      * TileSet from it.
      */
-    static final TileSet parseTileSetElement(Element e) @safe
+    static final TileSet parseTileSetElement(string baseDir, Element e) @safe
     {
         enforce(e.tag.name == "tileset", "Expected 'tileset' element");
         auto tileset = new TileSet();
+        tileset.baseDir = baseDir;
 
         /* Step through <tileset> attributes */
         foreach (attr, attrValue; e.tag.attr)
@@ -188,8 +190,9 @@ public:
     {
         auto r = cast(string) std.file.read(path);
         std.xml.check(r);
+        auto baseDir = dirName(path);
 
         auto doc = new Document(r);
-        return parseTileSetElement(doc);
+        return parseTileSetElement(baseDir, doc);
     }
 }
