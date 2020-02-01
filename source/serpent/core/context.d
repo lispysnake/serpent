@@ -222,6 +222,9 @@ public:
             _app.shutdown();
         }
 
+        enforce(display.scene !is null, "Must have a scene to run");
+        enforce(display.scene.camera !is null, "Need at least one camera");
+
         _running = true;
         display.visible = true;
 
