@@ -62,6 +62,7 @@ private:
     int _spacing = 0;
     int _margin = 0;
     bool _collection = false;
+    int _firstGID = 0; /* Only relevant to maps with multiple gids */
 
     Array!Tile _tilesGUID; /*GUID-indexed tile array */
     Tile[int] _tilesMap; /* ID-to-Tile mapping (slower) */
@@ -131,6 +132,14 @@ public:
     pure @property final const bool collection() @safe @nogc nothrow
     {
         return _collection;
+    }
+
+    /**
+     * Return the firstGID (usually 0) for the tilemap
+     */
+    pure @property final const int firstGID() @safe @nogc nothrow
+    {
+        return _firstGID;
     }
 
     /**
@@ -240,6 +249,14 @@ package:
         }
 
         return _tilesGUID[guid];
+    }
+
+    /**
+     * Update the firstGID property
+     */
+    pure @property final void firstGID(int firstGID) @safe @nogc nothrow
+    {
+        _firstGID = firstGID;
     }
 
     /**
