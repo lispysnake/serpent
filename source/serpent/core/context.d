@@ -174,7 +174,7 @@ public:
 
         /* Do actual rendering. Eventually, make this parallel. */
         _renderGroup = new Group!ReadOnly("render");
-        _renderGroup.parallel = true;
+        _renderGroup.parallel = false;
         addGroup(_renderGroup);
 
         /* Finish the rendering. */
