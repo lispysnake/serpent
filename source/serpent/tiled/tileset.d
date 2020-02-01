@@ -265,10 +265,6 @@ package:
      */
     final const immutable(Tile) getTile(uint guid) @trusted
     {
-        import std.stdio;
-
-        writeln(guid);
-        writeln(firstGID);
         if (collection)
         {
             return cast(immutable(Tile)) _tilesID[guid - _firstGID];
