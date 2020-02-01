@@ -217,11 +217,32 @@ public:
     /**
      * Perform any pre-rendering we need to do, such as clearing the
      * display.
+     *
+     * TODO: Render everything to one framebuffer by default, and scale that framenbuffer
+     * so that the QuadBatch doesn't know about scale factors. It will also help us to
+     * solve the glitchy black bars when using non-aspect ratios.
      */
     final void prerender() @system
     {
-        /* Set up sizing for view0  */
-        bgfx_set_view_rect(0, 0, 0, cast(ushort) width, cast(ushort) height);
+        /* Set clearing of view0 background. */
+        bgfx_set_view_clear(0, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH, _backgroundColor, 1.0f, 0);
+
+        /* Set up auto scaling: http://www.david-amador.com/2013/04/opengl-2d-independent-resolution-rendering/ */
+        auto aspectRatio = cast(float) logicalWidth / cast(float) logicalHeight;
+        int w = width;
+        int h = cast(int)(w / aspectRatio + 0.5f);
+
+        /* Letter box it */
+        if (h > height)
+        {
+            h = height;
+            w = cast(int)(h * aspectRatio + 0.5f);
+        }
+
+        int vpX = (width / 2) - (w / 2);
+        int vpY = (height / 2) - (h / 2);
+
+        bgfx_set_view_rect(0, cast(ushort) vpX, cast(ushort) vpY, cast(ushort) w, cast(ushort) h);
 
         /* Make sure view0 is drawn. */
         bgfx_touch(0);

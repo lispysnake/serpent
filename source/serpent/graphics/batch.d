@@ -221,22 +221,13 @@ public:
         auto u2 = (quad.clip.min.x + quad.width) * invWidth;
         auto v2 = (quad.clip.min.y + quad.height) * invHeight;
 
+        auto realWidth = context.display.logicalWidth;
+        auto realHeight = context.display.logicalHeight;
         auto transformPosition = quad.transformPosition;
 
-        auto logicalWidth = cast(float) context.display.logicalWidth;
-        auto logicalHeight = cast(float) context.display.logicalHeight;
-        auto realWidth = context.display.width;
-        auto realHeight = context.display.height;
-
-        auto widthAspect = realWidth / logicalWidth;
-        auto heightAspect = realHeight / logicalHeight;
-
-        auto spriteWidth = quad.width * widthAspect;
-        auto spriteHeight = quad.height * widthAspect;
-
-        /* Aspect scale it */
-        transformPosition.x *= widthAspect;
-        transformPosition.y *= heightAspect;
+        /* Scale it */
+        auto spriteWidth = quad.width * quad.transformScale.x;
+        auto spriteHeight = quad.height * quad.transformScale.y;
 
         /* Anchor it */
         transformPosition.x -= (realWidth / 2.0f);
@@ -280,6 +271,13 @@ public:
         }
 
         auto model = mat4x4f.identity();
+        auto trans = mat4x4f.translation(vec3f(0.0f, 0.0f, 0.0f));
+        auto scaleX = cast(float)(cast(float) context.display.width / cast(
+                float) context.display.logicalWidth);
+        auto scaleY = cast(float)(cast(float) context.display.height / cast(
+                float) context.display.logicalHeight);
+        auto scale = mat4x4f.scaling(vec3f(scaleX, scaleY, 1.0f));
+        model = trans * scale;
         bgfx_encoder_set_transform(encoder, model.ptr, 1);
 
         bgfx_encoder_set_transient_vertex_buffer(encoder, 0, &tvb, 0,

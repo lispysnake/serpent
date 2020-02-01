@@ -102,8 +102,9 @@ public:
         initView.addComponent!SpriteComponent(entity_logo).texture = tex;
 
         /* Set the logo location */
-        initView.data!TransformComponent(entity_logo)
-            .position = vec3f(1366.0f - tex.width - 10.0f, 768.0f - tex.height - 10.0f, 0.0f);
+        initView.data!TransformComponent(entity_logo).position = vec3f(
+                context.display.logicalWidth - tex.width - 10.0f,
+                context.display.logicalHeight - tex.height - 10.0f, 0.0f);
 
         /* Hack! */
         auto entity_map = initView.createEntity();
