@@ -74,6 +74,9 @@ private:
     bool _debugMode = false;
     bool _fullscreen = false;
 
+    uint _logicalWidth = 0;
+    uint _logicalHeight = 0;
+
 private:
 
     /**
@@ -408,6 +411,22 @@ public:
      * Return our height.
      */
     pure @property final const int height() @nogc @safe nothrow
+    {
+        return _height;
+    }
+
+    /**
+     * Return the logical width for the underlying render system
+     */
+    pure @property final const int logicalWidth() @nogc @safe nothrow
+    {
+        return _width;
+    }
+
+    /**
+     * Return the logical height for the underlying render system
+     */
+    pure @property final const int logicalHeight() @nogc @safe nothrow
     {
         return _height;
     }

@@ -222,8 +222,23 @@ public:
         auto v2 = (quad.clip.min.y + quad.height) * invHeight;
 
         auto transformPosition = quad.transformPosition;
-        transformPosition.x -= (context.display.width / 2.0f);
-        transformPosition.y -= (context.display.height / 2.0f);
+
+        auto logicalWidth = cast(float) context.display.logicalWidth;
+        auto logicalHeight = cast(float) context.display.logicalHeight;
+        auto realWidth = context.display.width;
+        auto realHeight = context.display.height;
+
+        auto widthAspect = realWidth / logicalWidth;
+        auto heightAspect = realHeight / logicalHeight;
+
+        auto spriteWidth = quad.width * widthAspect;
+        auto spriteHeight = quad.height * widthAspect;
+
+        transformPosition.x *= widthAspect;
+        transformPosition.y *= heightAspect;
+
+        transformPosition.x -= (realWidth / 2.0f);
+        transformPosition.y -= (realHeight / 2.0f);
 
         /* index position */
         auto i = drawIndex * numIndices;
@@ -244,12 +259,12 @@ public:
         auto vertexData = cast(PosUVVertex*) tvb.data;
         vertexData[v] = PosUVVertex(vec3f(transformPosition.x,
                 transformPosition.y, 0.0f), vec2f(u1, v1));
-        vertexData[v + 1] = PosUVVertex(vec3f(transformPosition.x + quad.width,
+        vertexData[v + 1] = PosUVVertex(vec3f(transformPosition.x + spriteWidth,
                 transformPosition.y, 0.0f), vec2f(u2, v1));
-        vertexData[v + 2] = PosUVVertex(vec3f(transformPosition.x + quad.width,
-                transformPosition.y + quad.height, 0.0f), vec2f(u2, v2));
+        vertexData[v + 2] = PosUVVertex(vec3f(transformPosition.x + spriteWidth,
+                transformPosition.y + spriteHeight, 0.0f), vec2f(u2, v2));
         vertexData[v + 3] = PosUVVertex(vec3f(transformPosition.x,
-                transformPosition.y + quad.height, 0.0f), vec2f(u1, v2));
+                transformPosition.y + spriteHeight, 0.0f), vec2f(u1, v2));
     }
 
     final void blitQuads(bgfx_encoder_t* encoder, uint numQuads, Texture texture) @trusted
@@ -265,8 +280,8 @@ public:
         bgfx_encoder_set_transient_vertex_buffer(encoder, 0, &tvb, 0,
                 numVertices * numQuads, tvb.layoutHandle);
         bgfx_encoder_set_transient_index_buffer(encoder, &tib, 0, numIndices * numQuads);
-        bgfx_encoder_set_texture(encoder, 0, cast(bgfx_uniform_handle_t) 0,
-                texture.handle, BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP);
+        bgfx_encoder_set_texture(encoder, 0, cast(bgfx_uniform_handle_t) 0, texture.handle,
+                BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP | BGFX_SAMPLER_MAG_POINT);
 
         bgfx_encoder_set_state(encoder,
                 0UL | BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BlendState.Alpha, 0);
