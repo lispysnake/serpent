@@ -29,7 +29,7 @@ import std.file;
 import std.exception : enforce;
 import std.conv : to;
 import std.format;
-import std.path : dirName;
+import std.path : dirName, buildPath;
 
 /**
  * The TSXParser is a utility class that exists solely to parse TSX files
@@ -139,6 +139,8 @@ package:
             }
         }
 
+        auto texture = new Texture(buildPath(tileset.baseDir, source));
+
         /* Start at MARGIN gap (X/Y) */
         int x = tileset.margin;
         int y = tileset.margin;
@@ -153,6 +155,7 @@ package:
         {
             auto region = rectanglef(x, y, tileset.tileWidth, tileset.tileHeight);
             Tile t = Tile(region);
+            t.texture = texture;
             tileset.setTile(tileID, t);
 
             ++column;

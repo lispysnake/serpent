@@ -103,7 +103,6 @@ public:
         /* Hack! */
         auto entity_map = initView.createEntity();
         auto map = initView.addComponent!MapComponent(entity_map);
-        map.texture = new Texture("assets/raw/Overworld.png");
         map.map = TMXParser.loadTMX("assets/raw/testMap.tmx");
 
         bounds = rectanglef(0.0f, 0.0f, cast(float) map.map.width * map.map.tileWidth,

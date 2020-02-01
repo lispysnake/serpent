@@ -96,7 +96,7 @@ private:
 
                     auto transformPosition = vec3f(drawX, drawY, 0.0f);
 
-                    qb.drawTexturedQuad(encoder, mapComponent.texture, transformPosition, transformScale,
+                    qb.drawTexturedQuad(encoder, t2.texture, transformPosition, transformScale,
                             mapComponent.map.tileWidth, mapComponent.map.tileHeight, t2.region);
                     drawX += mapComponent.map.tileWidth;
                 }

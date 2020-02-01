@@ -26,6 +26,7 @@ import std.exception : enforce;
 import std.container.array;
 
 public import gfm.math;
+public import serpent.graphics.texture;
 
 /**
  * The underlying storage defines how to actually draw a Tile
@@ -34,6 +35,7 @@ public import gfm.math;
 final struct Tile
 {
     box2f region; /**<Defines the renderable region for the tile */
+    Texture texture = null; /**<The texture to draw */
 
     this(box2f region) @safe @nogc nothrow
     {
@@ -242,7 +244,7 @@ package:
      * parser as the underlying storage is an array! This must remain
      * contiguous in memory.
      */
-    pure final void setTile(uint gid, ref Tile t) @safe @nogc nothrow
+    final void setTile(uint gid, ref Tile t) @safe @nogc nothrow
     {
         _tilesGUID[gid] = t;
     }
@@ -250,14 +252,14 @@ package:
     /**
      * Return the Tile data for the given guid
      */
-    final const Tile getTile(uint guid) @trusted @nogc nothrow
+    final const immutable(Tile) getTile(uint guid) @trusted @nogc nothrow
     {
         if (collection)
         {
-            return Tile(rectanglef(0.0f, 0.0f, 0.0f, 0.0f));
+            return cast(immutable(Tile)) Tile(rectanglef(0.0f, 0.0f, 0.0f, 0.0f));
         }
 
-        return _tilesGUID[guid];
+        return cast(immutable(Tile)) _tilesGUID[guid];
     }
 
     /**
@@ -271,9 +273,9 @@ package:
     /**
      * Update the baseDir property
      */
-    pure @property final void baseDir(string baseDir) @safe @nogc nothrow
+    pure @property final void baseDir(string dir) @safe @nogc nothrow
     {
-        this.baseDir = baseDir;
+        this._baseDir = dir;
     }
 
     /**
@@ -281,7 +283,7 @@ package:
      * tiles. Cheekily this allocates a large struct-pointer blob for
      * all of our Tile regions when not using a collection.
      */
-    pure final void reserve() @trusted @nogc nothrow
+    final void reserve() @trusted @nogc nothrow
     {
         if (collection)
         {

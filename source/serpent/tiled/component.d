@@ -38,8 +38,4 @@ public import serpent.graphics.texture;
 @serpentComponent final struct MapComponent
 {
     Map map; /**< The map and layers to draw */
-
-    /* HAX: These will become part of Map. We're just testing! */
-
-    Texture texture; /**<The texture the TileSet is using */
 }
