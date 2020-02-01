@@ -26,6 +26,7 @@ import std.exception : enforce;
 public import std.container.array;
 
 public import serpent.tiled.layer;
+public import serpent.tiled.tileset;
 
 /**
  * A Tiled map can have numerous orientations.
@@ -53,6 +54,8 @@ private:
     int _width = 0;
     int _height = 0;
     Array!MapLayer _layers;
+    Array!TileSet _tilesets;
+    string _baseDir = ".";
     MapOrientation _orientation = MapOrientation.Unknown;
 
 package:
@@ -95,6 +98,14 @@ package:
     pure final @property void tileHeight(uint h) @safe @nogc nothrow
     {
         _tileHeight = h;
+    }
+
+    /**
+     * Set the base directory for the map
+     */
+    pure final @property void baseDir(string dir) @safe @nogc nothrow
+    {
+        _baseDir = dir;
     }
 
     this() @safe @nogc nothrow
@@ -164,6 +175,14 @@ public:
     }
 
     /**
+     * Add a tileset to this map
+     */
+    final void appendTileSet(TileSet set) @trusted
+    {
+        _tilesets.insert(set);
+    }
+
+    /**
      * Validate the map configuration
      */
     final void validate() @safe
@@ -181,5 +200,33 @@ public:
     pure const final @property immutable(Array!MapLayer) layers() @trusted
     {
         return cast(immutable(Array!MapLayer)) _layers;
+    }
+
+    /**
+     * Return base directory for the map to load relative assets
+     */
+    pure const final @property string baseDir() @safe @nogc nothrow
+    {
+        return _baseDir;
+    }
+
+    /**
+     * Find the relevant tileset for the given gid
+     */
+    const final immutable(TileSet) findTileSet(uint32_t gid) @trusted
+    {
+        if (gid < 1)
+        {
+            return null;
+        }
+
+        foreach (ref set; _tilesets)
+        {
+            if (gid >= set.firstGID)
+            {
+                return cast(immutable(TileSet)) set;
+            }
+        }
+        return null;
     }
 }

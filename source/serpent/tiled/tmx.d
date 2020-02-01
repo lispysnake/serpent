@@ -32,6 +32,9 @@ import std.format;
 import std.base64;
 import std.string;
 import std.zlib;
+import std.path : dirName, buildPath;
+
+import serpent.tiled.tsx : TSXParser;
 
 /**
  * The TMXParser exists solely as a utility class to load TMX files.
@@ -46,10 +49,11 @@ private:
     /**
      * Begin parsing the actual XML document.
      */
-    static final Map parseMap(Document doc) @safe
+    static final Map parseMap(string path, Document doc) @safe
     {
         enforce(doc.tag.name == "map", "First element should be <map>");
         auto map = new Map();
+        map.baseDir = dirName(path);
 
         /* Grab our basic map attributes */
         foreach (attr, attrValue; doc.tag.attr)
@@ -118,8 +122,27 @@ private:
      * In future we'll actually need to do something with the tilesheet,
      * determine if it is embedded, etc. For now, skip it.
      */
-    static final void parseTileset(Map map, Element e) @safe @nogc nothrow
+    static final void parseTileset(Map map, Element e) @safe
     {
+        TileSet tsx = null;
+        int firstGID = 0;
+        if ("firstgid" in e.tag.attr)
+        {
+            firstGID = to!int(e.tag.attr["firstgid"]);
+        }
+
+        if ("source" in e.tag.attr)
+        {
+            auto tsxPath = buildPath(map.baseDir, e.tag.attr["source"]);
+            tsx = TSXParser.loadTSX(tsxPath);
+        }
+        else
+        {
+            tsx = TSXParser.parseTileSetElement(e);
+        }
+
+        tsx.firstGID = firstGID;
+        map.appendTileSet(tsx);
     }
 
     /**
@@ -282,6 +305,6 @@ public:
         std.xml.check(r);
 
         auto doc = new Document(r);
-        return parseMap(doc);
+        return parseMap(path, doc);
     }
 }

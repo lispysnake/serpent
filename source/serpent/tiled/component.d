@@ -41,6 +41,5 @@ public import serpent.graphics.texture;
 
     /* HAX: These will become part of Map. We're just testing! */
 
-    TileSet tileset; /**<The TileSet to draw with */
     Texture texture; /**<The texture the TileSet is using */
 }

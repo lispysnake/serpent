@@ -105,7 +105,6 @@ public:
         auto map = initView.addComponent!MapComponent(entity_map);
         map.texture = new Texture("assets/raw/Overworld.png");
         map.map = TMXParser.loadTMX("assets/raw/testMap.tmx");
-        map.tileset = TSXParser.loadTSX("assets/raw/Overworld.tsx");
 
         bounds = rectanglef(0.0f, 0.0f, cast(float) map.map.width * map.map.tileWidth,
                 cast(float) map.map.height * map.map.tileHeight);

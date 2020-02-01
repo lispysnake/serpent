@@ -86,12 +86,13 @@ private:
                 {
                     auto gid = layer.data[x + y * layer.width];
                     auto tile = gid & ~FlipMode.Mask;
-                    if (tile == 0)
+                    auto tileset = mapComponent.map.findTileSet(tile);
+                    if (tileset is null)
                     {
                         drawX += mapComponent.map.tileWidth;
                         continue;
                     }
-                    auto t2 = mapComponent.tileset.getTile(tile - 1);
+                    auto t2 = tileset.getTile(tile - 1);
 
                     auto transformPosition = vec3f(drawX, drawY, 0.0f);
 
