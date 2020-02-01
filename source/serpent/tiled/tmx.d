@@ -30,6 +30,7 @@ import std.exception : enforce;
 import std.conv : to;
 import std.format;
 import std.base64;
+import std.algorithm.iteration : splitter;
 import std.string;
 import std.zlib;
 import std.path : dirName, buildPath;
@@ -233,6 +234,9 @@ private:
         case LayerEncoding.Base64:
             parseLayerDataBase64(data, layer, compression);
             break;
+        case LayerEncoding.CSV:
+            parseLayerDataCSV(data, layer);
+            break;
         default:
             enforce("Currently we only support Base64 decoing");
             break;
@@ -284,6 +288,31 @@ private:
 
                 /* Stride 4 */
                 tileIndex += 4;
+            }
+        }
+    }
+
+    /**
+     * Not really CSV tbf, just comma separated
+     */
+    static final void parseLayerDataCSV(Element data, MapLayer layer) @trusted
+    {
+        enforce(data.texts.length == 1, "CSV layer requires 1 data text");
+        auto layerData = std.string.strip(data.texts[0].toString());
+
+        int x = 0;
+        int y = 0;
+
+        foreach (item; layerData.splitter(','))
+        {
+            auto guid = to!uint32_t(std.string.strip(item));
+            layer.set(x, y, guid);
+
+            ++x;
+            if (x >= layer.width)
+            {
+                ++y;
+                x = 0;
             }
         }
     }
