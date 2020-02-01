@@ -46,10 +46,14 @@ private:
     /**
      * The mouse was just moved
      */
-    final void onMouseMoved(MouseEvent e) @safe
+    final void onMouseMoved(MouseEvent e) @trusted
     {
+        auto bounds = rectanglef(0.0f, 0.0f, 16.0f * 30.0f, 16.0f * 30.0f);
+        auto viewport = rectanglef(0.0f, 0.0f, cast(float) context.display.logicalWidth,
+                cast(float) context.display.logicalHeight);
         writefln("Moved: %f %f", e.x, e.y);
         s.camera.position = vec3f(e.x, e.y, 0.0f);
+        s.camera.clamp(bounds, viewport);
     }
 
     /**

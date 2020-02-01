@@ -220,6 +220,29 @@ public:
     }
 
     /**
+     * Clamp the X/Y position to the given bounds (2d-centric)
+     */
+    final void clamp(box2f bounds, box2f viewport) @safe @nogc nothrow
+    {
+        if (_position.x > bounds.max.x - viewport.max.x)
+        {
+            _position.x = bounds.max.x - viewport.max.x;
+        }
+        if (_position.x < bounds.min.x)
+        {
+            _position.x = bounds.min.x;
+        }
+        if (_position.y > bounds.max.y - viewport.max.y)
+        {
+            _position.y = bounds.max.y - viewport.max.y;
+        }
+        if (_position.y < bounds.min.y)
+        {
+            _position.y = bounds.min.y;
+        }
+    }
+
+    /**
      * Unproject the inputted real-world coordinates to 3D-space
      */
     final vec3f unproject(const ref vec3f point) @safe
