@@ -34,6 +34,7 @@ final class DemoGame : App
 
 private:
     Scene s;
+    box2f bounds;
 
     /**
      * A mouse button was just pressed
@@ -48,7 +49,6 @@ private:
      */
     final void onMouseMoved(MouseEvent e) @trusted
     {
-        auto bounds = rectanglef(0.0f, 0.0f, 16.0f * 30.0f, 16.0f * 30.0f);
         auto viewport = rectanglef(0.0f, 0.0f, cast(float) context.display.logicalWidth,
                 cast(float) context.display.logicalHeight);
         writefln("Moved: %f %f", e.x, e.y);
@@ -106,6 +106,9 @@ public:
         map.texture = new Texture("assets/raw/Overworld.png");
         map.map = TMXParser.loadTMX("assets/raw/testMap.tmx");
         map.tileset = TSXParser.loadTSX("assets/raw/Overworld.tsx");
+
+        bounds = rectanglef(0.0f, 0.0f, cast(float) map.map.width * map.map.tileWidth,
+                cast(float) map.map.height * map.map.tileHeight);
 
         return true;
     }
