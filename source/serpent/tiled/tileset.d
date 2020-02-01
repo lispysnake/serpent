@@ -263,14 +263,18 @@ package:
     /**
      * Return the Tile data for the given guid
      */
-    final const immutable(Tile) getTile(uint guid) @trusted nothrow
+    final const immutable(Tile) getTile(uint guid) @trusted
     {
+        import std.stdio;
+
+        writeln(guid);
+        writeln(firstGID);
         if (collection)
         {
-            return cast(immutable(Tile)) _tilesID[guid];
+            return cast(immutable(Tile)) _tilesID[guid - _firstGID];
         }
 
-        return cast(immutable(Tile)) _tilesGUID[guid];
+        return cast(immutable(Tile)) _tilesGUID[guid - _firstGID];
     }
 
     /**

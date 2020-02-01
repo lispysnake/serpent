@@ -220,11 +220,12 @@ public:
             return null;
         }
 
-        foreach (ref set; _tilesets)
+        for (ulong i = _tilesets.length - 1; i >= 0; i--)
         {
-            if (gid >= set.firstGID)
+            auto tileset = _tilesets[i];
+            if (gid >= tileset.firstGID)
             {
-                return cast(immutable(TileSet)) set;
+                return cast(immutable(TileSet)) tileset;
             }
         }
         return null;

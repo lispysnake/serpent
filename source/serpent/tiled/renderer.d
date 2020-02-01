@@ -92,7 +92,7 @@ private:
                         drawX += mapComponent.map.tileWidth;
                         continue;
                     }
-                    auto t2 = tileset.getTile(tile - 1);
+                    auto t2 = tileset.getTile(tile);
 
                     auto transformPosition = vec3f(drawX, drawY, 0.0f);
 
