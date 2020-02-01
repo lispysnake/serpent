@@ -96,8 +96,26 @@ private:
 
                     auto transformPosition = vec3f(drawX, drawY, 0.0f);
 
-                    qb.drawTexturedQuad(encoder, t2.texture, transformPosition, transformScale,
-                            mapComponent.map.tileWidth, mapComponent.map.tileHeight, t2.region);
+                    float tileWidth = mapComponent.map.tileWidth;
+                    float tileHeight = mapComponent.map.tileHeight;
+
+                    /* Anchor the image correctly. */
+                    if (tileset.collection)
+                    {
+                        tileWidth = t2.texture.width;
+                        tileHeight = t2.texture.height;
+
+                        /* Account for non-regular tiles */
+                        if (tileWidth != mapComponent.map.tileWidth
+                                || tileHeight != mapComponent.map.tileHeight)
+                        {
+                            transformPosition.y += mapComponent.map.tileHeight;
+                            transformPosition.y -= tileHeight;
+                        }
+                    }
+
+                    qb.drawTexturedQuad(encoder, t2.texture, transformPosition,
+                            transformScale, tileWidth, tileHeight, t2.region);
                     drawX += mapComponent.map.tileWidth;
                 }
                 drawY += mapComponent.map.tileHeight;

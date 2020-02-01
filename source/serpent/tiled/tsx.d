@@ -93,7 +93,7 @@ package:
                 parseRootImage(tileset, item);
                 break;
             case "tile":
-                parseTile(item);
+                parseTile(tileset, item);
                 break;
             default:
                 break;
@@ -106,8 +106,38 @@ package:
     /**
      * Parse a singular tile.
      */
-    static final void parseTile(Element element) @safe @nogc nothrow
+    static final void parseTile(TileSet tileset, Element element) @safe
     {
+        int id = to!int(element.tag.attr["id"]);
+        foreach (item; element.elements)
+        {
+            switch (item.tag.name)
+            {
+            case "animation":
+                /* Handle animation */
+                break;
+            case "image":
+                parseTileImage(tileset, id, item);
+                break;
+            default:
+                break;
+            }
+        }
+    }
+
+    /**
+     * Handle per-tile-image (!collection)
+     */
+    static final void parseTileImage(TileSet tileset, int gid, Element element) @trusted
+    {
+        tileset.collection = true;
+        auto source = element.tag.attr["source"];
+        auto width = to!int(element.tag.attr["width"]);
+        auto height = to!int(element.tag.attr["height"]);
+
+        auto texture = new Texture(buildPath(tileset.baseDir, source));
+        auto tile = Tile(texture);
+        tileset.setTile(gid, tile);
     }
 
     /**

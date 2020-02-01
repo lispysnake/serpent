@@ -42,6 +42,12 @@ final struct Tile
         this.region = region;
     }
 
+    this(Texture texture) @safe @nogc nothrow
+    {
+        this.texture = texture;
+        this.region = texture.clip();
+    }
+
     @disable this();
 };
 
@@ -66,7 +72,7 @@ private:
     int _firstGID = 0; /* Only relevant to maps with multiple gids */
 
     Array!Tile _tilesGUID; /*GUID-indexed tile array */
-    Tile[int] _tilesMap; /* ID-to-Tile mapping (slower) */
+    Tile[int] _tilesID; /* ID-to-Tile mapping (slower) */
     string _baseDir = ".";
 
 public:
@@ -244,19 +250,24 @@ package:
      * parser as the underlying storage is an array! This must remain
      * contiguous in memory.
      */
-    final void setTile(uint gid, ref Tile t) @safe @nogc nothrow
+    final void setTile(uint gid, ref Tile t) @safe nothrow
     {
+        if (collection)
+        {
+            _tilesID[gid] = t;
+            return;
+        }
         _tilesGUID[gid] = t;
     }
 
     /**
      * Return the Tile data for the given guid
      */
-    final const immutable(Tile) getTile(uint guid) @trusted @nogc nothrow
+    final const immutable(Tile) getTile(uint guid) @trusted nothrow
     {
         if (collection)
         {
-            return cast(immutable(Tile)) Tile(rectanglef(0.0f, 0.0f, 0.0f, 0.0f));
+            return cast(immutable(Tile)) _tilesID[guid];
         }
 
         return cast(immutable(Tile)) _tilesGUID[guid];
