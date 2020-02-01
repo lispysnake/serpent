@@ -234,6 +234,9 @@ public:
         auto spriteWidth = quad.width * widthAspect;
         auto spriteHeight = quad.height * widthAspect;
 
+        /* Remove the cameraPosition */
+        transformPosition -= context.display.scene.camera.position;
+
         transformPosition.x *= widthAspect;
         transformPosition.y *= heightAspect;
 

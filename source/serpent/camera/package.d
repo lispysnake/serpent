@@ -58,6 +58,7 @@ private:
     mat4x4f _combined = mat4x4f.identity();
     mat4x4f _inverse = mat4x4f.identity();
     WorldOrigin _worldOrigin = WorldOrigin.TopLeft;
+    vec3f _position = vec3f(0.0f, 0.0f, 0.0f);
 
 public:
 
@@ -203,12 +204,28 @@ public:
     }
 
     /**
+     * Return the camera position
+     */
+    pure @property final vec3f position() @safe @nogc nothrow
+    {
+        return _position;
+    }
+
+    /**
+     * Set the camera position
+     */
+    pure @property final void position(vec3f position) @safe @nogc nothrow
+    {
+        _position = position;
+    }
+
+    /**
      * Unproject the inputted real-world coordinates to 3D-space
      */
     final vec3f unproject(const ref vec3f point) @safe
     {
-        auto x = 0.0f; /* Viewport X */
-        auto y = 0.0f; /* Viewport Y */
+        auto x = _position.x; /* Viewport X */
+        auto y = _position.y; /* Viewport Y */
         auto width = cast(float) scene.display.width;
         auto height = cast(float) scene.display.height;
 
