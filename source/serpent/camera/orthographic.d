@@ -44,9 +44,9 @@ private:
     bool _invertedY = false;
 
     /**
-     * Camera position within 3D space
+     * Camera viewerPosition within 3D space
      */
-    static const vec3f position = vec3f(0.0f, 0.0f, 0.0f);
+    static const vec3f viewerPosition = vec3f(0.0f, 0.0f, 0.0f);
 
     /**
      * Direction of camera (straight forward)
@@ -84,12 +84,12 @@ public:
             direction.z = -1.0f;
         }
 
-        vec3f eyes = position + direction;
+        vec3f eyes = viewerPosition + direction;
 
         projection = mat4x4f.orthographic(zoomLevel * scene.display.width,
                 zoomLevel * -scene.display.width, zoomLevel * -scene.display.height,
                 zoomLevel * scene.display.height, nearPlane, farPlane);
-        view = mat4x4f.lookAt(position, eyes, up);
+        view = mat4x4f.lookAt(viewerPosition, eyes, up);
 
         combined = projection * view;
         inverse = combined.inverse();
