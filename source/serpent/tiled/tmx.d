@@ -238,7 +238,7 @@ private:
             parseLayerDataCSV(data, layer);
             break;
         default:
-            enforce("Currently we only support Base64 decoing");
+            enforce("Currently we only support Base64 or CSV decoding");
             break;
         }
 
