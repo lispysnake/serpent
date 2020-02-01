@@ -234,14 +234,16 @@ public:
         auto spriteWidth = quad.width * widthAspect;
         auto spriteHeight = quad.height * widthAspect;
 
-        /* Remove the cameraPosition */
-        transformPosition -= context.display.scene.camera.position;
-
+        /* Aspect scale it */
         transformPosition.x *= widthAspect;
         transformPosition.y *= heightAspect;
 
+        /* Anchor it */
         transformPosition.x -= (realWidth / 2.0f);
         transformPosition.y -= (realHeight / 2.0f);
+
+        /* Remove the cameraPosition */
+        transformPosition -= context.display.scene.camera.position;
 
         /* index position */
         auto i = drawIndex * numIndices;

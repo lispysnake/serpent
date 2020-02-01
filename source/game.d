@@ -49,6 +49,7 @@ private:
     final void onMouseMoved(MouseEvent e) @safe
     {
         writefln("Moved: %f %f", e.x, e.y);
+        s.camera.position = vec3f(e.x, e.y, 0.0f);
     }
 
     /**
