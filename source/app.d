@@ -48,6 +48,7 @@ int main(string[] args)
     /* Context is essential to *all* Serpent usage. */
     auto context = new Context();
     context.display.title("#serpent demo").size(1366, 768);
+    context.display.logicalSize(480, 270);
 
     /* We want OpenGL or Vulkan? */
     if (vulkan)

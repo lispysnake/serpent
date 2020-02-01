@@ -76,6 +76,7 @@ private:
 
     uint _logicalWidth = 0;
     uint _logicalHeight = 0;
+    bool _logicalSizeSet = false;
 
 private:
 
@@ -420,6 +421,10 @@ public:
      */
     pure @property final const int logicalWidth() @nogc @safe nothrow
     {
+        if (_logicalSizeSet)
+        {
+            return _logicalWidth;
+        }
         return _width;
     }
 
@@ -428,7 +433,46 @@ public:
      */
     pure @property final const int logicalHeight() @nogc @safe nothrow
     {
+        if (_logicalSizeSet)
+        {
+            return _logicalHeight;
+        }
         return _height;
+    }
+
+    /**
+     * Set the logical size of the display
+     */
+    pure @property final const vec2i logicalSize() @nogc @safe nothrow
+    {
+        if (_logicalSizeSet)
+        {
+            return vec2i(_logicalWidth, _logicalHeight);
+        }
+        return vec2i(_width, _height);
+    }
+
+    /**
+     * Set the logical size of the display
+     */
+    pure @property final void logicalSize(vec2i size) @nogc @safe nothrow
+    {
+        if (size.x <= 0 && size.y <= 0)
+        {
+            _logicalSizeSet = false;
+            return;
+        }
+        _logicalSizeSet = true;
+        _logicalHeight = size.y;
+        _logicalWidth = size.x;
+    }
+
+    /**
+     * Return the logical size of the display
+     */
+    pure @property final void logicalSize(int w, int h) @nogc @safe nothrow
+    {
+        logicalSize(vec2i(w, h));
     }
 
     /**
