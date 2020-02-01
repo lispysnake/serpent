@@ -2,8 +2,25 @@
 
 [![License](https://img.shields.io/badge/License-ZLib-blue.svg)](https://opensource.org/licenses/ZLib)
 
+
 A game framework from [Lispy Snake, Ltd.](https://lispysnake.com).
 This is not *exactly* an engine.
+
+## Support Development
+
+This framework is being developed by Lispy Snake for our first games.
+While we would love to develop it full time, basic economics says we
+must reinvest any contract-work revenue to support development in
+any remaining time.
+
+To accelerate development (and time-to-market) for our framework
+and first game, consider buying a [Lifetime License](https://lispysnake.com/the-game-raiser) from
+us ($20!) to have lifetime access to our games. If you just want to send a tip
+to help with Serpent development (and our other efforts) then please click the link
+below!
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VYHL9CEFSNCVA)
+
 
 ### UNDER DEVELOPMENT
 
@@ -25,16 +42,6 @@ however we're looking to build more of an SDK out of the core
 `serpent` runtime and associated tooling, to help others very
 easily build their games.
 
-## Support Development
-
-This framework is being developed by Lispy Snake for our first games.
-While we would love to develop it full time, basic economics says we
-must reinvest any contract-work revenue to support development in
-any remaining time.
-
-To accelerate development (and time-to-market) for our framework
-and first game, consider buying a [Lifetime License](https://lispysnake.com/the-game-raiser) from
-us ($20!) to have lifetime access to our games.
 
 ## Building
 
