@@ -35,6 +35,7 @@ final class DemoGame : App
 private:
     Scene s;
     box2f bounds;
+    string mapFile;
 
     /**
      * A mouse button was just pressed
@@ -83,6 +84,11 @@ private:
 
 public:
 
+    this(string mapFile)
+    {
+        this.mapFile = mapFile;
+    }
+
     /**
      * All initial game setup should be done from bootstrap.
      */
@@ -103,7 +109,7 @@ public:
         /* Hack! */
         auto entity_map = initView.createEntity();
         auto map = initView.addComponent!MapComponent(entity_map);
-        map.map = TMXParser.loadTMX("assets/raw/testMap.tmx");
+        map.map = TMXParser.loadTMX(this.mapFile);
 
         bounds = rectanglef(0.0f, 0.0f, cast(float) map.map.width * map.map.tileWidth,
                 cast(float) map.map.height * map.map.tileHeight);
