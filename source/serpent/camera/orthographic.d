@@ -38,7 +38,7 @@ class OrthographicCamera : Camera
 
 private:
     float _zoomLevel = 0.5f;
-    float _nearPlane = 0.0f;
+    float _nearPlane = -1.0f;
     float _farPlane = 1.0f;
 
     bool _invertedY = false;
