@@ -254,13 +254,13 @@ public:
         /* update vertices */
         auto vertexData = cast(PosUVVertex*) tvb.data;
         vertexData[v] = PosUVVertex(vec3f(transformPosition.x,
-                transformPosition.y, 0.0f), vec2f(u1, v1));
+                transformPosition.y, transformPosition.z), vec2f(u1, v1));
         vertexData[v + 1] = PosUVVertex(vec3f(transformPosition.x + spriteWidth,
-                transformPosition.y, 0.0f), vec2f(u2, v1));
+                transformPosition.y, transformPosition.z), vec2f(u2, v1));
         vertexData[v + 2] = PosUVVertex(vec3f(transformPosition.x + spriteWidth,
-                transformPosition.y + spriteHeight, 0.0f), vec2f(u2, v2));
+                transformPosition.y + spriteHeight, transformPosition.z), vec2f(u2, v2));
         vertexData[v + 3] = PosUVVertex(vec3f(transformPosition.x,
-                transformPosition.y + spriteHeight, 0.0f), vec2f(u1, v2));
+                transformPosition.y + spriteHeight, transformPosition.z), vec2f(u1, v2));
     }
 
     final void blitQuads(bgfx_encoder_t* encoder, uint numQuads, Texture texture) @trusted
@@ -286,6 +286,10 @@ public:
         bgfx_encoder_set_texture(encoder, 0, cast(bgfx_uniform_handle_t) 0, texture.handle,
                 BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP | BGFX_SAMPLER_MAG_POINT);
 
+        /* What we need. *
+        bgfx_encoder_set_state(encoder,
+                0UL | BGFX_STATE_WRITE_RGB | BGFX_STATE_DEPTH_TEST_LEQUAL | BGFX_STATE_WRITE_Z | BlendState.Alpha, 0);
+        */
         bgfx_encoder_set_state(encoder,
                 0UL | BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BlendState.Alpha, 0);
         bgfx_encoder_submit(encoder, 0, shader.handle, 0, false);
