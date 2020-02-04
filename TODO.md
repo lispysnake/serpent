@@ -29,6 +29,22 @@ basic demo shape.
  - [ ] Stop relying on PNG assets + debugmode. Compile these assets and implement ResourceManager ZIPs
  - [x] Fix crash on exit (unlink order of shader programs)
 
+Secondary Thoughts...:
+
+ - Go to multithreaded mode of bgfx with separate thread for rendering/main.
+ - Have a wide-function sequential pipeline:
+    - Run simulation step (physics, etc.)
+    - Gather visibles in parallel, push to next stage
+    - Gather necessary data for rendering, push to next stage
+    - Order into 2 renderable queues, opaque (front to back) and transparent (back to front)
+    - Submit all renderables (opaque first, transparent last)
+    - Run various post-processing effects through framebuffers
+    - Submit final view.
+ - Remember, it will take much longer to query and extract information than it will be to merge
+   into a single-threaded queue. Distributing across cores will ensure constant framerates.
+ - We'll have to decouple rendering from our Processor systems in the Context and instead
+   allow registering into the pipeline. Also provide default pipelines.
+
 Nice to have:
 
  - Chunked data processors. Right now we can run our units in parallel or series, and ensure
