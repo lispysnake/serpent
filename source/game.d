@@ -37,9 +37,7 @@ private:
     box2f bounds;
     string mapFile;
 
-    Entity background;
     Entity tileMap;
-    Entity player;
 
     /**
      * A mouse button was just pressed
@@ -110,36 +108,10 @@ public:
         context.display.addScene(s);
         s.addCamera(new OrthographicCamera());
 
-        auto logo = new Texture("assets/raw/logo.png");
-
-        auto Z = 0.01f;
-        auto X = 1366.0f - logo.width - 10;
-        auto Y = 768.0f - logo.height - 10;
-        auto transform = vec3f(X, Y, Z);
-        Z += 0.1f;
-
-        auto entityLogo = initView.createEntity();
-        initView.addComponent!SpriteComponent(entityLogo).texture = logo;
-        initView.data!TransformComponent(entityLogo).position = transform;
-
-        background = initView.createEntity();
-        initView.addComponent!SpriteComponent(background)
-            .texture = new Texture("../proving-grounds/assets/Graveyard/png/BG.png");
-        initView.data!TransformComponent(background).position.z = -0.3;
-
         /* Hack! */
         tileMap = initView.createEntity();
         auto map = initView.addComponent!MapComponent(tileMap);
         map.map = TMXParser.loadTMX(this.mapFile);
-
-        player = initView.createEntity();
-        initView.addComponent!SpriteComponent(player)
-            .texture = new Texture("../proving-grounds/assets/Zombie/png/male/Idle (1).png");
-        initView.data!TransformComponent(player).position.z = -0.1f;
-        initView.data!TransformComponent(player).position.x = 390.0f;
-        initView.data!TransformComponent(player).position.y = 350.0f;
-        initView.data!TransformComponent(player).scale.x = 0.6f;
-        initView.data!TransformComponent(player).scale.y = 0.6f;
 
         bounds = rectanglef(0.0f, 0.0f, cast(float) map.map.width * map.map.tileWidth,
                 cast(float) map.map.height * map.map.tileHeight);
