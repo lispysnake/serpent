@@ -31,46 +31,36 @@ public import serpent.core.view;
 import serpent.tiled : FlipMode;
 import serpent.graphics.batch;
 
+import serpent.graphics.renderer;
+import serpent.core.transform;
+
 /**
  * MapRenderer walks through a tilemap and dispatches relevant drawing
  * of quads through Sprite APIs.
  */
-final class MapRenderer : Processor!ReadOnly
+final class MapRenderer : Renderer
 {
-
-private:
-    QuadBatch qb = null;
 
 public:
 
-    /* Load shaders */
-    final override void bootstrap(View!ReadOnly dataView) @system
+    final override void queryVisibles(View!ReadOnly queryView, ref FramePacket packet)
     {
-
-        context.component.registerComponent!MapComponent;
-        qb = new QuadBatch(context);
-    }
-
-    final override void run(View!ReadOnly dataView)
-    {
-        foreach (entity; dataView.withComponent!MapComponent)
+        foreach (entity; queryView.withComponent!MapComponent)
         {
-            drawMap(dataView, entity);
+            auto transform = queryView.data!TransformComponent(entity);
+            packet.pushVisibleEntity(entity, this, transform.position);
         }
     }
 
-    final override void finish(View!ReadOnly dataView) @system
+    final override void submit(View!ReadOnly queryView, ref QuadBatch batch, EntityID id)
     {
-        qb.destroy();
-        qb = null;
-    }
 
-private:
+    }
 
     /**
      * Begin drawing of a map.
      */
-    final void drawMap(View!ReadOnly dataView, EntityID entity)
+    final void drawMap(View!ReadOnly dataView, ref QuadBatch qb, EntityID entity)
     {
         auto mapComponent = dataView.data!MapComponent(entity);
         float drawX = 0.0f;
