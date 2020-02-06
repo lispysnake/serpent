@@ -77,9 +77,10 @@ int main(string[] args)
     /* Set our root directory up */
     context.resource.root = context.resource.root ~ "/assets/built";
 
-    /* Without a SpriteRenderer, nothing will be drawn. */
+    /* Without a SpriteRenderer, nothing will be drawn. 
     context.renderGroup.add(new MapRenderer);
     context.renderGroup.add(new SpriteRenderer);
+    */
 
     /* Run the game now. */
     return context.run(new DemoGame(mapFile));

@@ -86,8 +86,6 @@ private:
     GroupRunner[] groups;
     TaskPool tp;
     Group!ReadWrite _systemGroup;
-    Group!ReadOnly _prerenderGroup;
-    Group!ReadOnly _postrenderGroup;
     Group!ReadOnly _renderGroup;
 
     /**
@@ -167,21 +165,6 @@ public:
             .add(new AppUpdateProcessor());
         addGroup(_systemGroup);
 
-        /* Begin frame kick, etc. */
-        _prerenderGroup = new Group!ReadOnly("pre-render");
-        _prerenderGroup.add(new PreRenderProcessor);
-        addGroup(_prerenderGroup);
-
-        /* Do actual rendering. Eventually, make this parallel. */
-        _renderGroup = new Group!ReadOnly("render");
-        _renderGroup.parallel = false;
-        addGroup(_renderGroup);
-
-        /* Finish the rendering. */
-        _postrenderGroup = new Group!ReadOnly("post-render");
-        _postrenderGroup.add(new PostRenderProcessor);
-        addGroup(_postrenderGroup);
-
         /* Create a display with the default size */
         _input = new InputManager(this);
         _display = new Display(this, 640, 480);
@@ -236,6 +219,7 @@ public:
             /* Force stepping through the Entity system */
             _entity.step();
             scheduledExecution();
+            _display.pipeline.render();
         }
 
         finishGroups();
@@ -338,15 +322,6 @@ public:
     pure @property final Group!ReadWrite systemGroup() @safe @nogc nothrow
     {
         return _systemGroup;
-    }
-
-    /**
-     * Returns the Group used within the rendering stage of frame-execution.
-     * Internally this is the core 'render' group.
-     */
-    pure @property final Group!ReadOnly renderGroup() @safe @nogc nothrow
-    {
-        return _renderGroup;
     }
 
     /**
