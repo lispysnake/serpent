@@ -25,6 +25,7 @@ module serpent.graphics.sprite.renderer;
 public import serpent.graphics.renderer;
 
 import serpent.graphics.sprite : SpriteComponent;
+import serpent.core.transform;
 
 /**
  * The SpriteRenderer will collect and draw all visible sprites within
@@ -53,8 +54,10 @@ public:
     /**
      * Draw the visible on screen now.
      */
-    final override void submit(View!ReadOnly queryView, ref FramePacket packet, EntityID entity) @safe
+    final override void submit(View!ReadOnly queryView, ref QuadBatch batch, EntityID entity) @safe
     {
-
+        auto transform = queryView.data!TransformComponent(entity);
+        auto sprite = queryView.data!SpriteComponent(entity);
+        batch.drawTexturedQuad(encoder, sprite.texture, transform.position, transform.scale);
     }
 }

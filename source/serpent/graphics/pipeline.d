@@ -141,18 +141,25 @@ public:
     {
         packet.startTick();
         prerender();
+        auto encoder = bgfx_encoder_begin(true);
+        qb.begin();
 
         /* Query visibles */
         foreach (r; _renderers)
         {
+            r.encoder = encoder;
             r.queryVisibles(queryView, packet);
         }
 
         /* Submission (TODO: Sort by z-index) */
         foreach (s; packet.visibleEntities)
         {
-            s.renderer.submit(queryView, packet, s.id);
+            s.renderer.encoder = encoder;
+            s.renderer.submit(queryView, qb, s.id);
         }
+
+        qb.flush(encoder);
+        bgfx_encoder_end(encoder);
 
         postrender();
     }

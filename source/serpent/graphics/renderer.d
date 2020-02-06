@@ -27,6 +27,10 @@ public import serpent.core.view;
 
 public import serpent.graphics.frame;
 
+public import bindbc.bgfx;
+
+public import serpent.graphics.batch;
+
 /**
  * The Renderer is implemented by specific components that wish to register
  * their visibles with the current frame for rendering. As each component
@@ -36,6 +40,20 @@ public import serpent.graphics.frame;
 abstract class Renderer
 {
 
+private:
+    bgfx_encoder_t* _encoder = null;
+
+package:
+
+    /**
+     * Set the encoder used by the renderer
+     */
+    final @property void encoder(bgfx_encoder_t* encoder) @safe @nogc nothrow
+    {
+        _encoder = encoder;
+    }
+
+public:
     /**
      * The renderer will be called with the given queryView, if it finds
      * entities it knows it can draw, then submit them to the packet.
@@ -45,5 +63,10 @@ abstract class Renderer
     /**
      * The renderer now needs to submit the visible to the framepacket for drawing
      */
-    abstract void submit(View!ReadOnly queryView, ref FramePacket packet, EntityID id);
+    abstract void submit(View!ReadOnly queryView, ref QuadBatch batch, EntityID id);
+
+    final @property bgfx_encoder_t* encoder() @safe @nogc nothrow
+    {
+        return _encoder;
+    }
 }
