@@ -5,10 +5,13 @@ public import serpent.core.ringbuffer;
 
 import serpent.graphics.renderer;
 
+import gfm.math;
+
 final struct FramePacketVisible
 {
     EntityID id;
     Renderer renderer;
+    vec3f transformPosition;
 };
 
 /**
@@ -43,9 +46,10 @@ public:
      * We do this in our first round to compute *what* needs to
      * go on screen.
      */
-    pragma(inline, true) final void pushVisibleEntity(EntityID entityID, Renderer renderer) @trusted @nogc nothrow
+    pragma(inline, true) final void pushVisibleEntity(EntityID entityID,
+            Renderer renderer, vec3f transformPosition) @trusted @nogc nothrow
     {
-        _visibleEntities.add(FramePacketVisible(entityID, renderer));
+        _visibleEntities.add(FramePacketVisible(entityID, renderer, transformPosition));
     }
 
     /**

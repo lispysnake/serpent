@@ -47,7 +47,8 @@ public:
     {
         foreach (entity; queryView.withComponent!SpriteComponent)
         {
-            packet.pushVisibleEntity(entity, this);
+            auto transform = queryView.data!TransformComponent(entity);
+            packet.pushVisibleEntity(entity, this, transform.position);
         }
     }
 

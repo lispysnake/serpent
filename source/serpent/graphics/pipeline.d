@@ -31,6 +31,7 @@ public import serpent.graphics.renderer;
 import bindbc.bgfx;
 import serpent.graphics.frame;
 import std.exception : enforce;
+import std.container.binaryheap;
 
 import serpent.graphics.batch;
 
@@ -151,8 +152,11 @@ public:
             r.queryVisibles(queryView, packet);
         }
 
-        /* Submission (TODO: Sort by z-index) */
-        foreach (s; packet.visibleEntities)
+        auto heap = heapify!("a.transformPosition.z < b.transformPosition.z")(
+                packet.visibleEntities);
+
+        /* Submission */
+        foreach (s; heap)
         {
             s.renderer.encoder = encoder;
             s.renderer.submit(queryView, qb, s.id);
