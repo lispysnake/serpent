@@ -44,7 +44,7 @@ final struct Entity
 {
 
 private:
-    EntityID _id;
+    EntityID _id = 0;
 
 protected:
 
@@ -58,7 +58,6 @@ protected:
     }
 
 public:
-    @disable this();
 
     /**
      * Return true if the entity is valid.
