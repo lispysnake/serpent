@@ -46,7 +46,7 @@ public:
     {
         foreach (entity; queryView.withComponent!SpriteComponent)
         {
-            packet.pushVisibleEntity(entity);
+            packet.pushVisibleEntity(entity, this);
         }
     }
 }

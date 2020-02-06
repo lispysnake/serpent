@@ -3,6 +3,14 @@ module serpent.graphics.frame;
 public import serpent.core.entity : EntityID;
 public import serpent.core.ringbuffer;
 
+import serpent.graphics.renderer;
+
+final struct FramePacketVisible
+{
+    EntityID id;
+    Renderer renderer;
+};
+
 /**
  * We have a pre-allocated framepacket which will store all drawing information
  * for the upcoming render.
@@ -14,7 +22,7 @@ final struct FramePacket
 
 private:
     __gshared bool running = false;
-    __gshared RingBuffer!EntityID _visibleEntities;
+    __gshared RingBuffer!FramePacketVisible _visibleEntities;
     ulong entityLimit = 0;
 
 public:
@@ -26,7 +34,7 @@ public:
      */
     this(ulong entityLimit) @trusted nothrow
     {
-        _visibleEntities = RingBuffer!EntityID(entityLimit);
+        _visibleEntities = RingBuffer!FramePacketVisible(entityLimit);
         this.entityLimit = entityLimit;
     }
 
@@ -35,9 +43,9 @@ public:
      * We do this in our first round to compute *what* needs to
      * go on screen.
      */
-    pragma(inline, true) final void pushVisibleEntity(EntityID entityID) @trusted @nogc nothrow
+    pragma(inline, true) final void pushVisibleEntity(EntityID entityID, Renderer renderer) @trusted @nogc nothrow
     {
-        _visibleEntities.add(entityID);
+        _visibleEntities.add(FramePacketVisible(entityID, renderer));
     }
 
     /**
