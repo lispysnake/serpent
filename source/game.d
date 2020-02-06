@@ -126,16 +126,15 @@ public:
         auto entity = initView.createEntity();
         initView.addComponent!SpriteComponent(entity)
             .texture = new Texture("../proving-grounds/assets/Graveyard/png/BG.png");
-        initView.data!TransformComponent(entity).position.z = 0.3;
+        initView.data!TransformComponent(entity).position.z = -0.3;
 
-        /* Hack! 
+        /* Hack! */
         auto entity_map = initView.createEntity();
         auto map = initView.addComponent!MapComponent(entity_map);
         map.map = TMXParser.loadTMX(this.mapFile);
 
         bounds = rectanglef(0.0f, 0.0f, cast(float) map.map.width * map.map.tileWidth,
                 cast(float) map.map.height * map.map.tileHeight);
-                */
 
         return true;
     }
