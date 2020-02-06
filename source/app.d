@@ -77,6 +77,9 @@ int main(string[] args)
     /* Set our root directory up */
     context.resource.root = context.resource.root ~ "/assets/built";
 
+    context.component.registerComponent!SpriteComponent;
+    context.component.registerComponent!MapComponent;
+
     /* Without a SpriteRenderer, nothing will be drawn. 
     context.renderGroup.add(new MapRenderer);
     context.renderGroup.add(new SpriteRenderer);
