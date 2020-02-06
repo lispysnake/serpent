@@ -26,6 +26,8 @@ public import serpent.core.context;
 public import serpent.graphics.display;
 
 import bindbc.bgfx;
+import serpent.graphics.frame;
+
 
 /**
  * The Pipeline is responsible for managing the underlying graphical context,
@@ -41,6 +43,7 @@ final class Pipeline
 {
     Context _context = null;
     Display _display = null;
+    __gshared FramePacket packet;
 
 package:
 
@@ -48,6 +51,9 @@ package:
     {
         this._display = display;
         this._context = context;
+
+        /* Allow tuning this in future */
+        packet = FramePacket(30_000);
     }
 
 private:
@@ -117,6 +123,7 @@ public:
      */
     final void render() @system @nogc nothrow
     {
+        packet.startTick();
         prerender();
         postrender();
     }
