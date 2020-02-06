@@ -37,6 +37,10 @@ private:
     box2f bounds;
     string mapFile;
 
+    Entity background;
+    Entity tileMap;
+    Entity player;
+
     /**
      * A mouse button was just pressed
      */
@@ -118,24 +122,24 @@ public:
         initView.addComponent!SpriteComponent(entityLogo).texture = logo;
         initView.data!TransformComponent(entityLogo).position = transform;
 
-        auto entity = initView.createEntity();
-        initView.addComponent!SpriteComponent(entity)
+        background = initView.createEntity();
+        initView.addComponent!SpriteComponent(background)
             .texture = new Texture("../proving-grounds/assets/Graveyard/png/BG.png");
-        initView.data!TransformComponent(entity).position.z = -0.3;
+        initView.data!TransformComponent(background).position.z = -0.3;
 
         /* Hack! */
-        auto entity_map = initView.createEntity();
-        auto map = initView.addComponent!MapComponent(entity_map);
+        tileMap = initView.createEntity();
+        auto map = initView.addComponent!MapComponent(tileMap);
         map.map = TMXParser.loadTMX(this.mapFile);
 
-        auto entityKnight = initView.createEntity();
-        initView.addComponent!SpriteComponent(entityKnight)
+        player = initView.createEntity();
+        initView.addComponent!SpriteComponent(player)
             .texture = new Texture("../proving-grounds/assets/Zombie/png/male/Idle (1).png");
-        initView.data!TransformComponent(entityKnight).position.z = -0.1f;
-        initView.data!TransformComponent(entityKnight).position.x = 390.0f;
-        initView.data!TransformComponent(entityKnight).position.y = 350.0f;
-        initView.data!TransformComponent(entityKnight).scale.x = 0.6f;
-        initView.data!TransformComponent(entityKnight).scale.y = 0.6f;
+        initView.data!TransformComponent(player).position.z = -0.1f;
+        initView.data!TransformComponent(player).position.x = 390.0f;
+        initView.data!TransformComponent(player).position.y = 350.0f;
+        initView.data!TransformComponent(player).scale.x = 0.6f;
+        initView.data!TransformComponent(player).scale.y = 0.6f;
 
         bounds = rectanglef(0.0f, 0.0f, cast(float) map.map.width * map.map.tileWidth,
                 cast(float) map.map.height * map.map.tileHeight);
