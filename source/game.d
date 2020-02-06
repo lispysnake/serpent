@@ -109,19 +109,14 @@ public:
         auto logo = new Texture("assets/raw/logo.png");
 
         auto Z = 0.01f;
-        auto X = 0.0f;
-        auto Y = 0.0f;
-        foreach (i; 0 .. 3)
-        {
-            auto transform = vec3f(X, Y, Z);
-            Z += 0.1f;
-            X += 20.0f;
-            Y += 20.0f;
+        auto X = 1366.0f - logo.width - 10;
+        auto Y = 768.0f - logo.height - 10;
+        auto transform = vec3f(X, Y, Z);
+        Z += 0.1f;
 
-            auto entity = initView.createEntity();
-            initView.addComponent!SpriteComponent(entity).texture = logo;
-            initView.data!TransformComponent(entity).position = transform;
-        }
+        auto entityLogo = initView.createEntity();
+        initView.addComponent!SpriteComponent(entityLogo).texture = logo;
+        initView.data!TransformComponent(entityLogo).position = transform;
 
         auto entity = initView.createEntity();
         initView.addComponent!SpriteComponent(entity)
@@ -132,6 +127,15 @@ public:
         auto entity_map = initView.createEntity();
         auto map = initView.addComponent!MapComponent(entity_map);
         map.map = TMXParser.loadTMX(this.mapFile);
+
+        auto entityKnight = initView.createEntity();
+        initView.addComponent!SpriteComponent(entityKnight)
+            .texture = new Texture("../proving-grounds/assets/Knight/png/Idle (1).png");
+        initView.data!TransformComponent(entityKnight).position.z = -0.1f;
+        initView.data!TransformComponent(entityKnight).position.x = 100.0f;
+        initView.data!TransformComponent(entityKnight).position.y = 250.0f;
+        initView.data!TransformComponent(entityKnight).scale.x = 0.6f;
+        initView.data!TransformComponent(entityKnight).scale.y = 0.6f;
 
         bounds = rectanglef(0.0f, 0.0f, cast(float) map.map.width * map.map.tileWidth,
                 cast(float) map.map.height * map.map.tileHeight);
