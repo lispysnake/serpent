@@ -37,6 +37,9 @@ import serpent.core.transform;
 /**
  * MapRenderer walks through a tilemap and dispatches relevant drawing
  * of quads through Sprite APIs.
+ *
+ * TODO: Split renderer to work on MapLayer entities. This will massively
+ * improve approach to layering sprites.
  */
 final class MapRenderer : Renderer
 {

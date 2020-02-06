@@ -97,8 +97,8 @@ public:
         writeln("Game Init");
 
         /* We need input working. */
-        //context.input.mousePressed.connect(&onMousePressed);
-        //context.input.mouseMoved.connect(&onMouseMoved);
+        context.input.mousePressed.connect(&onMousePressed);
+        context.input.mouseMoved.connect(&onMouseMoved);
         context.input.keyReleased.connect(&onKeyReleased);
 
         /* Create our first scene */
