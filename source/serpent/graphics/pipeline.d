@@ -152,7 +152,7 @@ public:
             r.queryVisibles(queryView, packet);
         }
 
-        auto heap = heapify!("a.transformPosition.z < b.transformPosition.z")(
+        auto heap = heapify!("a.transformPosition.z > b.transformPosition.z")(
                 packet.visibleEntities);
 
         /* Submission */

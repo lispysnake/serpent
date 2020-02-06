@@ -106,10 +106,27 @@ public:
         context.display.addScene(s);
         s.addCamera(new OrthographicCamera());
 
-        auto entity = initView.createEntity();
         auto logo = new Texture("assets/raw/logo.png");
-        initView.addComponent!SpriteComponent(entity);
-        initView.data!SpriteComponent(entity).texture = logo;
+
+        auto Z = 0.01f;
+        auto X = 0.0f;
+        auto Y = 0.0f;
+        foreach (i; 0 .. 3)
+        {
+            auto transform = vec3f(X, Y, Z);
+            Z += 0.01f;
+            X += 20.0f;
+            Y += 20.0f;
+
+            auto entity = initView.createEntity();
+            initView.addComponent!SpriteComponent(entity).texture = logo;
+            initView.data!TransformComponent(entity).position = transform;
+        }
+
+        auto entity = initView.createEntity();
+        initView.addComponent!SpriteComponent(entity)
+            .texture = new Texture("../proving-grounds/assets/Graveyard/png/BG.png");
+        initView.data!TransformComponent(entity).position.z = 0.3;
 
         /* Hack! 
         auto entity_map = initView.createEntity();

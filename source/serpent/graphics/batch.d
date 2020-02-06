@@ -25,7 +25,6 @@ module serpent.graphics.batch;
 import bindbc.bgfx;
 import std.stdint;
 import std.container.array;
-import std.container.binaryheap;
 
 import serpent.camera : WorldOrigin;
 import serpent.graphics.shader;
@@ -182,10 +181,9 @@ public:
             return;
         }
 
-        auto heap = heapify!("a.texture.path < b.texture.path")(drawOps[0 .. quadIndex]);
         uint drawIndex = 0;
         Texture lastTexture = null;
-        foreach (ref item; heap)
+        foreach (ref item; drawOps[0 .. quadIndex])
         {
             if (drawIndex >= maxQuadsPerDraw)
             {
@@ -205,7 +203,6 @@ public:
             renderQuad(encoder, drawIndex, item);
             ++drawIndex;
         }
-        heap.release();
         blitQuads(encoder, drawIndex + 1, lastTexture);
 
         /* Finished now, set the quadIndex. */
@@ -286,12 +283,9 @@ public:
         bgfx_encoder_set_texture(encoder, 0, cast(bgfx_uniform_handle_t) 0, texture.handle,
                 BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP | BGFX_SAMPLER_MAG_POINT);
 
-        /* What we need. *
         bgfx_encoder_set_state(encoder,
-                0UL | BGFX_STATE_WRITE_RGB | BGFX_STATE_DEPTH_TEST_LEQUAL | BGFX_STATE_WRITE_Z | BlendState.Alpha, 0);
-        */
-        bgfx_encoder_set_state(encoder,
-                0UL | BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A | BlendState.Alpha, 0);
+                0UL | BGFX_STATE_WRITE_RGB | BGFX_STATE_DEPTH_TEST_LEQUAL | BGFX_STATE_WRITE_Z | BlendState.Alpha,
+                0);
         bgfx_encoder_submit(encoder, 0, shader.handle, 0, false);
 
         /* Allocate a new VB/IB pair */
