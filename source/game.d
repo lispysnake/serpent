@@ -130,10 +130,10 @@ public:
 
         auto entityKnight = initView.createEntity();
         initView.addComponent!SpriteComponent(entityKnight)
-            .texture = new Texture("../proving-grounds/assets/Knight/png/Idle (1).png");
+            .texture = new Texture("../proving-grounds/assets/Zombie/png/male/Idle (1).png");
         initView.data!TransformComponent(entityKnight).position.z = -0.1f;
-        initView.data!TransformComponent(entityKnight).position.x = 100.0f;
-        initView.data!TransformComponent(entityKnight).position.y = 250.0f;
+        initView.data!TransformComponent(entityKnight).position.x = 390.0f;
+        initView.data!TransformComponent(entityKnight).position.y = 350.0f;
         initView.data!TransformComponent(entityKnight).scale.x = 0.6f;
         initView.data!TransformComponent(entityKnight).scale.y = 0.6f;
 
