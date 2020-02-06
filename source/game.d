@@ -97,8 +97,8 @@ public:
         writeln("Game Init");
 
         /* We need input working. */
-        context.input.mousePressed.connect(&onMousePressed);
-        context.input.mouseMoved.connect(&onMouseMoved);
+        //context.input.mousePressed.connect(&onMousePressed);
+        //context.input.mouseMoved.connect(&onMouseMoved);
         context.input.keyReleased.connect(&onKeyReleased);
 
         /* Create our first scene */
@@ -106,13 +106,19 @@ public:
         context.display.addScene(s);
         s.addCamera(new OrthographicCamera());
 
-        /* Hack! */
+        auto entity = initView.createEntity();
+        auto logo = new Texture("assets/raw/logo.png");
+        initView.addComponent!SpriteComponent(entity);
+        initView.data!SpriteComponent(entity).texture = logo;
+
+        /* Hack! 
         auto entity_map = initView.createEntity();
         auto map = initView.addComponent!MapComponent(entity_map);
         map.map = TMXParser.loadTMX(this.mapFile);
 
         bounds = rectanglef(0.0f, 0.0f, cast(float) map.map.width * map.map.tileWidth,
                 cast(float) map.map.height * map.map.tileHeight);
+                */
 
         return true;
     }
