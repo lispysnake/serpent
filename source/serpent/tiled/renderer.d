@@ -54,7 +54,8 @@ public:
 
     final override void submit(View!ReadOnly queryView, ref QuadBatch batch, EntityID id)
     {
-
+        // auto map = queryView.data!MapComponent(id);
+        drawMap(queryView, batch, id);
     }
 
     /**
@@ -63,11 +64,14 @@ public:
     final void drawMap(View!ReadOnly dataView, ref QuadBatch qb, EntityID entity)
     {
         auto mapComponent = dataView.data!MapComponent(entity);
+        auto transform = dataView.data!TransformComponent(entity);
+
         float drawX = 0.0f;
         float drawY = 0.0f;
         auto transformScale = vec3f(1.0f, 1.0f, 1.0f);
 
-        qb.begin();
+        float drawZ = transform.position.z;
+
         foreach (layer; mapComponent.map.layers)
         {
             foreach (y; 0 .. layer.height)
@@ -84,7 +88,7 @@ public:
                     }
                     auto t2 = tileset.getTile(tile);
 
-                    auto transformPosition = vec3f(drawX, drawY, 0.0f);
+                    auto transformPosition = vec3f(drawX, drawY, drawZ);
 
                     float tileWidth = mapComponent.map.tileWidth;
                     float tileHeight = mapComponent.map.tileHeight;
@@ -113,9 +117,7 @@ public:
             }
             drawX = 0;
             drawY = 0;
-
-            /* Flush between layers to preserve depth. */
-            qb.flush(encoder);
+            drawZ += 0.1f;
         }
         qb.flush(encoder);
     }

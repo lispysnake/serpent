@@ -114,7 +114,7 @@ public:
         foreach (i; 0 .. 3)
         {
             auto transform = vec3f(X, Y, Z);
-            Z += 0.01f;
+            Z += 0.1f;
             X += 20.0f;
             Y += 20.0f;
 
