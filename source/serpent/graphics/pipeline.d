@@ -32,6 +32,8 @@ import bindbc.bgfx;
 import serpent.graphics.frame;
 import std.exception : enforce;
 
+import serpent.graphics.batch;
+
 /**
  * The Pipeline is responsible for managing the underlying graphical context,
  * such as OpenGL (or through an abstraction like bgfx) and actually getting
@@ -44,10 +46,15 @@ import std.exception : enforce;
  */
 final class Pipeline
 {
+private:
+
     Context _context = null;
     Display _display = null;
     __gshared FramePacket packet;
     Renderer[] _renderers;
+
+    /* Temporary: We need a draw operation queue we can sort! */
+    QuadBatch qb;
 
 package:
 
@@ -164,5 +171,16 @@ public:
     final @property Display display() @safe @nogc nothrow
     {
         return _display;
+    }
+
+    final void bootstrap()
+    {
+        qb = new QuadBatch(context);
+    }
+
+    final void shutdown()
+    {
+        qb.destroy();
+        qb = null;
     }
 }

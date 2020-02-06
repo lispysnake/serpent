@@ -55,6 +55,6 @@ public:
      */
     final override void submit(View!ReadOnly queryView, ref FramePacket packet, EntityID entity) @safe
     {
-        
+
     }
 }

@@ -261,9 +261,6 @@ public:
         bgfx_init(&bInit);
         reset();
         updateDebug();
-
-        /* Set clearing of view0 background. */
-        _pipeline.clear(0);
     }
 
     /**

@@ -190,6 +190,10 @@ public:
         enforce(info.driverType != DriverType.Unsupported,
                 "Unsupported underlying driver. Please report this.");
 
+        /* Set clearing of view0 background. */
+        _display.pipeline.bootstrap();
+        _display.pipeline.clear(0);
+
         /* Bootstrap processor groups before app loads anything */
         bootstrapGroups();
 
@@ -223,6 +227,7 @@ public:
         }
 
         finishGroups();
+        _display.pipeline.shutdown();
 
         return 0;
     }
