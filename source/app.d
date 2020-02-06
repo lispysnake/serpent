@@ -80,6 +80,8 @@ int main(string[] args)
     context.component.registerComponent!SpriteComponent;
     context.component.registerComponent!MapComponent;
 
+    context.display.pipeline.addRenderer(new SpriteRenderer);
+
     /* Without a SpriteRenderer, nothing will be drawn. 
     context.renderGroup.add(new MapRenderer);
     context.renderGroup.add(new SpriteRenderer);

@@ -22,13 +22,9 @@
 
 module serpent.graphics.sprite.renderer;
 
-import serpent.core.transform : TransformComponent;
+public import serpent.graphics.renderer;
 
-public import serpent.graphics.batch;
-public import serpent.graphics.sprite : SpriteComponent;
-public import serpent.core.entity;
-public import serpent.core.processor;
-public import serpent.core.view;
+import serpent.graphics.sprite : SpriteComponent;
 
 /**
  * The SpriteRenderer will collect and draw all visible sprites within
@@ -38,38 +34,19 @@ public import serpent.core.view;
  * going to be ugly and draw a quad at a time. This results in multiple
  * draw calls per frame, and is hella inefficient.
  */
-final class SpriteRenderer : Processor!ReadOnly
+final class SpriteRenderer : Renderer
 {
-
-private:
-    QuadBatch qb;
 
 public:
 
-    /* Load shaders */
-    final override void bootstrap(View!ReadOnly dataView) @system
+    /**
+     * Find all sprites. We should add camera culling here but meh.
+     */
+    final override void queryVisibles(View!ReadOnly queryView, ref FramePacket packet) @safe
     {
-        context.component.registerComponent!SpriteComponent;
-        qb = new QuadBatch(context);
-
-    }
-
-    final override void run(View!ReadOnly dataView)
-    {
-        qb.begin();
-        foreach (entity; dataView.withComponent!SpriteComponent)
+        foreach (entity; queryView.withComponent!SpriteComponent)
         {
-            auto transform = dataView.data!TransformComponent(entity);
-            qb.drawTexturedQuad(encoder, dataView.data!SpriteComponent(entity)
-                    .texture, transform.position, transform.scale);
+            packet.pushVisibleEntity(entity);
         }
-        qb.flush(encoder);
-    }
-
-    /* Unload shaders while context is active  */
-    final override void finish(View!ReadOnly dataView) @system
-    {
-        qb.destroy();
-        qb = null;
     }
 }
