@@ -23,11 +23,14 @@
 module serpent.graphics.pipeline;
 
 public import serpent.core.context;
+public import serpent.core.policy;
+public import serpent.core.view;
 public import serpent.graphics.display;
+public import serpent.graphics.renderer;
 
 import bindbc.bgfx;
 import serpent.graphics.frame;
-
+import std.exception : enforce;
 
 /**
  * The Pipeline is responsible for managing the underlying graphical context,
@@ -44,6 +47,7 @@ final class Pipeline
     Context _context = null;
     Display _display = null;
     __gshared FramePacket packet;
+    Renderer[] _renderers;
 
 package:
 
@@ -109,6 +113,11 @@ private:
 
 public:
 
+    final void addRenderer(Renderer r) @safe
+    {
+        enforce(!context.running, "Cannot add renderers to a running context");
+        _renderers ~= r;
+    }
     /**
      * Clear the view
      */
@@ -121,10 +130,17 @@ public:
     /**
      * Perform one full render tick
      */
-    final void render() @system @nogc nothrow
+    final void render(View!ReadOnly queryView) @system
     {
         packet.startTick();
         prerender();
+
+        /* Query visibles */
+        foreach (r; _renderers)
+        {
+            r.queryVisibles(queryView, packet);
+        }
+
         postrender();
     }
 

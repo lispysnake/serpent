@@ -219,7 +219,7 @@ public:
             /* Force stepping through the Entity system */
             _entity.step();
             scheduledExecution();
-            _display.pipeline.render();
+            _display.pipeline.render(View!ReadOnly(entity, component));
         }
 
         finishGroups();
