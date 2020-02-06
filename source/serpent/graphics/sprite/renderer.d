@@ -49,4 +49,12 @@ public:
             packet.pushVisibleEntity(entity, this);
         }
     }
+
+    /**
+     * Draw the visible on screen now.
+     */
+    final override void submit(View!ReadOnly queryView, ref FramePacket packet, EntityID entity) @safe
+    {
+        
+    }
 }

@@ -41,4 +41,9 @@ abstract class Renderer
      * entities it knows it can draw, then submit them to the packet.
      */
     abstract void queryVisibles(View!ReadOnly queryView, ref FramePacket packet);
+
+    /**
+     * The renderer now needs to submit the visible to the framepacket for drawing
+     */
+    abstract void submit(View!ReadOnly queryView, ref FramePacket packet, EntityID id);
 }

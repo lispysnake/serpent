@@ -141,6 +141,12 @@ public:
             r.queryVisibles(queryView, packet);
         }
 
+        /* Submission (TODO: Sort by z-index) */
+        foreach (s; packet.visibleEntities)
+        {
+            s.renderer.submit(queryView, packet, s.id);
+        }
+
         postrender();
     }
 
