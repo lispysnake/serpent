@@ -30,6 +30,7 @@ import serpent.camera : WorldOrigin;
 import serpent.graphics.shader;
 import serpent.graphics.blend;
 import serpent.graphics.vertex;
+import serpent.core.ringbuffer;
 
 public import serpent.core.context;
 public import serpent.graphics.texture;
@@ -72,10 +73,7 @@ private:
     bgfx_transient_vertex_buffer_t tvb;
     ulong quadIndex = 0;
 
-    uint _maxQuads = 3000; /**<Default to caching 3000 sprites before implicit flush */
-    uint _maxQuadsPerDraw = 1000; /**<Default to 1000 quads per call */
-
-    Array!TexturedQuad drawOps;
+    RingBuffer!TexturedQuad drawOps;
 
     /**
      * Update the current Context
@@ -101,11 +99,10 @@ public:
         auto fragment = new Shader(fp);
         shader = new Program(vertex, fragment);
 
-        /* Allow 1000 sprites, 6000 indices, 4000 vertices */
-        drawOps.reserve(maxQuads);
-        drawOps.length = maxQuads;
-        maxVertices = numVertices * maxQuadsPerDraw;
-        maxIndices = numIndices * maxQuadsPerDraw;
+        /* Allow 100 sprites, 600 indices, 400 vertices */
+        drawOps = RingBuffer!TexturedQuad(1_00);
+        maxVertices = numVertices * 1_00;
+        maxIndices = numIndices * 1_00;
     }
 
     ~this()
@@ -153,22 +150,22 @@ public:
     final void drawTexturedQuad(bgfx_encoder_t* encoder, immutable(Texture) texture,
             vec3f transformPosition, vec3f transformScale, float width, float height, box2f clip) @trusted
     {
-        /* Straight up copy it into the draw queue */
-        drawOps[quadIndex].texture = cast(Texture) texture;
-        drawOps[quadIndex].transformPosition = transformPosition;
-        drawOps[quadIndex].transformScale = transformScale;
-        drawOps[quadIndex].width = width;
-        drawOps[quadIndex].height = height;
-        drawOps[quadIndex].clip = clip;
-
-        ++quadIndex;
-
         /* When too many quads are added, force a flush */
-        if (quadIndex >= maxQuads)
+        if (drawOps.full())
         {
             flush(encoder);
-            quadIndex = 0;
         }
+
+        /* Straight up copy it into the draw queue */
+        auto quad = TexturedQuad();
+        quad.texture = cast(Texture) texture;
+        quad.transformPosition = transformPosition;
+        quad.transformScale = transformScale;
+        quad.width = width;
+        quad.height = height;
+        quad.clip = clip;
+
+        drawOps.add(quad);
     }
 
     /**
@@ -176,25 +173,15 @@ public:
      */
     final void flush(bgfx_encoder_t* encoder) @trusted
     {
-        if (quadIndex < 1)
-        {
-            return;
-        }
-
         uint drawIndex = 0;
         Texture lastTexture = null;
-        foreach (ref item; drawOps[0 .. quadIndex])
+        foreach (ref item; drawOps.data)
         {
-            if (drawIndex >= maxQuadsPerDraw)
-            {
-                blitQuads(encoder, drawIndex + 1, lastTexture);
-                drawIndex = 0;
-            }
             if (lastTexture != item.texture)
             {
                 if (lastTexture !is null)
                 {
-                    blitQuads(encoder, drawIndex + 1, lastTexture);
+                    blitQuads(encoder, drawIndex, lastTexture);
                     drawIndex = 0;
                 }
                 lastTexture = item.texture;
@@ -203,10 +190,8 @@ public:
             renderQuad(encoder, drawIndex, item);
             ++drawIndex;
         }
-        blitQuads(encoder, drawIndex + 1, lastTexture);
-
-        /* Finished now, set the quadIndex. */
-        quadIndex = 0;
+        blitQuads(encoder, drawIndex, lastTexture);
+        drawOps.reset();
     }
 
     final void renderQuad(bgfx_encoder_t* encoder, uint drawIndex, ref TexturedQuad quad) @trusted
@@ -297,24 +282,5 @@ public:
     pure @property final Context context() @safe @nogc nothrow
     {
         return _context;
-    }
-
-    /**
-     * The absolute top number of quads we'll cache before attempting to
-     * batch.
-     */
-    pure @property final const uint maxQuads() @safe @nogc nothrow
-    {
-        return _maxQuads;
-    }
-
-    /**
-     * The maximum number of quads to attempt in any draw call. Note this
-     * does not directly control the maximum calls per frame, but it certainly
-     * ooes influence it.
-     */
-    pure @property final const uint maxQuadsPerDraw() @safe @nogc nothrow
-    {
-        return _maxQuadsPerDraw;
     }
 }

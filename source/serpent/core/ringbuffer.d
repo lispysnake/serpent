@@ -63,4 +63,9 @@ public:
     {
         return _buffer[0 .. _bufferIndex];
     }
+
+    final const @property bool full() @trusted @nogc nothrow
+    {
+        return _bufferIndex == _bufferLimit - 1;
+    }
 }
