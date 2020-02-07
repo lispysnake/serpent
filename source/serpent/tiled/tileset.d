@@ -257,7 +257,7 @@ package:
             _tilesID[gid] = t;
             return;
         }
-        _tilesGUID[gid] = t;
+        _tilesGUID[gid - firstGID] = t;
     }
 
     /**
