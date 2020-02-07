@@ -34,30 +34,6 @@ final class DemoGame : App
 
 private:
     Scene s;
-    box2f bounds;
-    string mapFile;
-
-    Entity tileMap;
-
-    /**
-     * A mouse button was just pressed
-     */
-    final void onMousePressed(MouseEvent e) @system
-    {
-        writefln("Pressed (%u): %f %f", e.button, e.x, e.y);
-    }
-
-    /**
-     * The mouse was just moved
-     */
-    final void onMouseMoved(MouseEvent e) @trusted
-    {
-        auto viewport = rectanglef(0.0f, 0.0f, cast(float) context.display.logicalWidth,
-                cast(float) context.display.logicalHeight);
-        writefln("Moved: %f %f", e.x, e.y);
-        s.camera.position = vec3f(e.x, e.y, 0.0f);
-        s.camera.clamp(bounds, viewport);
-    }
 
     /**
      * A keyboard key was just released
@@ -86,11 +62,6 @@ private:
 
 public:
 
-    this(string mapFile)
-    {
-        this.mapFile = mapFile;
-    }
-
     /**
      * All initial game setup should be done from bootstrap.
      */
@@ -99,22 +70,12 @@ public:
         writeln("Game Init");
 
         /* We need input working. */
-        context.input.mousePressed.connect(&onMousePressed);
-        context.input.mouseMoved.connect(&onMouseMoved);
         context.input.keyReleased.connect(&onKeyReleased);
 
         /* Create our first scene */
         s = new Scene("sample");
         context.display.addScene(s);
         s.addCamera(new OrthographicCamera());
-
-        /* Hack! */
-        tileMap = initView.createEntity();
-        auto map = initView.addComponent!MapComponent(tileMap);
-        map.map = TMXParser.loadTMX(this.mapFile);
-
-        bounds = rectanglef(0.0f, 0.0f, cast(float) map.map.width * map.map.tileWidth,
-                cast(float) map.map.height * map.map.tileHeight);
 
         return true;
     }

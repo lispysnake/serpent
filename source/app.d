@@ -37,10 +37,7 @@ import std.algorithm.searching : endsWith;
 int main(string[] args)
 {
     bool vulkan = false;
-    string mapFile = "assets/raw/testMap.tmx";
-    bool scale = false;
-    auto argp = getopt(args, std.getopt.config.bundling, "v|vulkan", "Use Vulkan instead of OpenGL", &vulkan, "m|map",
-            "Set the (TMX) mapfile to use", &mapFile, "s|scale", "Scale the display", &scale);
+    auto argp = getopt(args, std.getopt.config.bundling, "v|vulkan", "Use Vulkan instead of OpenGL", &vulkan);
 
     if (argp.helpWanted)
     {
@@ -48,19 +45,11 @@ int main(string[] args)
         return 0;
     }
 
-    if (!mapFile.endsWith(".tmx"))
-    {
-        writeln("Input mapFile should be a .tmx file");
-        return 1;
-    }
 
     /* Context is essential to *all* Serpent usage. */
     auto context = new Context();
     context.display.title("#serpent demo").size(1366, 768);
-    if (scale)
-    {
-        context.display.logicalSize(480, 270);
-    }
+    context.display.logicalSize(480, 270);
 
     /* We want OpenGL or Vulkan? */
     if (vulkan)
@@ -83,11 +72,6 @@ int main(string[] args)
     context.display.pipeline.addRenderer(new MapRenderer);
     context.display.pipeline.addRenderer(new SpriteRenderer);
 
-    /* Without a SpriteRenderer, nothing will be drawn. 
-    context.renderGroup.add(new MapRenderer);
-    context.renderGroup.add(new SpriteRenderer);
-    */
-
     /* Run the game now. */
-    return context.run(new DemoGame(mapFile));
+    return context.run(new DemoGame());
 }
