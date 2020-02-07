@@ -34,6 +34,7 @@ final class DemoGame : App
 
 private:
     Scene s;
+    Entity background;
 
     /**
      * A keyboard key was just released
@@ -77,6 +78,9 @@ public:
         context.display.addScene(s);
         s.addCamera(new OrthographicCamera());
 
+        background = initView.createEntity();
+        initView.addComponent!SpriteComponent(background).texture = new Texture(
+                "assets/SciFi/Environments/alien-environment/PNG/layers/background.png");
         return true;
     }
 }
