@@ -56,6 +56,7 @@ private:
     __gshared FramePacket packet;
     Renderer[] _renderers;
     bgfx_init_t bInit;
+    bool hadInit = false;
 
     /* Temporary: We need a draw operation queue we can sort! */
     QuadBatch qb;
@@ -178,7 +179,6 @@ public:
         packet.startTick();
         prerender();
         auto encoder = bgfx_encoder_begin(true);
-        qb.begin();
 
         /* Query visibles */
         foreach (r; _renderers)
@@ -197,7 +197,6 @@ public:
             s.renderer.submit(queryView, qb, s.id);
         }
 
-        qb.flush(encoder);
         bgfx_encoder_end(encoder);
 
         postrender();
@@ -217,10 +216,11 @@ public:
         /* TODO: Init on separate render thread */
         bInit.type = context.info.convDriver(display.driverType);
         bgfx_init(&bInit);
-
-        reset();
+        hadInit = true;
 
         qb = new QuadBatch(context);
+
+        reset();
     }
 
     final override void shutdown() @system nothrow
@@ -237,6 +237,10 @@ public:
      */
     final override void reset() @system nothrow
     {
+        if (!hadInit)
+        {
+            return;
+        }
         bgfx_reset(cast(ushort) display.width, cast(ushort) display.height,
                 BGFX_RESET_VSYNC | BGFX_RESET_SRGB_BACKBUFFER | BGFX_RESET_DEPTH_CLAMP,
                 bInit.resolution.format);
