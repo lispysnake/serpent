@@ -20,7 +20,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.graphics.bgfx;
+module serpent.graphics.pipeline.bgfx;
 
 /**
  * This package provides the bgfx implementation of our graphical pipeline
@@ -28,4 +28,4 @@ module serpent.graphics.bgfx;
  * a more D-centric way of doing things.
  */
 
-public import serpent.graphics.bgfx.pipeline;
+public import serpent.graphics.pipeline.bgfx.pipeline;

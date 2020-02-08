@@ -20,7 +20,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.graphics.bgfx.pipeline;
+module serpent.graphics.pipeline.bgfx.pipeline;
 
 public import serpent.core.context;
 public import serpent.core.policy;
