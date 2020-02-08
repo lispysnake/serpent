@@ -50,6 +50,7 @@ int main(string[] args)
     auto context = new Context();
     context.display.title("#serpent demo").size(1366, 768);
     context.display.logicalSize(480, 270);
+    context.display.backgroundColor = 0x0f;
 
     /* We want OpenGL or Vulkan? */
     if (vulkan)
