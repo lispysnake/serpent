@@ -192,7 +192,9 @@ public:
         init();
 
         this.context = ctx;
-        this._pipeline = new Pipeline(ctx, this);
+        import serpent.graphics.bgfx;
+
+        this._pipeline = new BgfxPipeline(ctx, this);
 
         this._width = width;
         this._height = height;
@@ -550,7 +552,6 @@ public:
         {
             return;
         }
-        _pipeline.clear(0);
     }
 
     /**

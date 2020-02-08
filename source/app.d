@@ -70,8 +70,8 @@ int main(string[] args)
     context.component.registerComponent!SpriteComponent;
     context.component.registerComponent!MapComponent;
 
-    context.display.pipeline.addRenderer(new MapRenderer);
-    context.display.pipeline.addRenderer(new SpriteRenderer);
+    //context.display.pipeline.addRenderer(new MapRenderer);
+    //context.display.pipeline.addRenderer(new SpriteRenderer);
 
     /* Run the game now. */
     return context.run(new DemoGame());

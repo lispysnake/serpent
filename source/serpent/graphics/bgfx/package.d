@@ -27,3 +27,5 @@ module serpent.graphics.bgfx;
  * We've designed an abstraction around the underlying API in order to provide
  * a more D-centric way of doing things.
  */
+
+public import serpent.graphics.bgfx.pipeline;

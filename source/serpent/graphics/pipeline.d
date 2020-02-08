@@ -22,178 +22,75 @@
 
 module serpent.graphics.pipeline;
 
-public import serpent.core.context;
-public import serpent.core.policy;
-public import serpent.core.view;
-public import serpent.graphics.display;
-public import serpent.graphics.renderer;
-
-import bindbc.bgfx;
-import serpent.graphics.frame;
 import std.exception : enforce;
-import std.container.binaryheap;
 
-import serpent.graphics.batch;
+public import serpent.core.context;
+public import serpent.graphics.display;
+public import serpent.core.policy;
 
 /**
- * The Pipeline is responsible for managing the underlying graphical context,
- * such as OpenGL (or through an abstraction like bgfx) and actually getting
- * entities on screen.
- *
- * It will precompute visible entities from the global entity cache and then
- * sort them prior to rendering.
- *
- * All rendering is done via Renderer implementations.
+ * The Pipeline is the main entry into the graphical system. All calls and
+ * implementation specifics will be handled by a concrete implementation
+ * of this Pipeline.
  */
-final class Pipeline
+abstract class Pipeline
 {
 private:
 
-    Context _context = null;
-    Display _display = null;
-    __gshared FramePacket packet;
-    Renderer[] _renderers;
-
-    /* Temporary: We need a draw operation queue we can sort! */
-    QuadBatch qb;
-
-package:
-
-    this(Context context, Display display)
-    {
-        this._display = display;
-        this._context = context;
-
-        /* Allow tuning this in future */
-        packet = FramePacket(30_000);
-    }
+    Context _context;
+    Display _display;
 
 private:
 
-    /**
-     * Perform any pre-rendering we need to do, such as clearing the
-     * display.
-     *
-     * TODO: Render everything to one framebuffer by default, and scale that framenbuffer
-     * so that the QuadBatch doesn't know about scale factors. It will also help us to
-     * solve the glitchy black bars when using non-aspect ratios.
-     */
-    final void prerender() @system @nogc nothrow
+    pure final @property void context(Context c) @safe
     {
-        /* Set clearing of view0 background. */
-        clear(0);
-
-        /* Set up auto scaling: http://www.david-amador.com/2013/04/opengl-2d-independent-resolution-rendering/ */
-        auto aspectRatio = cast(float) display.logicalWidth / cast(float) display.logicalHeight;
-        int w = display.width;
-        int h = cast(int)(w / aspectRatio + 0.5f);
-
-        /* Letter box it */
-        if (h > display.height)
-        {
-            h = display.height;
-            w = cast(int)(h * aspectRatio + 0.5f);
-        }
-
-        int vpX = (display.width / 2) - (w / 2);
-        int vpY = (display.height / 2) - (h / 2);
-
-        bgfx_set_view_rect(0, cast(ushort) vpX, cast(ushort) vpY, cast(ushort) w, cast(ushort) h);
-        bgfx_set_view_mode(0, bgfx_view_mode_t.BGFX_VIEW_MODE_DEPTHASCENDING);
-
-        /* Make sure view0 is drawn. */
-        bgfx_touch(0);
-
-        auto camera = display.scene.camera;
-        if (camera !is null)
-        {
-            camera.apply();
-        }
+        enforce(c !is null, "Cannot have a null context");
+        _context = c;
     }
 
-    /**
-     * Perform any required rendering
-     */
-    final void postrender() @system @nogc nothrow
+    pure final @property void display(Display d) @safe
     {
-        /* Skip frame now */
-        bgfx_frame(false);
+        enforce(d !is null, "Cannot have a null display");
+        _display = d;
     }
 
 public:
 
-    final void addRenderer(Renderer r) @safe
-    {
-        enforce(!context.running, "Cannot add renderers to a running context");
-        r.context = context;
-        _renderers ~= r;
-    }
     /**
-     * Clear the view
+     * Abstract constructor which should be called by concrete implementations
      */
-    final void clear(ushort viewIndex = 0) @system @nogc nothrow
+    this(Context c, Display d) @safe
     {
-        bgfx_set_view_clear(viewIndex, BGFX_CLEAR_COLOR | BGFX_CLEAR_DEPTH,
-                display.backgroundColor, 1.0f, 0);
-    }
-
-    /**
-     * Perform one full render tick
-     */
-    final void render(View!ReadOnly queryView) @system
-    {
-        packet.startTick();
-        prerender();
-        auto encoder = bgfx_encoder_begin(true);
-        qb.begin();
-
-        /* Query visibles */
-        foreach (r; _renderers)
-        {
-            r.encoder = encoder;
-            r.queryVisibles(queryView, packet);
-        }
-
-        auto heap = heapify!("a.transformPosition.z > b.transformPosition.z")(
-                packet.visibleEntities);
-
-        /* Submission */
-        foreach (s; heap)
-        {
-            s.renderer.encoder = encoder;
-            s.renderer.submit(queryView, qb, s.id);
-        }
-
-        qb.flush(encoder);
-        bgfx_encoder_end(encoder);
-
-        postrender();
+        context = c;
+        display = d;
     }
 
     /**
      * Return the underlying context
      */
-    final @property Context context() @safe @nogc nothrow
+    pure final @property Context context() @safe @nogc nothrow
     {
         return _context;
     }
 
-    /**
-     * Return the underlying display
-     */
-    final @property Display display() @safe @nogc nothrow
+    pure final @property Display display() @safe @nogc nothrow
     {
         return _display;
     }
 
-    final void bootstrap()
-    {
-        qb = new QuadBatch(context);
-    }
+    /**
+     * The implementation should now bootstrap itself
+     */
+    abstract void bootstrap() @system;
 
-    final void shutdown()
-    {
-        qb.destroy();
-        qb = null;
-    }
+    /**
+     * The implementation should now shutdown and clean up
+     * any resources.
+     */
+    abstract void shutdown() @system;
+
+    /**
+     * Perform all rendering for the current frame
+     */
+    abstract void render(View!ReadOnly queryView) @system;
 }
