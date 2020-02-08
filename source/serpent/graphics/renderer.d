@@ -42,6 +42,7 @@ abstract class Renderer
 
 private:
     bgfx_encoder_t* _encoder = null;
+    Context _context;
 
 package:
 
@@ -51,6 +52,14 @@ package:
     final @property void encoder(bgfx_encoder_t* encoder) @safe @nogc nothrow
     {
         _encoder = encoder;
+    }
+
+    /**
+     * Set the context used by the renderer
+     */
+    final @property void context(Context context) @safe @nogc nothrow
+    {
+        _context = context;
     }
 
 public:
@@ -65,8 +74,19 @@ public:
      */
     abstract void submit(View!ReadOnly queryView, ref QuadBatch batch, EntityID id);
 
+    /**
+     * Return underlying encoder
+     */
     final @property bgfx_encoder_t* encoder() @safe @nogc nothrow
     {
         return _encoder;
+    }
+
+    /**
+     * Return underlying context
+     */
+    final @property Context context() @safe @nogc nothrow
+    {
+        return _context;
     }
 }

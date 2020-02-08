@@ -125,6 +125,7 @@ public:
     final void addRenderer(Renderer r) @safe
     {
         enforce(!context.running, "Cannot add renderers to a running context");
+        r.context = context;
         _renderers ~= r;
     }
     /**
