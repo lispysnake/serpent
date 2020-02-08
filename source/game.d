@@ -128,7 +128,7 @@ public:
         sprite = initView.createEntity();
         initView.addComponent!SpriteComponent(sprite).texture = robotTextures[0];
         initView.data!TransformComponent(sprite).position.x = 30.0f;
-        initView.data!TransformComponent(sprite).position.y = texture.height - 70.0f;
+        initView.data!TransformComponent(sprite).position.y = texture.height - 73.0f;
         initView.data!TransformComponent(sprite).position.z = 0.1f;
 
         return true;
