@@ -195,9 +195,6 @@ public:
         enforce(info.driverType != DriverType.Unsupported,
                 "Unsupported underlying driver. Please report this.");
 
-        /* Bootstrap the display pipeline. */
-        _display.pipeline.bootstrap();
-
         /* Bootstrap processor groups before app loads anything */
         bootstrapGroups();
 

@@ -200,7 +200,7 @@ public:
         init();
 
         this.context = ctx;
-        this._pipeline = Pipeline.create(context, this, PipelineType.Bgfx);
+        this._pipeline = Pipeline.create(context, this, PipelineType.Noop);
 
         this._width = width;
         this._height = height;
@@ -268,6 +268,9 @@ public:
         {
             throw new SystemException("Couldn't create Window: %s".format(SDL_GetError()));
         }
+
+        /* At this point the pipeline is allowed to bootstrap */
+        pipeline.bootstrap();
 
         bgfx_init_ctor(&bInit);
 
