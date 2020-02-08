@@ -99,6 +99,7 @@ private:
         int vpY = (display.height / 2) - (h / 2);
 
         bgfx_set_view_rect(0, cast(ushort) vpX, cast(ushort) vpY, cast(ushort) w, cast(ushort) h);
+        bgfx_set_view_mode(0, bgfx_view_mode_t.BGFX_VIEW_MODE_DEPTHASCENDING);
 
         /* Make sure view0 is drawn. */
         bgfx_touch(0);

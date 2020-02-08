@@ -136,7 +136,8 @@ private:
     /**
      * reset bgfx buffer
      */
-    final void reset(uint flags = BGFX_RESET_VSYNC) @system @nogc nothrow
+    final void reset(
+            uint flags = BGFX_RESET_VSYNC | BGFX_RESET_SRGB_BACKBUFFER | BGFX_RESET_DEPTH_CLAMP) @system @nogc nothrow
     {
         if (!didInit)
         {
