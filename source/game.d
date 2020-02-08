@@ -80,17 +80,31 @@ public:
 
         auto texture = new Texture("assets/SciFi/Environments/bulkhead-walls/PNG/bg-wall.png");
         auto floortexture = new Texture("assets/SciFi/Environments/bulkhead-walls/PNG/floor.png");
+        auto altTexture = new Texture(
+                "assets/SciFi/Environments/bulkhead-walls/PNG/bg-wall-with-supports.png");
 
-        int columns = 480 / cast(int) texture.width + 1;
-        foreach (i; 0 .. columns)
+        float x = 0;
+        int idx = 0;
+        while (x < context.display.logicalWidth)
         {
             background ~= initView.createEntity();
-            initView.addComponent!SpriteComponent(background[i]).texture = texture;
-            initView.data!TransformComponent(background[i]).position.x = i * texture.width;
-            initView.data!TransformComponent(background[i]).position.z = -0.1f;
+            auto component = initView.addComponent!SpriteComponent(background[idx]);
+            if (idx % 2 == 0)
+            {
+                component.texture = altTexture;
+            }
+            else
+            {
+                component.texture = texture;
+            }
+            auto transform = initView.data!TransformComponent(background[idx]);
+            transform.position.x = x;
+            transform.position.z = -0.1f;
+            x += component.texture.width;
+            idx++;
         }
 
-        columns = 480 / cast(int) floortexture.width + 1;
+        int columns = 480 / cast(int) floortexture.width + 1;
         foreach (i; 0 .. columns)
         {
             auto floor = initView.createEntity();
@@ -104,7 +118,8 @@ public:
         initView.addComponent!SpriteComponent(sprite).texture = new Texture(
                 "assets/SciFi/Sprites/bipedal-Unit/PNG/sprites/bipedal-unit1.png");
         initView.data!TransformComponent(sprite).position.x = 30.0f;
-        initView.data!TransformComponent(sprite).position.y = texture.height - 74.0f;
+        initView.data!TransformComponent(sprite).position.y = texture.height - 70.0f;
+        initView.data!TransformComponent(sprite).position.z = 0.2f;
 
         return true;
     }
