@@ -67,6 +67,6 @@ public:
      */
     final override void reset() @system
     {
-
+        display.scene.camera.update();
     }
 }

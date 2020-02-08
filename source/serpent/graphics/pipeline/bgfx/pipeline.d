@@ -241,6 +241,7 @@ public:
         {
             return;
         }
+        display.scene.camera.update();
         bgfx_reset(cast(ushort) display.width, cast(ushort) display.height,
                 BGFX_RESET_VSYNC | BGFX_RESET_SRGB_BACKBUFFER | BGFX_RESET_DEPTH_CLAMP,
                 bInit.resolution.format);
