@@ -136,7 +136,7 @@ public:
         init();
 
         this.context = ctx;
-        this._pipeline = Pipeline.create(context, this, PipelineType.Noop);
+        this._pipeline = Pipeline.create(context, this, PipelineType.Bgfx);
 
         this._width = width;
         this._height = height;
