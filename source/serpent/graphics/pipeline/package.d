@@ -49,6 +49,8 @@ enum PipelineFlags
     Debug = 1 << 1, /**< Enable debug */
     DepthClamp = 1 << 2, /**< Enable depth clamping */
 
+
+
 }
 
 /**
@@ -155,4 +157,10 @@ public:
      * Perform all rendering for the current frame
      */
     abstract void render(View!ReadOnly queryView) @system;
+
+    /**
+     * Require the pipeline to reset attributes relating to the
+     * windowing system (height/width/etc)
+     */
+    abstract void reset() @system;
 }

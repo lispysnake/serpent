@@ -48,11 +48,25 @@ public:
     {
     }
 
+    /**
+     * Shut down the pipeline
+     */
     final override void shutdown() @system
     {
     }
 
+    /**
+     * Render everything in one cycle
+     */
     final override void render(View!ReadOnly queryView) @system
     {
+    }
+
+    /**
+     * Reset due to windowing change.
+     */
+    final override void reset() @system
+    {
+
     }
 }

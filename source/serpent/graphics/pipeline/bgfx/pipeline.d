@@ -32,9 +32,12 @@ import bindbc.bgfx;
 import serpent.graphics.frame;
 import std.exception : enforce;
 import std.container.binaryheap;
+import bindbc.sdl;
 
 import serpent.graphics.batch;
 import serpent.graphics.pipeline;
+import serpent : SystemException;
+import std.format;
 
 /**
  * The BgfxPipeline is responsible for managing the underlying graphical context,
@@ -52,6 +55,7 @@ private:
 
     __gshared FramePacket packet;
     Renderer[] _renderers;
+    bgfx_init_t bInit;
 
     /* Temporary: We need a draw operation queue we can sort! */
     QuadBatch qb;
@@ -104,6 +108,41 @@ private:
     {
         /* Skip frame now */
         bgfx_frame(false);
+    }
+
+    /**
+     * Integrate bgfx with our SDL_Window's native handles.
+     *
+     * We don't do any SDL rendering whether via SDL_Renderer or
+     * OpenGL context. /All/ drawing is performed through the bgfx
+     * library.
+     */
+    final void integrateWindowBgfx() @system
+    {
+        SDL_SysWMinfo wm;
+        SDL_VERSION(&wm.version_);
+
+        if (!SDL_GetWindowWMInfo(display.window, &wm))
+        {
+            throw new SystemException("Couldn't get Window Info: %s".format(SDL_GetError()));
+        }
+
+        bgfx_platform_data_t pd;
+        version (Posix)
+        {
+            /* X11 displays. Note we need to fix OSX integration separate. */
+            pd.ndt = wm.info.x11.display;
+            pd.nwh = cast(void*) wm.info.x11.window;
+        }
+        else
+        {
+            throw new SystemException("Unsupported platform");
+        }
+
+        pd.context = null;
+        pd.backBuffer = null;
+        pd.backBufferDS = null;
+        bgfx_set_platform_data(&pd);
     }
 
 public:
@@ -164,8 +203,23 @@ public:
         postrender();
     }
 
+    /**
+     * Bootstrap the bgfx pipeline.
+     */
     final override void bootstrap() @system
     {
+        /* Init our constructor */
+        bgfx_init_ctor(&bInit);
+
+        /* Integrate with the window */
+        integrateWindowBgfx();
+
+        /* TODO: Init on separate render thread */
+        bInit.type = context.info.convDriver(display.driverType);
+        bgfx_init(&bInit);
+
+        reset();
+
         qb = new QuadBatch(context);
     }
 
@@ -173,5 +227,18 @@ public:
     {
         qb.destroy();
         qb = null;
+
+        /* Shut down bgfx */
+        bgfx_shutdown();
+    }
+
+    /**
+     * Reset the bgfx backbuffer
+     */
+    final override void reset() @system nothrow
+    {
+        bgfx_reset(cast(ushort) display.width, cast(ushort) display.height,
+                BGFX_RESET_VSYNC | BGFX_RESET_SRGB_BACKBUFFER | BGFX_RESET_DEPTH_CLAMP,
+                bInit.resolution.format);
     }
 }

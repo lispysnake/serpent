@@ -23,7 +23,6 @@
 module serpent.graphics.display;
 
 import bindbc.sdl;
-import bindbc.bgfx;
 import std.string : toStringz, format;
 import std.exception : enforce;
 
@@ -55,7 +54,6 @@ private:
     SDL_Window* _window = null;
     bool _resizable = false;
     string _title = "serpent";
-    bgfx_init_t bInit;
     /* Default to Vulkan. */
     DriverType _driverType = DriverType.Vulkan;
     Pipeline _pipeline;
@@ -99,58 +97,6 @@ private:
     }
 
     /**
-     * Integrate bgfx with our SDL_Window's native handles.
-     *
-     * We don't do any SDL rendering whether via SDL_Renderer or
-     * OpenGL context. /All/ drawing is performed through the bgfx
-     * library.
-     */
-    final void integrateWindowBgfx() @system
-    {
-        SDL_SysWMinfo wm;
-        SDL_VERSION(&wm.version_);
-
-        if (!SDL_GetWindowWMInfo(window, &wm))
-        {
-            throw new SystemException("Couldn't get Window Info: %s".format(SDL_GetError()));
-        }
-
-        bgfx_platform_data_t pd;
-        version (Posix)
-        {
-            /* X11 displays. Note we need to fix OSX integration separate. */
-            pd.ndt = wm.info.x11.display;
-            pd.nwh = cast(void*) wm.info.x11.window;
-        }
-        else
-        {
-            throw new SystemException("Unsupported platform");
-        }
-
-        pd.context = null;
-        pd.backBuffer = null;
-        pd.backBufferDS = null;
-        bgfx_set_platform_data(&pd);
-    }
-
-    /**
-     * reset bgfx buffer
-     */
-    final void reset(
-            uint flags = BGFX_RESET_VSYNC | BGFX_RESET_SRGB_BACKBUFFER | BGFX_RESET_DEPTH_CLAMP) @system @nogc nothrow
-    {
-        if (!didInit)
-        {
-            return;
-        }
-        bgfx_reset(_width, _height, flags, bInit.resolution.format);
-        if (scene !is null && scene.camera !is null)
-        {
-            scene.camera.update();
-        }
-    }
-
-    /**
      * process pending window events
      */
     final bool processWindow(SDL_WindowEvent* event) @system
@@ -160,21 +106,11 @@ private:
         case SDL_WINDOWEVENT_RESIZED:
             _width = event.data1;
             _height = event.data2;
-            reset();
+            pipeline.reset();
             return true;
         default:
             return false;
         }
-    }
-
-    final void updateDebug() @system @nogc nothrow
-    {
-        if (!_debugMode)
-        {
-            bgfx_set_debug(0);
-            return;
-        }
-        bgfx_set_debug(BGFX_DEBUG_STATS | BGFX_DEBUG_TEXT);
     }
 
     /**
@@ -206,11 +142,11 @@ public:
         this._height = height;
     }
 
-    final ~this() @system @nogc nothrow
+    final ~this() @system
     {
         if (window)
         {
-            bgfx_shutdown();
+            pipeline.destroy();
             SDL_DestroyWindow(window);
         }
         shutdown();
@@ -271,16 +207,6 @@ public:
 
         /* At this point the pipeline is allowed to bootstrap */
         pipeline.bootstrap();
-
-        bgfx_init_ctor(&bInit);
-
-        integrateWindowBgfx();
-
-        /* TODO: Init on separate render thread */
-        bInit.type = context.info.convDriver(this._driverType);
-        bgfx_init(&bInit);
-        reset();
-        updateDebug();
     }
 
     /**
@@ -320,7 +246,7 @@ public:
     /**
      * Return the size of the display
      */
-    @property final vec2i size() @safe @nogc nothrow
+    @property final vec2i size() @safe @nogc
     {
         return vec2i(_width, _height);
     }
@@ -328,19 +254,19 @@ public:
     /**
      * Set the size to a given vec2i
      */
-    @property final Display size(vec2i size) @system @nogc nothrow
+    @property final Display size(vec2i size) @system
     {
         _width = size.x;
         _height = size.y;
         SDL_SetWindowSize(window, _width, _height);
-        reset();
+        pipeline.reset();
         return this;
     }
 
     /**
      * Set the size using integers
      */
-    @property final Display size(int w, int h) @system @nogc nothrow
+    @property final Display size(int w, int h) @system
     {
         return size(vec2i(w, h));
     }
@@ -565,35 +491,6 @@ public:
             return;
         }
         _backgroundColor = bg;
-        if (!didInit)
-        {
-            return;
-        }
-    }
-
-    /**
-     * Return true if debugMode is set
-     */
-    pure @property final bool debugMode() @safe @nogc nothrow
-    {
-        return _debugMode;
-    }
-
-    /**
-     * Update the debugMode
-     */
-    @property final void debugMode(bool b) @system @nogc nothrow
-    {
-        if (_debugMode == b)
-        {
-            return;
-        }
-        _debugMode = b;
-        if (!didInit)
-        {
-            return;
-        }
-        updateDebug();
     }
 
     /**
