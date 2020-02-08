@@ -192,9 +192,7 @@ public:
         init();
 
         this.context = ctx;
-        import serpent.graphics.pipeline.bgfx;
-
-        this._pipeline = new BgfxPipeline(ctx, this);
+        this._pipeline = Pipeline.create(context, this, PipelineType.Bgfx);
 
         this._width = width;
         this._height = height;

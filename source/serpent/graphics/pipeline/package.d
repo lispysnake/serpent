@@ -28,6 +28,12 @@ public import serpent.core.context;
 public import serpent.graphics.display;
 public import serpent.core.policy;
 
+enum PipelineType
+{
+    Bgfx = 0, /**< Use the bgfx pipeline */
+    Noop,     /**< Use the no-op pipeline */
+}
+
 /**
  * The Pipeline is the main entry into the graphical system. All calls and
  * implementation specifics will be handled by a concrete implementation
@@ -63,6 +69,24 @@ public:
     {
         context = c;
         display = d;
+    }
+
+    /**
+     * Create a new pipeline for the given pipeline type.
+     *
+     * This should only be called by the Display instance.
+     */
+    static final Pipeline create(Context context, Display display, PipelineType type) @system
+    {
+        switch (type)
+        {
+            case PipelineType.Bgfx:
+                import serpent.graphics.pipeline.bgfx;
+                return new BgfxPipeline(context, display);
+            case PipelineType.Noop:
+            default:
+                return null;
+        }
     }
 
     /**
