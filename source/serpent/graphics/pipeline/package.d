@@ -31,7 +31,8 @@ public import serpent.core.policy;
 enum PipelineType
 {
     Bgfx = 0, /**< Use the bgfx pipeline */
-    Noop,     /**< Use the no-op pipeline */
+    Noop, /**< Use the no-op pipeline */
+
 }
 
 /**
@@ -80,12 +81,13 @@ public:
     {
         switch (type)
         {
-            case PipelineType.Bgfx:
-                import serpent.graphics.pipeline.bgfx;
-                return new BgfxPipeline(context, display);
-            case PipelineType.Noop:
-            default:
-                return null;
+        case PipelineType.Bgfx:
+            import serpent.graphics.pipeline.bgfx;
+
+            return new BgfxPipeline(context, display);
+        case PipelineType.Noop:
+        default:
+            return null;
         }
     }
 
