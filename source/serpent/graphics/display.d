@@ -52,7 +52,7 @@ private:
     int _height;
     int _width;
     bool _visible = false;
-    SDL_Window* window = null;
+    SDL_Window* _window = null;
     bool _resizable = false;
     string _title = "serpent";
     bgfx_init_t bInit;
@@ -177,6 +177,14 @@ private:
         bgfx_set_debug(BGFX_DEBUG_STATS | BGFX_DEBUG_TEXT);
     }
 
+    /**
+     * Set the window property.
+     */
+    final @property void window(SDL_Window* window) @safe @nogc nothrow
+    {
+        _window = window;
+    }
+
 public:
 
     /** Must have window attributes to construct */
@@ -206,6 +214,14 @@ public:
             SDL_DestroyWindow(window);
         }
         shutdown();
+    }
+
+    /**
+     * Return the underlying SDL_Window for this display
+     */
+    pure final @property SDL_Window* window() @safe @nogc nothrow
+    {
+        return _window;
     }
 
     final bool process(SDL_Event* event) @system

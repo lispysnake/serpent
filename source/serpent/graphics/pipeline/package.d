@@ -48,6 +48,7 @@ enum PipelineFlags
     VerticalSync = 1 << 0, /**< Enable vsync */
     Debug = 1 << 1, /**< Enable debug */
     DepthClamp = 1 << 2, /**< Enable depth clamping */
+
 }
 
 /**
