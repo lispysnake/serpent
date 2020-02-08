@@ -25,6 +25,7 @@ import std.stdio : writeln, writefln;
 import std.exception;
 import bindbc.sdl;
 import serpent.tiled;
+import std.format;
 
 /**
  * Provided merely for demo purposes.
@@ -35,6 +36,9 @@ final class DemoGame : App
 private:
     Scene s;
     Entity[] background;
+    Texture[7] robotTextures;
+    Entity sprite;
+    ulong robotIndex;
 
     /**
      * A keyboard key was just released
@@ -114,13 +118,28 @@ public:
                 .position.y = texture.height - floortexture.height;
         }
 
-        auto sprite = initView.createEntity();
-        initView.addComponent!SpriteComponent(sprite).texture = new Texture(
-                "assets/SciFi/Sprites/bipedal-Unit/PNG/sprites/bipedal-unit1.png");
+        foreach (i; 0 .. 7)
+        {
+            robotTextures[i] = new Texture(
+                    "assets/SciFi/Sprites/bipedal-Unit/PNG/sprites/bipedal-unit%d.png".format(i + 1));
+        }
+
+        sprite = initView.createEntity();
+        initView.addComponent!SpriteComponent(sprite).texture = robotTextures[0];
         initView.data!TransformComponent(sprite).position.x = 30.0f;
         initView.data!TransformComponent(sprite).position.y = texture.height - 70.0f;
         initView.data!TransformComponent(sprite).position.z = 0.1f;
 
         return true;
+    }
+
+    final override void update(View!ReadWrite view)
+    {
+        robotIndex++;
+        if (robotIndex >= robotTextures.length)
+        {
+            robotIndex = 0;
+        }
+        view.data!SpriteComponent(sprite).texture = robotTextures[robotIndex];
     }
 }
