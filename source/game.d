@@ -39,6 +39,7 @@ private:
     Texture[7] robotTextures;
     Entity sprite;
     ulong robotIndex;
+    Duration passed;
 
     /**
      * A keyboard key was just released
@@ -135,6 +136,15 @@ public:
 
     final override void update(View!ReadWrite view)
     {
+        view.data!TransformComponent(sprite).position.x += 0.3f;
+        import std.datetime;
+
+        passed += context.deltaTime();
+        if (passed <= dur!"msecs"(80))
+        {
+            return;
+        }
+        passed = context.deltaTime();
         robotIndex++;
         if (robotIndex >= robotTextures.length)
         {
