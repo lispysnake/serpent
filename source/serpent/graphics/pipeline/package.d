@@ -28,6 +28,8 @@ public import serpent.core.context;
 public import serpent.graphics.display;
 public import serpent.core.policy;
 
+public import std.typecons : BitFlags;
+
 enum PipelineType
 {
     Bgfx = 0, /**< Use the bgfx pipeline */
@@ -35,6 +37,17 @@ enum PipelineType
 
 
 
+}
+
+/**
+ * Pipelines may have one or more flags enabled to control rendering
+ * and informative behaviour.
+ */
+enum PipelineFlags
+{
+    VerticalSync = 1 << 0, /**< Enable vsync */
+    Debug = 1 << 1, /**< Enable debug */
+    DepthClamp = 1 << 2, /**< Enable depth clamping */
 }
 
 /**
@@ -48,6 +61,7 @@ private:
 
     Context _context;
     Display _display;
+    BitFlags!PipelineFlags _flags = PipelineFlags.VerticalSync;
 
 private:
 
@@ -72,6 +86,23 @@ public:
     {
         context = c;
         display = d;
+    }
+
+    /**
+     * Return the flags
+     */
+    pure @property final BitFlags!PipelineFlags flags() @safe @nogc nothrow
+    {
+        return _flags;
+    }
+
+    /**
+     * Update the pipeline flags. These will be reflected on the next render
+     * cycle.
+     */
+    pure @property final void flags(PipelineFlags flags) @safe @nogc nothrow
+    {
+        _flags = flags;
     }
 
     /**
