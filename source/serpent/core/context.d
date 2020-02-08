@@ -34,12 +34,15 @@ import serpent.core.entity;
 import serpent.core.group;
 import serpent.core.policy;
 import serpent.core.transform;
+import std.datetime.systime;
 
 public import serpent.graphics.display;
 public import serpent.app;
 public import serpent.info;
 public import serpent.input;
 public import serpent.resource;
+
+public import core.time : Duration;
 
 /**
  * Wrap groups with RW attribute to protect insertion order and
@@ -87,6 +90,8 @@ private:
     TaskPool tp;
     Group!ReadWrite _systemGroup;
     Group!ReadOnly _renderGroup;
+
+    Duration _ticks;
 
     /**
      * Bootstrap (sequentially) all processor groups before
@@ -215,15 +220,23 @@ public:
         _running = true;
         display.visible = true;
 
+        /* Time prior to first tick */
+        auto timeStart = Clock.currTime();
+
         /**
          * Main run loop
          */
         while (_running)
         {
+            auto timeNow = Clock.currTime();
+            _ticks = timeNow - timeStart;
+
             /* Force stepping through the Entity system */
             _entity.step();
             scheduledExecution();
             _display.pipeline.render(View!ReadOnly(entity, component));
+
+            timeStart = timeNow;
         }
 
         finishGroups();
@@ -343,6 +356,14 @@ public:
     pure @property final ComponentManager component() @safe @nogc nothrow
     {
         return _component;
+    }
+
+    /**
+     * Return the tick count for the current frame
+     */
+    pure @property final Duration deltaTime() @safe @nogc nothrow
+    {
+        return _ticks;
     }
 
     /**
