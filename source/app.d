@@ -24,6 +24,7 @@ import game : DemoGame;
 import std.getopt;
 import serpent.core;
 import serpent.graphics.sprite;
+import serpent.graphics.pipeline.info;
 import std.stdio : writeln, writefln;
 
 import serpent.tiled;
@@ -56,12 +57,12 @@ int main(string[] args)
     if (vulkan)
     {
         writeln("Requesting Vulkan display mode");
-        context.display.driverType = DriverType.Vulkan;
+        context.display.pipeline.driverType = DriverType.Vulkan;
     }
     else
     {
         writeln("Requesting OpenGL display mode");
-        context.display.driverType = DriverType.OpenGL;
+        context.display.pipeline.driverType = DriverType.OpenGL;
     }
 
     /* Set our root directory up */

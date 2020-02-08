@@ -54,8 +54,6 @@ private:
     SDL_Window* _window = null;
     bool _resizable = false;
     string _title = "serpent";
-    /* Default to Vulkan. */
-    DriverType _driverType = DriverType.Vulkan;
     Pipeline _pipeline;
 
     /* Our scenes mapping */
@@ -207,6 +205,9 @@ public:
 
         /* At this point the pipeline is allowed to bootstrap */
         pipeline.bootstrap();
+
+        enforce(pipeline.info.driverType != DriverType.Unsupported,
+                "Unsupported underlying driver. Please report this.");
     }
 
     /**
@@ -491,26 +492,6 @@ public:
             return;
         }
         _backgroundColor = bg;
-    }
-
-    /**
-     * Return the real driverType in use once the display is up and
-     * running
-     */
-    pure @property final DriverType driverType() @safe @nogc nothrow
-    {
-        return context.info.driverType();
-    }
-
-    /**
-     * Override the default Driver to use before the display is up
-     * and running. This allows forcibly switching to OpenGL, Vulkan, etc.
-     */
-    @property final Display driverType(DriverType d) @safe
-    {
-        enforce(!didInit, "Cannot change driverType when running.");
-        _driverType = d;
-        return this;
     }
 
     /**

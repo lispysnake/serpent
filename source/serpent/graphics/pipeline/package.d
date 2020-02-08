@@ -27,6 +27,7 @@ import std.exception : enforce;
 public import serpent.core.context;
 public import serpent.graphics.display;
 public import serpent.core.policy;
+public import serpent.graphics.pipeline.info;
 
 public import std.typecons : BitFlags;
 
@@ -65,6 +66,9 @@ private:
     Context _context;
     Display _display;
     BitFlags!PipelineFlags _flags = PipelineFlags.VerticalSync;
+    /* Default to Vulkan. */
+    DriverType _driverType = DriverType.Vulkan;
+    Info _info;
 
 private:
 
@@ -109,6 +113,14 @@ public:
     }
 
     /**
+     * Return underlying info type
+     */
+    @property Info info() @safe @nogc nothrow
+    {
+        return Info(DriverType.None);
+    }
+
+    /**
      * Create a new pipeline for the given pipeline type.
      *
      * This should only be called by the Display instance.
@@ -140,6 +152,26 @@ public:
     pure final @property Display display() @safe @nogc nothrow
     {
         return _display;
+    }
+
+    /**
+     * Return the requested driverType.
+     *
+     * This may not match the info.driverType!
+     */
+    @property final DriverType driverType() @safe @nogc nothrow
+    {
+        return _driverType;
+    }
+
+    /**
+     * Override the default Driver to use before the pipeline is up
+     * and running. This allows forcibly switching to OpenGL, Vulkan, etc.
+     */
+    @property final Pipeline driverType(DriverType d) @safe
+    {
+        _driverType = d;
+        return this;
     }
 
     /**

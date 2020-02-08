@@ -101,6 +101,7 @@ public:
         import std.string : toLower;
         import std.conv : to;
 
-        return p.replace("${shaderModel}", to!string(context.info.shaderModel).toLower());
+        return p.replace("${shaderModel}",
+                to!string(context.display.pipeline.info.shaderModel).toLower());
     }
 }

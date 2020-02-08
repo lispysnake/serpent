@@ -22,6 +22,9 @@
 
 module serpent.graphics.pipeline.bgfx;
 
+public import serpent.graphics.pipeline.info;
+public import bindbc.bgfx : bgfx_renderer_type_t;
+
 /**
  * This package provides the bgfx implementation of our graphical pipeline
  * We've designed an abstraction around the underlying API in order to provide
@@ -29,3 +32,65 @@ module serpent.graphics.pipeline.bgfx;
  */
 
 public import serpent.graphics.pipeline.bgfx.pipeline;
+
+/**
+     * Convert a bgfx_renderer_type_t to a serpent.info.DriverType
+     */
+pure final DriverType convRenderer(bgfx_renderer_type_t renType) @nogc @safe nothrow
+{
+    switch (renType)
+    {
+    case bgfx_renderer_type_t.BGFX_RENDERER_TYPE_NOOP:
+        return DriverType.None;
+    case bgfx_renderer_type_t.BGFX_RENDERER_TYPE_DIRECT3D9:
+        return DriverType.Direct3D9;
+    case bgfx_renderer_type_t.BGFX_RENDERER_TYPE_DIRECT3D11:
+        return DriverType.Direct3D11;
+    case bgfx_renderer_type_t.BGFX_RENDERER_TYPE_DIRECT3D12:
+        return DriverType.Direct3D12;
+    case bgfx_renderer_type_t.BGFX_RENDERER_TYPE_GNM:
+        return DriverType.Gnm;
+    case bgfx_renderer_type_t.BGFX_RENDERER_TYPE_METAL:
+        return DriverType.Metal;
+    case bgfx_renderer_type_t.BGFX_RENDERER_TYPE_NVN:
+        return DriverType.Nvn;
+    case bgfx_renderer_type_t.BGFX_RENDERER_TYPE_OPENGLES:
+        return DriverType.OpenGLES;
+    case bgfx_renderer_type_t.BGFX_RENDERER_TYPE_OPENGL:
+        return DriverType.OpenGL;
+    case bgfx_renderer_type_t.BGFX_RENDERER_TYPE_VULKAN:
+        return DriverType.Vulkan;
+    default:
+        return DriverType.Unsupported;
+    }
+}
+
+/**
+     * Convert a DriverType to a bgfx_renderer_type_t
+     */
+public final bgfx_renderer_type_t convDriver(DriverType driverType) @nogc @safe nothrow
+{
+    switch (driverType)
+    {
+    case DriverType.None:
+        return bgfx_renderer_type_t.BGFX_RENDERER_TYPE_NOOP;
+    case DriverType.Direct3D9:
+        return bgfx_renderer_type_t.BGFX_RENDERER_TYPE_DIRECT3D9;
+    case DriverType.Direct3D11:
+        return bgfx_renderer_type_t.BGFX_RENDERER_TYPE_DIRECT3D11;
+    case DriverType.Direct3D12:
+        return bgfx_renderer_type_t.BGFX_RENDERER_TYPE_DIRECT3D12;
+    case DriverType.Gnm:
+        return bgfx_renderer_type_t.BGFX_RENDERER_TYPE_GNM;
+    case DriverType.Metal:
+        return bgfx_renderer_type_t.BGFX_RENDERER_TYPE_METAL;
+    case DriverType.OpenGLES:
+        return bgfx_renderer_type_t.BGFX_RENDERER_TYPE_OPENGLES;
+    case DriverType.OpenGL:
+        return bgfx_renderer_type_t.BGFX_RENDERER_TYPE_OPENGL;
+    case DriverType.Vulkan:
+        return bgfx_renderer_type_t.BGFX_RENDERER_TYPE_VULKAN;
+    default:
+        return bgfx_renderer_type_t.BGFX_RENDERER_TYPE_COUNT;
+    }
+}

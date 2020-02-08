@@ -38,7 +38,6 @@ import std.datetime.systime;
 
 public import serpent.graphics.display;
 public import serpent.app;
-public import serpent.info;
 public import serpent.input;
 public import serpent.resource;
 
@@ -82,7 +81,6 @@ private:
     ComponentManager _component;
     App _app;
     Display _display;
-    Info _info;
     __gshared bool _running = false;
 
     /* Scheduling cruft */
@@ -174,7 +172,6 @@ public:
         _input = new InputManager(this);
         _display = new Display(this, 640, 480);
         _resource = new ResourceManager(this, dirName(thisExePath()));
-        _info = new Info();
     }
 
     /**
@@ -190,10 +187,6 @@ public:
         enforce(app !is null, "Cannot run context without a valid App");
 
         _display.prepare();
-        _info.update();
-
-        enforce(info.driverType != DriverType.Unsupported,
-                "Unsupported underlying driver. Please report this.");
 
         /* Bootstrap processor groups before app loads anything */
         bootstrapGroups();
@@ -299,14 +292,6 @@ public:
     pure @property final Display display() @nogc @safe nothrow
     {
         return _display;
-    }
-
-    /**
-     * Return the Info object associated with this Context
-     */
-    pure @property final Info info() @nogc @safe nothrow
-    {
-        return _info;
     }
 
     /**

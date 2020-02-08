@@ -39,6 +39,8 @@ import serpent.graphics.pipeline;
 import serpent : SystemException;
 import std.format;
 
+import serpent.graphics.pipeline.bgfx : convDriver, convRenderer;
+
 /**
  * The BgfxPipeline is responsible for managing the underlying graphical context,
  * such as OpenGL (or through an abstraction like bgfx) and actually getting
@@ -60,6 +62,8 @@ private:
 
     /* Temporary: We need a draw operation queue we can sort! */
     QuadBatch qb;
+
+    Info cachedInfo;
 
     /**
      * Perform any pre-rendering we need to do, such as clearing the
@@ -180,6 +184,8 @@ public:
         prerender();
         auto encoder = bgfx_encoder_begin(true);
 
+        qb.begin();
+
         /* Query visibles */
         foreach (r; _renderers)
         {
@@ -197,6 +203,7 @@ public:
             s.renderer.submit(queryView, qb, s.id);
         }
 
+        qb.flush(encoder);
         bgfx_encoder_end(encoder);
 
         postrender();
@@ -214,13 +221,24 @@ public:
         integrateWindowBgfx();
 
         /* TODO: Init on separate render thread */
-        bInit.type = context.info.convDriver(display.driverType);
+        bInit.type = convDriver(driverType);
         bgfx_init(&bInit);
         hadInit = true;
 
-        qb = new QuadBatch(context);
-
+        /* Make sure we have the driverType set. */
+        cachedInfo = Info(convRenderer(bgfx_get_renderer_type()));
         reset();
+
+        qb = new QuadBatch(context);
+    }
+
+    /**
+     * We specify our own Info return to make sure the renderer is
+     * set correctly.
+     */
+    pure final override @property Info info() @safe @nogc nothrow
+    {
+        return cachedInfo;
     }
 
     final override void shutdown() @system nothrow
@@ -241,7 +259,10 @@ public:
         {
             return;
         }
-        display.scene.camera.update();
+        if (display.scene !is null && display.scene.camera !is null)
+        {
+            display.scene.camera.update();
+        }
         bgfx_reset(cast(ushort) display.width, cast(ushort) display.height,
                 BGFX_RESET_VSYNC | BGFX_RESET_SRGB_BACKBUFFER | BGFX_RESET_DEPTH_CLAMP,
                 bInit.resolution.format);
