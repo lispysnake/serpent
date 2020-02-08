@@ -71,8 +71,14 @@ int main(string[] args)
     context.component.registerComponent!SpriteComponent;
     context.component.registerComponent!MapComponent;
 
-    //context.display.pipeline.addRenderer(new MapRenderer);
-    //context.display.pipeline.addRenderer(new SpriteRenderer);
+    /* HAX: Add bgfx specific renderer. We need to abstract renderer
+     * and textures!
+     */
+    import serpent.graphics.pipeline.bgfx.pipeline;
+
+    auto pipeline = cast(BgfxPipeline) context.display.pipeline;
+    pipeline.addRenderer(new MapRenderer);
+    pipeline.addRenderer(new SpriteRenderer);
 
     /* Run the game now. */
     return context.run(new DemoGame());
