@@ -34,7 +34,7 @@ final class DemoGame : App
 
 private:
     Scene s;
-    Entity background;
+    Entity[] background;
 
     /**
      * A keyboard key was just released
@@ -78,9 +78,34 @@ public:
         context.display.addScene(s);
         s.addCamera(new OrthographicCamera());
 
-        background = initView.createEntity();
-        initView.addComponent!SpriteComponent(background).texture = new Texture(
-                "assets/SciFi/Environments/alien-environment/PNG/layers/background.png");
+        auto texture = new Texture("assets/SciFi/Environments/bulkhead-walls/PNG/bg-wall.png");
+        auto floortexture = new Texture("assets/SciFi/Environments/bulkhead-walls/PNG/floor.png");
+
+        int columns = 480 / cast(int) texture.width + 1;
+        foreach (i; 0 .. columns)
+        {
+            background ~= initView.createEntity();
+            initView.addComponent!SpriteComponent(background[i]).texture = texture;
+            initView.data!TransformComponent(background[i]).position.x = i * texture.width;
+            initView.data!TransformComponent(background[i]).position.z = -0.1f;
+        }
+
+        columns = 480 / cast(int) floortexture.width + 1;
+        foreach (i; 0 .. columns)
+        {
+            auto floor = initView.createEntity();
+            initView.addComponent!SpriteComponent(floor).texture = floortexture;
+            initView.data!TransformComponent(floor).position.x = i * floortexture.width;
+            initView.data!TransformComponent(floor)
+                .position.y = texture.height - floortexture.height;
+        }
+
+        auto sprite = initView.createEntity();
+        initView.addComponent!SpriteComponent(sprite).texture = new Texture(
+                "assets/SciFi/Sprites/bipedal-Unit/PNG/sprites/bipedal-unit1.png");
+        initView.data!TransformComponent(sprite).position.x = 30.0f;
+        initView.data!TransformComponent(sprite).position.y = texture.height - 74.0f;
+
         return true;
     }
 }

@@ -37,14 +37,14 @@ import std.algorithm.searching : endsWith;
 int main(string[] args)
 {
     bool vulkan = false;
-    auto argp = getopt(args, std.getopt.config.bundling, "v|vulkan", "Use Vulkan instead of OpenGL", &vulkan);
+    auto argp = getopt(args, std.getopt.config.bundling, "v|vulkan",
+            "Use Vulkan instead of OpenGL", &vulkan);
 
     if (argp.helpWanted)
     {
         defaultGetoptPrinter("serpent demonstration\n", argp.options);
         return 0;
     }
-
 
     /* Context is essential to *all* Serpent usage. */
     auto context = new Context();
