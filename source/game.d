@@ -90,7 +90,7 @@ public:
 
         float x = 0;
         int idx = 0;
-        while (x < context.display.logicalWidth)
+        while (x < context.display.logicalWidth + 100)
         {
             background ~= initView.createEntity();
             auto component = initView.addComponent!SpriteComponent(background[idx]);
@@ -109,7 +109,7 @@ public:
             idx++;
         }
 
-        int columns = 480 / cast(int) floortexture.width + 1;
+        int columns = 480 / cast(int) floortexture.width + 2;
         foreach (i; 0 .. columns)
         {
             auto floor = initView.createEntity();
@@ -136,7 +136,14 @@ public:
 
     final override void update(View!ReadWrite view)
     {
-        view.data!TransformComponent(sprite).position.x += 0.3f;
+        import gfm.math;
+
+        auto component = view.data!TransformComponent(sprite);
+        component.position.x += 0.8f;
+        s.camera.position = vec3f(component.position.x, 0.0f, 0.0f);
+        auto bounds = rectanglef(0.0f, 0.0f, 480.0f + 76.0f, 176.0f);
+        auto viewport = rectanglef(0.0f, 0.0f, 480.0f, 176.0f);
+        s.camera.clamp(bounds, viewport);
         import std.datetime;
 
         passed += context.deltaTime();
