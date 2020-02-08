@@ -33,6 +33,8 @@ enum PipelineType
     Bgfx = 0, /**< Use the bgfx pipeline */
     Noop, /**< Use the no-op pipeline */
 
+
+
 }
 
 /**
@@ -87,7 +89,9 @@ public:
             return new BgfxPipeline(context, display);
         case PipelineType.Noop:
         default:
-            return null;
+            import serpent.graphics.pipeline.noop;
+
+            return new NoopPipeline(context, display);
         }
     }
 
