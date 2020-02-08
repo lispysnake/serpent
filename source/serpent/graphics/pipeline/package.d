@@ -29,8 +29,6 @@ public import serpent.graphics.display;
 public import serpent.core.policy;
 public import serpent.graphics.pipeline.info;
 
-public import std.typecons : BitFlags;
-
 enum PipelineType
 {
     Bgfx = 0, /**< Use the bgfx pipeline */
@@ -46,9 +44,10 @@ enum PipelineType
  */
 enum PipelineFlags
 {
-    VerticalSync = 1 << 0, /**< Enable vsync */
-    Debug = 1 << 1, /**< Enable debug */
-    DepthClamp = 1 << 2, /**< Enable depth clamping */
+    None = 1 << 0,
+    VerticalSync = 1 << 1, /**< Enable vsync */
+    Debug = 1 << 2, /**< Enable debug */
+    DepthClamp = 1 << 3, /**< Enable depth clamping */
 
 
 
@@ -65,7 +64,7 @@ private:
 
     Context _context;
     Display _display;
-    BitFlags!PipelineFlags _flags = PipelineFlags.VerticalSync;
+    PipelineFlags _flags = PipelineFlags.VerticalSync;
     /* Default to Vulkan. */
     DriverType _driverType = DriverType.Vulkan;
     Info _info;
@@ -98,7 +97,7 @@ public:
     /**
      * Return the flags
      */
-    pure @property final BitFlags!PipelineFlags flags() @safe @nogc nothrow
+    pure @property final PipelineFlags flags() @safe @nogc nothrow
     {
         return _flags;
     }
@@ -107,9 +106,10 @@ public:
      * Update the pipeline flags. These will be reflected on the next render
      * cycle.
      */
-    pure @property final void flags(PipelineFlags flags) @safe @nogc nothrow
+    @property final void flags(PipelineFlags flags) @system
     {
         _flags = flags;
+        reset();
     }
 
     /**
@@ -172,6 +172,57 @@ public:
     {
         _driverType = d;
         return this;
+    }
+
+    /**
+     * Return true if debug mode is enabled
+     */
+    pragma(inline, true) pure final @property bool debugMode() @safe @nogc nothrow
+    {
+        return (_flags & PipelineFlags.Debug) == PipelineFlags.Debug;
+    }
+
+    /**
+     * Enable/disable debug mode
+     */
+    final @property void debugMode(bool b) @system
+    {
+        _flags = b ? _flags | PipelineFlags.Debug : _flags ^ PipelineFlags.Debug;
+        reset();
+    }
+
+    /**
+     * Return true if vsync is enabled
+     */
+    pragma(inline, true) pure final @property bool verticalSync() @safe @nogc nothrow
+    {
+        return (_flags & PipelineFlags.VerticalSync) == PipelineFlags.VerticalSync;
+    }
+
+    /**
+     * Enable/disable vertical sync (vsync)
+     */
+    final @property void verticalSync(bool b) @system
+    {
+        _flags = b ? _flags | PipelineFlags.VerticalSync : _flags ^ PipelineFlags.VerticalSync;
+        reset();
+    }
+
+    /**
+     * Return true if depth clamp is enabled
+     */
+    pragma(inline, true) pure final @property bool depthClamp() @safe @nogc nothrow
+    {
+        return (_flags & PipelineFlags.DepthClamp) == PipelineFlags.DepthClamp;
+    }
+
+    /**
+     * Enable/disable depth clamp
+     */
+    final @property void depthClamp(bool b) @system
+    {
+        _flags = b ? _flags | PipelineFlags.DepthClamp : _flags ^ PipelineFlags.DepthClamp;
+        reset();
     }
 
     /**

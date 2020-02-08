@@ -56,12 +56,10 @@ private:
             writeln("Quitting time.");
             context.quit();
             break;
-            /*
         case SDL_SCANCODE_D:
             writeln("Flip debug.");
-            context.display.debugMode = !context.display.debugMode;
+            context.display.pipeline.debugMode = !context.display.pipeline.debugMode;
             break;
-        */
         default:
             writeln("Key released");
             break;

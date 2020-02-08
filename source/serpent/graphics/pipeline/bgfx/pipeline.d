@@ -263,8 +263,18 @@ public:
         {
             display.scene.camera.update();
         }
+        bgfx_set_debug(debugMode ? BGFX_DEBUG_STATS | BGFX_DEBUG_TEXT : 0);
+
+        auto flags = BGFX_RESET_SRGB_BACKBUFFER;
+        if (verticalSync)
+        {
+            flags |= BGFX_RESET_VSYNC;
+        }
+        if (depthClamp)
+        {
+            flags |= BGFX_RESET_DEPTH_CLAMP;
+        }
         bgfx_reset(cast(ushort) display.width, cast(ushort) display.height,
-                BGFX_RESET_VSYNC | BGFX_RESET_SRGB_BACKBUFFER | BGFX_RESET_DEPTH_CLAMP,
-                bInit.resolution.format);
+                flags, bInit.resolution.format);
     }
 }
