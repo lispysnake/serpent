@@ -26,8 +26,6 @@ public import serpent.core.context;
 public import serpent.core.policy;
 public import serpent.core.view;
 
-public import bindbc.bgfx;
-
 /**
  * The virtual base class for any Processor (System) within the Serpent
  * core framework loop.
@@ -48,7 +46,6 @@ abstract class Processor(T : DataPolicy)
 
 private:
     Context _context;
-    bgfx_encoder_t* _encoder;
 
 public:
 
@@ -85,14 +82,6 @@ package:
         _context = c;
     }
 
-    /**
-     * Set the bgfx_encoder (per-thread) for this processor
-     */
-    final void encoder(bgfx_encoder_t* encoder) @safe @nogc nothrow
-    {
-        _encoder = encoder;
-    }
-
 public:
 
     /**
@@ -101,17 +90,5 @@ public:
     pure final Context context() @safe @nogc nothrow
     {
         return _context;
-    }
-
-    /**
-     * Return the current bgfx_encoder for this processor
-     *
-     * Note this should only be used in *draw* operations,
-     * i.e. during the run step. It may not exist before
-     * this time.
-     */
-    pure final bgfx_encoder_t* encoder() @safe @nogc nothrow
-    {
-        return _encoder;
     }
 }
