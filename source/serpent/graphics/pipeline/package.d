@@ -64,7 +64,7 @@ private:
 
     Context _context;
     Display _display;
-    PipelineFlags _flags = PipelineFlags.VerticalSync|PipelineFlags.DepthClamp;
+    PipelineFlags _flags = PipelineFlags.VerticalSync | PipelineFlags.DepthClamp;
     /* Default to Vulkan. */
     DriverType _driverType = DriverType.Vulkan;
     Info _info;

@@ -37,9 +37,14 @@ private:
     Scene s;
     Entity[] background;
     Texture[7] robotTextures;
+    Texture[10] mechTextures;
     Entity sprite;
+    Entity mech;
     ulong robotIndex;
     Duration passed;
+
+    Duration passedMech;
+    ulong mechIndex;
 
     /**
      * A keyboard key was just released
@@ -131,10 +136,50 @@ public:
         initView.data!TransformComponent(sprite).position.y = texture.height - 73.0f;
         initView.data!TransformComponent(sprite).position.z = 0.1f;
 
+        foreach (i; 0 .. 10)
+        {
+            mechTextures[i] = new Texture(
+                    "assets/SciFi/Sprites/mech-unit/sprites/mech-unit-export%d.png".format(i + 1));
+        }
+
+        mech = initView.createEntity();
+        initView.addComponent!SpriteComponent(mech).texture = mechTextures[0];
+        initView.data!TransformComponent(mech).position.z = 0.1f;
+        initView.data!TransformComponent(mech).position.x = -80.0f;
+        initView.data!TransformComponent(mech)
+            .position.y = texture.height - mechTextures[0].height - 12;
+
         return true;
     }
 
     final override void update(View!ReadWrite view)
+    {
+        updateRobot(view);
+        updateMech(view);
+    }
+
+    final void updateMech(View!ReadWrite view)
+    {
+        auto component = view.data!TransformComponent(mech);
+        component.position.x += 0.55f;
+
+        import std.datetime;
+
+        passedMech += context.deltaTime();
+        if (passedMech <= dur!"msecs"(80))
+        {
+            return;
+        }
+        passedMech = context.deltaTime();
+        mechIndex++;
+        if (mechIndex >= mechTextures.length)
+        {
+            mechIndex = 0;
+        }
+        view.data!SpriteComponent(mech).texture = mechTextures[mechIndex];
+    }
+
+    final void updateRobot(View!ReadWrite view)
     {
         import gfm.math;
 
