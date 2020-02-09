@@ -23,3 +23,9 @@ Reorganise the batcher:
  - Allocate large dynamic index/vertex buffer pair per batch
    and submit them all. Respect upper caps and all will work fine
    with large maps.
+
+
+Make Life Easier:
+
+Try to get `autoformat`, `dfmt` and `misspell` packaged up for
+Solus to simplify `update_format.sh` usage.
