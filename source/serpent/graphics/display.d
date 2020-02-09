@@ -203,6 +203,17 @@ public:
             throw new SystemException("Couldn't create Window: %s".format(SDL_GetError()));
         }
 
+        /* Ensure we always update internal w/h to what we actually got.
+         * It may be wise for devs to use logical dimensions to counteract
+         * this.
+         */
+        int w = _width;
+        int h = _height;
+        SDL_GetWindowSize(window, &w, &h);
+
+        _width = w;
+        _height = h;
+
         /* At this point the pipeline is allowed to bootstrap */
         pipeline.bootstrap();
 

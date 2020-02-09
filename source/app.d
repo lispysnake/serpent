@@ -38,8 +38,9 @@ import std.algorithm.searching : endsWith;
 int main(string[] args)
 {
     bool vulkan = false;
-    auto argp = getopt(args, std.getopt.config.bundling, "v|vulkan",
-            "Use Vulkan instead of OpenGL", &vulkan);
+    bool fullscreen = false;
+    auto argp = getopt(args, std.getopt.config.bundling, "v|vulkan", "Use Vulkan instead of OpenGL",
+            &vulkan, "f|fullscreen", "Start in fullscreen mode", &fullscreen);
 
     if (argp.helpWanted)
     {
@@ -63,6 +64,12 @@ int main(string[] args)
     {
         writeln("Requesting OpenGL display mode");
         context.display.pipeline.driverType = DriverType.OpenGL;
+    }
+
+    if (fullscreen)
+    {
+        writeln("Starting in fullscreen mode");
+        context.display.fullscreen = true;
     }
 
     /* Set our root directory up */
