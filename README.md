@@ -1,9 +1,14 @@
 # Serpent Game Framework
 
-[![License](https://img.shields.io/badge/License-ZLib-blue.svg)](https://opensource.org/licenses/ZLib) [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VYHL9CEFSNCVA) [![Donate with Bitcoin](https://en.cryptobadges.io/badge/small/168AkAQszA7mZSv2epzYoPq4qnefiyhAKG)](https://en.cryptobadges.io/donate/168AkAQszA7mZSv2epzYoPq4qnefiyhAKG)
+[![License](https://img.shields.io/badge/License-ZLib-blue.svg)](https://opensource.org/licenses/ZLib)
 
-A game framework from [Lispy Snake, Ltd.](https://lispysnake.com).
-This is not *exactly* an engine.
+The Serpent Game Framework is a new a brand new game framework from [Lispy Snake, Ltd](https://lispysnake.com) leveraging
+the latest technologies such as D, OpenGL and Vulkan, to make indie game
+development easier than ever.
+
+![demo](https://github.com/lispysnake/serpent/raw/master/.github/screenshot.png)
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VYHL9CEFSNCVA) [![Donate with Bitcoin](https://en.cryptobadges.io/badge/small/168AkAQszA7mZSv2epzYoPq4qnefiyhAKG)](https://en.cryptobadges.io/donate/168AkAQszA7mZSv2epzYoPq4qnefiyhAKG)
 
 ## Support Development
 
