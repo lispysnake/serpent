@@ -39,8 +39,10 @@ int main(string[] args)
 {
     bool vulkan = false;
     bool fullscreen = false;
-    auto argp = getopt(args, std.getopt.config.bundling, "v|vulkan", "Use Vulkan instead of OpenGL",
-            &vulkan, "f|fullscreen", "Start in fullscreen mode", &fullscreen);
+    bool debugMode = false;
+    auto argp = getopt(args, std.getopt.config.bundling, "v|vulkan",
+            "Use Vulkan instead of OpenGL", &vulkan, "f|fullscreen",
+            "Start in fullscreen mode", &fullscreen, "d|debug", "Enable debug mode", &debugMode);
 
     if (argp.helpWanted)
     {
@@ -70,6 +72,12 @@ int main(string[] args)
     {
         writeln("Starting in fullscreen mode");
         context.display.fullscreen = true;
+    }
+
+    if (debugMode)
+    {
+        writeln("Starting in debug mode");
+        context.display.pipeline.debugMode = true;
     }
 
     /* Set our root directory up */
