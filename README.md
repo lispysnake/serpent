@@ -8,9 +8,7 @@ development easier than ever.
 
 ![demo](https://github.com/lispysnake/serpent/raw/master/.github/screenshot.png)
 
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VYHL9CEFSNCVA) [![Donate with Bitcoin](https://en.cryptobadges.io/badge/small/168AkAQszA7mZSv2epzYoPq4qnefiyhAKG)](https://en.cryptobadges.io/donate/168AkAQszA7mZSv2epzYoPq4qnefiyhAKG)
-
-## Support Development
+## Support It
 
 This framework is being developed by Lispy Snake for our first games.
 While we would love to develop it full time, basic economics says we
@@ -21,31 +19,26 @@ To accelerate development (and time-to-market) for our framework
 and first game, consider buying a [Lifetime License](https://lispysnake.com/the-game-raiser) from
 us ($20!) to have lifetime access to our games. If you just want to send a tip
 to help with Serpent development (and our other efforts) then please click one
-of the links above!
+of the links below!
 
-### UNDER DEVELOPMENT
-
-SUPER SUPER UNSTABLE RIGHT NOW. Landing 2 months of changes is hard work! :P
-
-This is very much a work in progress and will continue to
-change daily. As such the document provides a rough roadmap and
-vision overview. Note this is a restart of efforts after our
-lispysnake2d repo (also public)
-
-Do note that we're initially only focusing on Linux development,
-with a strong bias towards Vulkan and OpenGL.
-
-Whilst we develop, it will appear we're developing a mini game
-in-tree. This is to help steer direction of the project. Eventually
-however we're looking to build more of an SDK out of the core
-`serpent` runtime and associated tooling, to help others very
-easily build their games.
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VYHL9CEFSNCVA) [![Donate with Bitcoin](https://en.cryptobadges.io/badge/small/168AkAQszA7mZSv2epzYoPq4qnefiyhAKG)](https://en.cryptobadges.io/donate/168AkAQszA7mZSv2epzYoPq4qnefiyhAKG)
 
 
-## Building
+### Disclaimer
+
+Our focus right now is providing just enough architecture to support some
+initial tech demos. The API is highly volatile and should not currently
+be relied on. As we flesh out feature requirements, parts of the design
+will begin to stabilize.
+
+We currently target [Solus](https://getsol.us/home/) for both development
+and testing, validating OpenGL and Vulkan configurations.
+
+
+## Building (Solus)
 
 We build serpent with the `ldc2` (LLVM-based) D compiler. To test the
-included demo, build the `demo` subcomponent in release mode.
+included demo, build the `demo` subcomponent in denig mode.
 
     git submodule init
     git submodule update
@@ -119,11 +112,11 @@ be subject to modification.
 
 #### bgfx
 
-We will reuse bgfx / bimg / bx projects for our rendering pipeline.
-This will allow us to support all relevant graphical subsystems.
-The project also has a super modern architecture which allows us
-to just expose it to consumers so they can basically do anything
-they want.
+We will reuse bgfx to power the underlying rendering pipeline in
+order to abstract support for various platforms and rendering APIs.
+
+Currently we're focused on Vulkan and OpenGL, with Metal and DirectX
+on the cards in the future.
 
 #### SDL
 
