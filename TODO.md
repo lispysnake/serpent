@@ -15,3 +15,11 @@ TODO: SciFi Demo
  - Add a player.
  - Add keyboard control
  - Add enemies
+
+
+Reorganise the batcher:
+
+ - Transient vertex buffer is technically more expensive.
+ - Allocate large dynamic index/vertex buffer pair per batch
+   and submit them all. Respect upper caps and all will work fine
+   with large maps.
