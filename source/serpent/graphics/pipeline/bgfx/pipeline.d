@@ -265,7 +265,7 @@ public:
         }
         bgfx_set_debug(debugMode ? BGFX_DEBUG_STATS | BGFX_DEBUG_TEXT : 0);
 
-        auto flags = BGFX_RESET_SRGB_BACKBUFFER;
+        auto flags = 0U;
         if (verticalSync)
         {
             flags |= BGFX_RESET_VSYNC;
