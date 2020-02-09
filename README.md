@@ -47,6 +47,10 @@ included demo, build the `demo` subcomponent in release mode.
     git submodule init
     git submodule update
     ./build.sh
+    
+To build this on Solus you will need the following build dependencies:
+
+	sudo eopkg it -c system.devel sdl2-image-devel sdl2-devel mesalib-devel ldc dub
 
 Note you will need to have `serpent-support` built in a directory
 parallel to this checkout. This is a bit janky but we're focusing
