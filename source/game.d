@@ -54,7 +54,6 @@ private:
         switch (e.scancode())
         {
         case SDL_SCANCODE_F:
-            writeln("Fullscreen??");
             context.display.fullscreen = !context.display.fullscreen;
             break;
         case SDL_SCANCODE_Q:
@@ -62,7 +61,6 @@ private:
             context.quit();
             break;
         case SDL_SCANCODE_D:
-            writeln("Flip debug.");
             context.display.pipeline.debugMode = !context.display.pipeline.debugMode;
             break;
         default:
