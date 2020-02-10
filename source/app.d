@@ -40,9 +40,11 @@ int main(string[] args)
     bool vulkan = false;
     bool fullscreen = false;
     bool debugMode = false;
+    bool disableVsync = false;
     auto argp = getopt(args, std.getopt.config.bundling, "v|vulkan",
             "Use Vulkan instead of OpenGL", &vulkan, "f|fullscreen",
-            "Start in fullscreen mode", &fullscreen, "d|debug", "Enable debug mode", &debugMode);
+            "Start in fullscreen mode", &fullscreen, "d|debug", "Enable debug mode",
+            &debugMode, "n|no-vsync", "Disable VSync", &disableVsync);
 
     if (argp.helpWanted)
     {
@@ -78,6 +80,12 @@ int main(string[] args)
     {
         writeln("Starting in debug mode");
         context.display.pipeline.debugMode = true;
+    }
+
+    if (disableVsync)
+    {
+        writeln("Disabling vsync");
+        context.display.pipeline.verticalSync = false;
     }
 
     /* Set our root directory up */
