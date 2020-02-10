@@ -1,6 +1,6 @@
 TODO: SciFi Demo
 
- - [ ] Quick Hack 1: Fix delta time for velocity based movement of robots
+ - [x] Quick Hack 1: Fix delta time for velocity based movement of robots
  - [ ] Quick Hack 2: Add mainFBO to Pipeline
  - [ ] Abstract Shader into ShaderCache with handles
  - [ ] Abstract Texture into TextureCache with handles
