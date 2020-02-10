@@ -90,6 +90,7 @@ private:
     Group!ReadOnly _renderGroup;
 
     Duration _ticks;
+    float _frameTime;
 
     /**
      * Bootstrap (sequentially) all processor groups before
@@ -219,6 +220,9 @@ public:
         {
             auto timeNow = MonoTime.currTime();
             _ticks = timeNow - timeStart;
+            long timeNS;
+            _ticks.split!("nsecs")(timeNS);
+            _frameTime = timeNS / 1_000_000.0f;
 
             /* Force stepping through the Entity system */
             _entity.step();
@@ -345,6 +349,14 @@ public:
     pure @property final Duration deltaTime() @safe @nogc nothrow
     {
         return _ticks;
+    }
+
+    /**
+     * Return the frame time
+     */
+    pure @property final float frameTime() @safe @nogc nothrow
+    {
+        return _frameTime;
     }
 
     /**
