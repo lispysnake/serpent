@@ -28,6 +28,37 @@ import serpent.tiled;
 import std.format;
 
 /**
+ * We apply a PhysicsComponent when there is some position manipulation
+ * to be had.
+ */
+@serpentComponent final struct PhysicsComponent
+{
+    float velocityX = 0.0f;
+    float velocityY = 0.0f;
+}
+
+/**
+ * Demo physics - if have velocity, go.
+ */
+final class BasicPhysics : Processor!ReadWrite
+{
+    final override void run(View!ReadWrite view)
+    {
+        /* Find all physics entities */
+        foreach (ent; view.withComponent!PhysicsComponent())
+        {
+            auto transform = view.data!TransformComponent(ent);
+            auto physics = view.data!PhysicsComponent(ent);
+
+            auto frameTime = context.frameTime();
+
+            transform.position.x += physics.velocityX * frameTime;
+            transform.position.y += physics.velocityY * frameTime;
+        }
+    }
+}
+
+/**
  * Provided merely for demo purposes.
  */
 final class DemoGame : App
@@ -85,6 +116,9 @@ public:
         s = new Scene("sample");
         context.display.addScene(s);
         s.addCamera(new OrthographicCamera());
+
+        context.component.registerComponent!PhysicsComponent;
+        context.systemGroup.add(new BasicPhysics());
 
         auto texture = new Texture("assets/SciFi/Environments/bulkhead-walls/PNG/bg-wall.png");
         auto floortexture = new Texture("assets/SciFi/Environments/bulkhead-walls/PNG/floor.png");
@@ -147,6 +181,13 @@ public:
         initView.data!TransformComponent(mech)
             .position.y = texture.height - mechTextures[0].height - 12;
 
+        /* Register with physics */
+        auto physMech = initView.addComponent!PhysicsComponent(mech);
+        physMech.velocityX = 0.05f;
+
+        auto physRobot = initView.addComponent!PhysicsComponent(sprite);
+        physRobot.velocityX = 0.07f;
+
         return true;
     }
 
@@ -158,9 +199,6 @@ public:
 
     final void updateMech(View!ReadWrite view)
     {
-        auto component = view.data!TransformComponent(mech);
-        component.position.x += 0.05f * context.frameTime();
-
         import std.datetime;
 
         passedMech += context.deltaTime();
@@ -182,7 +220,6 @@ public:
         import gfm.math;
 
         auto component = view.data!TransformComponent(sprite);
-        component.position.x += 0.08f * context.frameTime();
 
         auto boundsX = (component.position.x + robotTextures[robotIndex].width / 2) - (
                 context.display.logicalWidth() / 2);
