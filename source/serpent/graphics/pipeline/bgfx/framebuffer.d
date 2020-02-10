@@ -53,6 +53,22 @@ package:
 public:
 
     /**
+     * Destroy the underlying FBO
+     */
+    final override void shutdown() @system @nogc nothrow
+    {
+        if (_fbo != cast(bgfx_frame_buffer_handle_t) InvalidHandle)
+        {
+            bgfx_destroy_frame_buffer(_fbo);
+        }
+    }
+
+    ~this()
+    {
+        shutdown();
+    }
+
+    /**
      * Bind underlying FBO ready for use
      */
     final override void bind() @system @nogc nothrow

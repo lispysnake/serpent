@@ -259,6 +259,8 @@ public:
         qb.destroy();
         qb = null;
 
+        mainFBO.shutdown();
+
         /* Shut down bgfx */
         bgfx_shutdown();
     }

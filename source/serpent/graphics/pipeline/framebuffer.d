@@ -78,4 +78,9 @@ public:
      * All rendering calls will now go to the backbuffer
      */
     abstract void unbind() @system @nogc nothrow;
+
+    /**
+     * Shutdown the underlying resources
+     */
+    abstract void shutdown() @system @nogc nothrow;
 }
