@@ -25,12 +25,20 @@ module serpent.graphics.pipeline.bgfx.framebuffer;
 public import serpent.graphics.pipeline.framebuffer;
 public import serpent.graphics.pipeline.bgfx.pipeline : BgfxPipeline;
 
+import bindbc.bgfx;
+
+import serpent.graphics.pipeline.bgfx : InvalidHandle;
+
 /**
  * The BgfxFrameBuffer wraps the bgfx_frame_buffer_handle_t to make
  * it trivial to use.
  */
 final class BgfxFrameBuffer : FrameBuffer
 {
+
+private:
+
+    bgfx_frame_buffer_handle_t _fbo = cast(bgfx_frame_buffer_handle_t) InvalidHandle;
 
 package:
 
@@ -49,6 +57,7 @@ public:
      */
     final override void bind() @system @nogc nothrow
     {
+        bgfx_set_view_frame_buffer(0, _fbo);
     }
 
     /**
@@ -56,5 +65,6 @@ public:
      */
     final override void unbind() @system @nogc nothrow
     {
+        bgfx_set_view_frame_buffer(0, cast(bgfx_frame_buffer_handle_t) InvalidHandle);
     }
 }

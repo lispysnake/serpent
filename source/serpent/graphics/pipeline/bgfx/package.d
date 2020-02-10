@@ -24,6 +24,7 @@ module serpent.graphics.pipeline.bgfx;
 
 public import serpent.graphics.pipeline.info;
 public import bindbc.bgfx : bgfx_renderer_type_t;
+public import std.stdint;
 
 /**
  * This package provides the bgfx implementation of our graphical pipeline
@@ -94,3 +95,5 @@ public final bgfx_renderer_type_t convDriver(DriverType driverType) @nogc @safe 
         return bgfx_renderer_type_t.BGFX_RENDERER_TYPE_COUNT;
     }
 }
+
+public const uint16_t InvalidHandle = uint16_t.max;
