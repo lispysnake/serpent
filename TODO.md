@@ -1,7 +1,6 @@
 TODO: SciFi Demo
 
  - [x] Quick Hack 1: Fix delta time for velocity based movement of robots
- - [ ] Quick Hack 2: Add mainFBO to Pipeline
  - [ ] Abstract Shader into ShaderCache with handles
  - [ ] Abstract Texture into TextureCache with handles
  - [ ] Verify NoopPipeline no longer crashes!
@@ -12,6 +11,7 @@ TODO: SciFi Demo
  - [ ] Design some basic basic level to run through
  - [ ] Add some collisiony type things.
  - [ ] Figure out how to have more than one scene. :)
+ - [ ] Add mainFBO to Pipeline
 
 Make Life Easier:
 
