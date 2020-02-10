@@ -66,8 +66,6 @@ private:
 
     Info cachedInfo;
 
-    FrameBuffer mainFBO;
-
     /**
      * Perform any pre-rendering we need to do, such as clearing the
      * display.
@@ -101,7 +99,6 @@ private:
 
         /* Make sure view0 is drawn. */
         bgfx_touch(0);
-        mainFBO.bind();
 
         auto camera = display.scene.camera;
         if (camera !is null)
@@ -115,8 +112,6 @@ private:
      */
     final void postrender() @system @nogc nothrow
     {
-        mainFBO.unbind();
-
         /* TODO: We can do post-processing in this spot */
 
         /* Skip frame now */
@@ -238,11 +233,6 @@ public:
         reset();
 
         qb = new QuadBatch(context);
-
-        /**
-         * Construct our main framebuffer
-         */
-        mainFBO = new BgfxFrameBuffer(this);
     }
 
     /**
@@ -259,8 +249,6 @@ public:
         qb.destroy();
         qb = null;
 
-        mainFBO.shutdown();
-
         /* Shut down bgfx */
         bgfx_shutdown();
     }
@@ -268,12 +256,13 @@ public:
     /**
      * Reset the bgfx backbuffer
      */
-    final override void reset() @system nothrow
+    final override void reset() @system
     {
         if (!hadInit)
         {
             return;
         }
+
         if (display.scene !is null && display.scene.camera !is null)
         {
             display.scene.camera.update();

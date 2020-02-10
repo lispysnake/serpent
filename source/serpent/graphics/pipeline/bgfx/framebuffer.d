@@ -45,9 +45,18 @@ package:
     /**
      * Construct a new BgfxFrameBuffer for the given parent
      */
-    this(BgfxPipeline parent) @safe
+    this(BgfxPipeline parent) @system
     {
         super(parent);
+
+        auto width = cast(ushort) pipeline.display.logicalWidth();
+        auto height = cast(ushort) pipeline.display.logicalHeight();
+
+        /* We may need to make this less stoopid */
+        auto format = bgfx_texture_format_t.BGFX_TEXTURE_FORMAT_RGBA8;
+
+        _fbo = bgfx_create_frame_buffer(width, height, format,
+                BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP);
     }
 
 public:
@@ -60,6 +69,7 @@ public:
         if (_fbo != cast(bgfx_frame_buffer_handle_t) InvalidHandle)
         {
             bgfx_destroy_frame_buffer(_fbo);
+            _fbo = cast(bgfx_frame_buffer_handle_t) InvalidHandle;
         }
     }
 

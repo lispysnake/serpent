@@ -47,6 +47,7 @@ private:
     pure final @property void pipeline(Pipeline pipeline) @safe
     {
         enforce(pipeline !is null, "Pipeline cannot be null");
+        _pipeline = pipeline;
     }
 
 public:
