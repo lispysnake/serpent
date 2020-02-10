@@ -1,29 +1,17 @@
 TODO: SciFi Demo
 
- - Add delta-time updates per frame
- - Add Material type:
-    - Sortable to minimize texture switches
-    - Bound (potentially) to Texture or cloned Texture (region)
-    - Add repeat flags
- - Use frame buffers
-    - Main FBO where we redirect all rendering
-    - Draw main FBO with aspect ratio fixing
- - Find way to bind entities to the scene (load/unload)
- - Add Animations (frame-based)
- - Allow ignoring camera for background/UI elements
- - Add flip support to renderer
- - Add a player.
- - Add keyboard control
- - Add enemies
-
-
-Reorganise the batcher:
-
- - Transient vertex buffer is technically more expensive.
- - Allocate large dynamic index/vertex buffer pair per batch
-   and submit them all. Respect upper caps and all will work fine
-   with large maps.
-
+ - [ ] Quick Hack 1: Fix delta time for velocity based movement of robots
+ - [ ] Quick Hack 2: Add mainFBO to Pipeline
+ - [ ] Abstract Shader into ShaderCache with handles
+ - [ ] Abstract Texture into TextureCache with handles
+ - [ ] Verify NoopPipeline no longer crashes!
+ - [ ] Add Animation module (Animation, Timeline, Processor)
+    - Likely that Animation is a class, Timeline is a struct, allowing
+      more specific implementations in future (property based, etc.)
+ - [ ] Bind a player Entity to keyboard so we can move it
+ - [ ] Design some basic basic level to run through
+ - [ ] Add some collisiony type things.
+ - [ ] Figure out how to have more than one scene. :)
 
 Make Life Easier:
 
