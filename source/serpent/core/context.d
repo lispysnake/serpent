@@ -34,7 +34,7 @@ import serpent.core.entity;
 import serpent.core.group;
 import serpent.core.policy;
 import serpent.core.transform;
-import std.datetime.systime;
+import core.time : MonoTime;
 
 public import serpent.graphics.display;
 public import serpent.app;
@@ -210,14 +210,14 @@ public:
         display.visible = true;
 
         /* Time prior to first tick */
-        auto timeStart = Clock.currTime();
+        auto timeStart = MonoTime.currTime();
 
         /**
          * Main run loop
          */
         while (_running)
         {
-            auto timeNow = Clock.currTime();
+            auto timeNow = MonoTime.currTime();
             _ticks = timeNow - timeStart;
 
             /* Force stepping through the Entity system */
