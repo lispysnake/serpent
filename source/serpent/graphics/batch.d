@@ -175,6 +175,12 @@ public:
     {
         uint drawIndex = 0;
         Texture lastTexture = null;
+        import std.algorithm.sorting;
+        import std.algorithm.mutation;
+
+        /* Sort order is important for drawing */
+        multiSort!("a.transformPosition.z < b.transformPosition.z",
+                "a.texture.path < b.texture.path", SwapStrategy.unstable)(drawOps.data);
         foreach (ref item; drawOps.data)
         {
             if (lastTexture != item.texture)

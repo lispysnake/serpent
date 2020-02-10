@@ -196,11 +196,8 @@ public:
             r.queryVisibles(queryView, packet);
         }
 
-        auto heap = heapify!("a.transformPosition.z > b.transformPosition.z")(
-                packet.visibleEntities);
-
         /* Submission */
-        foreach (s; heap)
+        foreach (s; packet.visibleEntities)
         {
             s.renderer.encoder = encoder;
             s.renderer.submit(queryView, qb, s.id);
