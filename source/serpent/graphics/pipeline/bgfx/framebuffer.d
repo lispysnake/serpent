@@ -41,4 +41,20 @@ package:
     {
         super(parent);
     }
+
+public:
+
+    /**
+     * Bind underlying FBO ready for use
+     */
+    final override void bind() @system @nogc nothrow
+    {
+    }
+
+    /**
+     * Unbind underlying FBO
+     */
+    final override void unbind() @system @nogc nothrow
+    {
+    }
 }

@@ -66,4 +66,16 @@ public:
     {
         return _pipeline;
     }
+
+    /**
+     * Require the framebuffer object be bound.
+     * All rendering will now happen within the framebuffer
+     */
+    abstract void bind() @system @nogc nothrow;
+
+    /**
+     * Unbind the framebuffer, no further rendering will happen here
+     * All rendering calls will now go to the backbuffer
+     */
+    abstract void unbind() @system @nogc nothrow;
 }

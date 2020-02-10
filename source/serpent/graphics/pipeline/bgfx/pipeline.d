@@ -40,6 +40,7 @@ import serpent : SystemException;
 import std.format;
 
 import serpent.graphics.pipeline.bgfx : convDriver, convRenderer;
+import serpent.graphics.pipeline.bgfx.framebuffer;
 
 /**
  * The BgfxPipeline is responsible for managing the underlying graphical context,
@@ -64,6 +65,8 @@ private:
     QuadBatch qb;
 
     Info cachedInfo;
+
+    FrameBuffer mainFBO;
 
     /**
      * Perform any pre-rendering we need to do, such as clearing the
@@ -98,6 +101,7 @@ private:
 
         /* Make sure view0 is drawn. */
         bgfx_touch(0);
+        mainFBO.bind();
 
         auto camera = display.scene.camera;
         if (camera !is null)
@@ -111,6 +115,10 @@ private:
      */
     final void postrender() @system @nogc nothrow
     {
+        mainFBO.unbind();
+
+        /* TODO: We can do post-processing in this spot */
+
         /* Skip frame now */
         bgfx_frame(false);
     }
@@ -230,6 +238,11 @@ public:
         reset();
 
         qb = new QuadBatch(context);
+
+        /**
+         * Construct our main framebuffer
+         */
+        mainFBO = new BgfxFrameBuffer(this);
     }
 
     /**
