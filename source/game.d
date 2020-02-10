@@ -181,12 +181,15 @@ public:
         initView.data!TransformComponent(mech)
             .position.y = texture.height - mechTextures[0].height - 12;
 
-        /* Register with physics */
-        auto physMech = initView.addComponent!PhysicsComponent(mech);
-        physMech.velocityX = 0.05f;
+        auto meterSize = 70; /* 70 pixels is our one meter */
 
+        /* Mech travels 70cm per second */
+        auto physMech = initView.addComponent!PhysicsComponent(mech);
+        physMech.velocityX = (meterSize * 0.7) / 1000.0f;
+
+        /* Robot travels 90cm per second */
         auto physRobot = initView.addComponent!PhysicsComponent(sprite);
-        physRobot.velocityX = 0.07f;
+        physRobot.velocityX = (meterSize * 0.9f) / 1000.0f;
 
         return true;
     }
