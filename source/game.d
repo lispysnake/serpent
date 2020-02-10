@@ -159,7 +159,7 @@ public:
     final void updateMech(View!ReadWrite view)
     {
         auto component = view.data!TransformComponent(mech);
-        component.position.x += 0.55f;
+        component.position.x += 0.05f * context.frameTime();
 
         import std.datetime;
 
@@ -182,7 +182,7 @@ public:
         import gfm.math;
 
         auto component = view.data!TransformComponent(sprite);
-        component.position.x += 0.8f;
+        component.position.x += 0.08f * context.frameTime();
 
         auto boundsX = (component.position.x + robotTextures[robotIndex].width / 2) - (
                 context.display.logicalWidth() / 2);
