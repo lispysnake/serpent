@@ -57,7 +57,6 @@ public:
 
     final override void submit(View!ReadOnly queryView, ref QuadBatch batch, EntityID id)
     {
-        // auto map = queryView.data!MapComponent(id);
         drawMap(queryView, batch, id);
     }
 
@@ -122,6 +121,5 @@ public:
             drawY = 0;
             drawZ += 0.1f;
         }
-        qb.flush(encoder);
     }
 }

@@ -187,6 +187,7 @@ public:
         prerender();
         auto encoder = bgfx_encoder_begin(true);
 
+        /* Start the quad batch */
         qb.begin();
 
         /* Query visibles */
@@ -203,7 +204,9 @@ public:
             s.renderer.submit(queryView, qb, s.id);
         }
 
+        /* End the quad batch */
         qb.flush(encoder);
+
         bgfx_encoder_end(encoder);
 
         postrender();
