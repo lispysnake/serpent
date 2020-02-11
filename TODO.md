@@ -1,6 +1,8 @@
 TODO: SciFi Demo
 
  - [x] Quick Hack 1: Fix delta time for velocity based movement of robots
+ - [x] Fix (finally) the Batch renderer to handle massive amounts of sprites
+ - [ ] Clip offscreen entities (don't draw them at all, *and* scissor the view
  - [ ] Abstract Shader into ShaderCache with handles
  - [ ] Abstract Texture into TextureCache with handles
  - [ ] Verify NoopPipeline no longer crashes!
