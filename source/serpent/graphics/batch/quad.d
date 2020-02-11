@@ -63,7 +63,7 @@ private:
 
     RingBuffer!TexturedQuad drawOps;
 
-    BatchQueue!PosUVVertex queue;
+    BatchQueue!(PosUVVertex, uint16_t) queue;
 
     /**
      * Update the current Context
@@ -89,7 +89,7 @@ public:
         auto fragment = new Shader(fp);
         shader = new Program(vertex, fragment);
 
-        queue = BatchQueue!PosUVVertex(16, 4096, 6, 4);
+        queue = BatchQueue!(PosUVVertex, uint16_t)(16, 4096, 6, 4);
 
         /* Allow 100 sprites, 600 indices, 400 vertices */
         drawOps = RingBuffer!TexturedQuad(1_00);

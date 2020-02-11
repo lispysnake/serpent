@@ -24,18 +24,16 @@ module serpent.graphics.batch.queue;
 
 public import std.container.array;
 
-import std.stdint;
-
 /**
  * A BatchQueue helps us to manage the CPU-size of vertex and index buffers
  * to prepare each set for uploading to the GPU.
  */
-final struct BatchQueue(V)
+final struct BatchQueue(V, I)
 {
 private:
 
     Array!V vertices;
-    Array!uint16_t indices;
+    Array!I indices;
 
     ulong _minQuads = 0;
     ulong _maxQuads = 0;
