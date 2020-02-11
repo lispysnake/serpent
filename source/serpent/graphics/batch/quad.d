@@ -89,12 +89,10 @@ public:
         auto fragment = new Shader(fp);
         shader = new Program(vertex, fragment);
 
-        queue = BatchQueue!(PosUVVertex, uint16_t)(16, 4096, 6, 4);
+        queue = BatchQueue!(PosUVVertex, uint16_t)(128, 100_000, 6, 4);
 
-        /* Allow 100 sprites, 600 indices, 400 vertices */
-        drawOps = RingBuffer!TexturedQuad(1_00);
-        maxVertices = numVertices * 1_00;
-        maxIndices = numIndices * 1_00;
+        /* Allow 100k sprites max */
+        drawOps = RingBuffer!TexturedQuad(100_000);
     }
 
     ~this()
@@ -131,9 +129,7 @@ public:
      */
     final void begin() @trusted
     {
-
-        bgfx_alloc_transient_index_buffer(&tib, maxIndices);
-        bgfx_alloc_transient_vertex_buffer(&tvb, maxVertices, &PosUVVertex.layout);
+        queue.reset();
     }
 
     /**
@@ -175,6 +171,12 @@ public:
                 "a.texture.path < b.texture.path", SwapStrategy.unstable)(drawOps.data);
         foreach (ref item; drawOps.data)
         {
+            if (queue.full())
+            {
+                blitQuads(encoder, drawIndex, lastTexture);
+                drawIndex = 0;
+            }
+
             if (lastTexture != item.texture)
             {
                 if (lastTexture !is null)
@@ -221,26 +223,26 @@ public:
 
         /* vertex position */
         auto v = drawIndex * numVertices;
-        auto indexData = cast(uint16_t*) tib.data;
 
-        /* update indices */
-        indexData[i] = cast(ushort)(v);
-        indexData[i + 1] = cast(ushort)(v + 1);
-        indexData[i + 2] = cast(ushort)(v + 2);
-        indexData[i + 3] = cast(ushort)(v + 2);
-        indexData[i + 4] = cast(ushort)(v + 3);
-        indexData[i + 5] = cast(ushort)(v);
+        /* Push indices */
+        uint16_t[6] idata = [
+            cast(uint16_t) v, cast(uint16_t)(v + 1), cast(uint16_t)(v + 2),
+            cast(uint16_t)(v + 2), cast(uint16_t)(v + 3), cast(uint16_t) v,
+        ];
+        queue.pushIndices(idata);
 
-        /* update vertices */
-        auto vertexData = cast(PosUVVertex*) tvb.data;
-        vertexData[v] = PosUVVertex(vec3f(transformPosition.x,
-                transformPosition.y, transformPosition.z), vec2f(u1, v1));
-        vertexData[v + 1] = PosUVVertex(vec3f(transformPosition.x + spriteWidth,
-                transformPosition.y, transformPosition.z), vec2f(u2, v1));
-        vertexData[v + 2] = PosUVVertex(vec3f(transformPosition.x + spriteWidth,
-                transformPosition.y + spriteHeight, transformPosition.z), vec2f(u2, v2));
-        vertexData[v + 3] = PosUVVertex(vec3f(transformPosition.x,
-                transformPosition.y + spriteHeight, transformPosition.z), vec2f(u1, v2));
+        /* Push vertices */
+        PosUVVertex[4] vdata = [
+            PosUVVertex(vec3f(transformPosition.x, transformPosition.y,
+                    transformPosition.z), vec2f(u1, v1)),
+            PosUVVertex(vec3f(transformPosition.x + spriteWidth, transformPosition.y,
+                    transformPosition.z), vec2f(u2, v1)),
+            PosUVVertex(vec3f(transformPosition.x + spriteWidth, transformPosition.y + spriteHeight,
+                    transformPosition.z), vec2f(u2, v2)),
+            PosUVVertex(vec3f(transformPosition.x,
+                    transformPosition.y + spriteHeight, transformPosition.z), vec2f(u1, v2))
+        ];
+        queue.pushVertices(vdata);
     }
 
     final void blitQuads(bgfx_encoder_t* encoder, uint numQuads, Texture texture) @trusted
@@ -249,6 +251,16 @@ public:
         {
             return;
         }
+
+        bgfx_alloc_transient_index_buffer(&tib, cast(uint) queue.indicesCount());
+        bgfx_alloc_transient_vertex_buffer(&tvb,
+                cast(uint) queue.verticesCount(), &PosUVVertex.layout);
+
+        auto indexData = cast(uint16_t*) tib.data;
+        auto vertexData = cast(PosUVVertex*) tvb.data;
+
+        queue.copyVertices(vertexData);
+        queue.copyIndices(indexData);
 
         auto model = mat4x4f.identity();
         auto trans = mat4x4f.translation(vec3f(0.0f, 0.0f, 0.0f));
@@ -261,8 +273,8 @@ public:
         bgfx_encoder_set_transform(encoder, model.ptr, 1);
 
         bgfx_encoder_set_transient_vertex_buffer(encoder, 0, &tvb, 0,
-                numVertices * numQuads, tvb.layoutHandle);
-        bgfx_encoder_set_transient_index_buffer(encoder, &tib, 0, numIndices * numQuads);
+                cast(uint) queue.verticesCount(), tvb.layoutHandle);
+        bgfx_encoder_set_transient_index_buffer(encoder, &tib, 0, cast(uint) queue.indicesCount());
         bgfx_encoder_set_texture(encoder, 0, cast(bgfx_uniform_handle_t) 0, texture.handle,
                 BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP | BGFX_SAMPLER_MAG_POINT);
 
@@ -271,7 +283,7 @@ public:
         bgfx_encoder_submit(encoder, 0, shader.handle, 0, false);
 
         /* Allocate a new VB/IB pair */
-        begin();
+        queue.reset();
     }
     /**
      * Return the underlying Context for this QuadBatch instance
