@@ -244,7 +244,7 @@ public:
         return cachedInfo;
     }
 
-    final override void shutdown() @system nothrow
+    final override void shutdown() @system
     {
         qb.destroy();
         qb = null;
