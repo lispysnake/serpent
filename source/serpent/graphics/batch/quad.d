@@ -30,6 +30,7 @@ import serpent.camera : WorldOrigin;
 import serpent.graphics.shader;
 import serpent.graphics.blend;
 import serpent.graphics.vertex;
+import serpent.graphics.batch.queue : BatchQueue;
 import serpent.graphics.batch : TexturedQuad;
 import serpent.core.ringbuffer;
 
@@ -62,6 +63,8 @@ private:
 
     RingBuffer!TexturedQuad drawOps;
 
+    BatchQueue!PosUVVertex queue;
+
     /**
      * Update the current Context
      */
@@ -85,6 +88,8 @@ public:
         auto vertex = new Shader(vp);
         auto fragment = new Shader(fp);
         shader = new Program(vertex, fragment);
+
+        queue = BatchQueue!PosUVVertex(16, 4096, 6, 4);
 
         /* Allow 100 sprites, 600 indices, 400 vertices */
         drawOps = RingBuffer!TexturedQuad(1_00);
