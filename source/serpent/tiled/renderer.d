@@ -35,6 +35,24 @@ import serpent.graphics.renderer;
 import serpent.core.transform;
 
 /**
+ * The MapOffsets lets us calculate exactly which part of the tilemap
+ * we need to render. Even though we can scissor most stuff out there
+ * is very little point in wasting CPU time submitting invisible
+ * quads.
+ */
+final struct MapOffsets
+{
+    float startX = 0;
+    float startY = 0;
+    int visibleColumns = 0;
+    int visibleRows = 0;
+    int firstColumn = 0;
+    int firstRow = 0;
+    int maxRow = 0;
+    int maxColumn = 0;
+};
+
+/**
  * MapRenderer walks through a tilemap and dispatches relevant drawing
  * of quads through Sprite APIs.
  *
@@ -61,6 +79,54 @@ public:
     }
 
     /**
+     * Return the renderable offsets + constraints for a tiled map to prevent
+     * drawing more than we actually need to.
+     */
+    final MapOffsets calcOffsets(in TransformComponent* transform, in MapComponent* map)
+    {
+        import std.math : ceil, floor;
+
+        /* Base offsets */
+        MapOffsets offsets = {
+            startX: transform.position.x, startY: transform.position.y,
+            firstColumn: 0, firstRow: 0, visibleRows: cast(int) ceil(
+                        cast(float) context.display.logicalHeight / map.map.tileHeight), visibleColumns: cast(int) ceil(cast(float) context.display.logicalWidth / map.map.tileWidth),
+            maxColumn: map.map.width, maxRow: map.map.height,
+        };
+
+        /* Need camera for offsets to work properly. */
+        if (context.display.scene.camera is null)
+        {
+            return offsets;
+        }
+
+        /* Compute first row + column */
+        vec3f cameraPos = context.display.scene.camera.position;
+        offsets.firstRow = cast(int) floor(cameraPos.y / map.map.tileHeight);
+        offsets.firstColumn = cast(int) floor(cameraPos.x / map.map.tileWidth);
+
+        /* Offset start X + Y (skipped) */
+        offsets.startX += offsets.firstColumn * map.map.tileWidth;
+        offsets.startY += offsets.firstRow * map.map.tileHeight;
+
+        /* Compute maximum column */
+        offsets.maxColumn = offsets.firstColumn + offsets.visibleColumns + 1;
+        if (offsets.maxColumn >= map.map.width)
+        {
+            offsets.maxColumn = map.map.width;
+        }
+
+        /* Compute maximum row */
+        offsets.maxRow = offsets.firstRow + offsets.visibleRows + 1;
+        if (offsets.maxRow >= map.map.height)
+        {
+            offsets.maxRow = map.map.height;
+        }
+
+        return offsets;
+    }
+
+    /**
      * Begin drawing of a map.
      */
     final void drawMap(View!ReadOnly dataView, ref QuadBatch qb, EntityID entity)
@@ -68,17 +134,19 @@ public:
         auto mapComponent = dataView.data!MapComponent(entity);
         auto transform = dataView.data!TransformComponent(entity);
 
-        float drawX = 0.0f;
-        float drawY = 0.0f;
+        auto offsets = calcOffsets(transform, mapComponent);
+
+        float drawX = offsets.startX;
+        float drawY = offsets.startY;
         auto transformScale = vec3f(1.0f, 1.0f, 1.0f);
 
         float drawZ = transform.position.z;
 
         foreach (layer; mapComponent.map.layers)
         {
-            foreach (y; 0 .. layer.height)
+            foreach (y; offsets.firstRow .. offsets.maxRow)
             {
-                foreach (x; 0 .. layer.width)
+                foreach (x; offsets.firstColumn .. offsets.maxColumn)
                 {
                     auto gid = layer.data[x + y * layer.width];
                     auto tile = gid & ~FlipMode.Mask;
@@ -115,10 +183,10 @@ public:
                     drawX += mapComponent.map.tileWidth;
                 }
                 drawY += mapComponent.map.tileHeight;
-                drawX = 0;
+                drawX = offsets.startX;
             }
-            drawX = 0;
-            drawY = 0;
+            drawX = offsets.startX;
+            drawY = offsets.startY;
             drawZ += 0.1f;
         }
     }
