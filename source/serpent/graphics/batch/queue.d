@@ -245,11 +245,19 @@ public:
         return verticesIndex;
     }
 
+    /**
+     * Copy all of our indices into the target buffer. It is up to the caller
+     * to ensure enough storage space exists in the target buffer.
+     */
     pragma(inline, true) final void copyIndices(I* target) @trusted
     {
         memcpy(cast(void*) target, cast(void*)&indices.front(), I.sizeof * indicesIndex);
     }
 
+    /**
+     * Copy all of our vertices into the target buffer. it is up to the caller
+     * to ensure enough storage space exists in the target buffer.
+     */
     pragma(inline, true) final void copyVertices(V* target) @trusted
     {
         memcpy(cast(void*) target, cast(void*)&vertices.front(), V.sizeof * verticesIndex);
