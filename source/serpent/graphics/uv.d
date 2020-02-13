@@ -33,6 +33,8 @@ package:
 
     vec2f u; /* u1 + u2 */
     vec2f v; /* v1 + v2 */
+    float width;
+    float height;
 
 public:
 
@@ -51,12 +53,13 @@ public:
 
         u = vec2f(clip.min.x * invWidth, (clip.min.x + texWidth) * invWidth);
         v = vec2f(clip.min.y * invHeight, (clip.min.y + texHeight) * invHeight);
+
     }
 
     /**
      * Return u1 coordinate
      */
-    pure @property final const float u1() @safe @nogc nothrow
+    pragma(inline, true) pure @property final const float u1() @safe @nogc nothrow
     {
         return u.x;
     }
@@ -64,7 +67,7 @@ public:
     /**
      * Return u2 coordinate
      */
-    pure @property final const float u2() @safe @nogc nothrow
+    pragma(inline, true) pure @property final const float u2() @safe @nogc nothrow
     {
         return u.y;
     }
@@ -72,7 +75,7 @@ public:
     /**
      * Return v1 coordinate
      */
-    pure @property final const float v1() @safe @nogc nothrow
+    pragma(inline, true) pure @property final const float v1() @safe @nogc nothrow
     {
         return v.x;
     }
@@ -80,7 +83,7 @@ public:
     /**
      * Return v2 coordinate
      */
-    pure @property final const float v2() @safe @nogc nothrow
+    pragma(inline, true) pure @property final const float v2() @safe @nogc nothrow
     {
         return v.y;
     }
@@ -88,16 +91,16 @@ public:
     /**
      * Flip the UVs vertically.
      */
-    final void flipVertical() @safe @nogc nothrow
+    pragma(inline, true) final void flipVertical() @safe @nogc nothrow
     {
-        v = vec2f(1.0f, 1.0f) - v;
+        v = vec2f(v2, v1);
     }
 
     /**
      * Flip the UVs horizontally
      */
-    final void flipHorizontal() @safe @nogc nothrow
+    pragma(inline, true) final void flipHorizontal() @safe @nogc nothrow
     {
-        u = vec2f(1.0f, 1.0f) - u;
+        u = vec2f(u2, u1);
     }
 }
