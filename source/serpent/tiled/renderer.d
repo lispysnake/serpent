@@ -178,8 +178,19 @@ public:
                         }
                     }
 
+                    /* Currently only support horizontal + vertical flip */
+                    UVCoordinates uv = t2.uv;
+                    if ((gid & FlipMode.Horizontal) == FlipMode.Horizontal)
+                    {
+                        uv.flipHorizontal();
+                    }
+                    if ((gid & FlipMode.Vertical) == FlipMode.Vertical)
+                    {
+                        uv.flipVertical();
+                    }
+
                     qb.drawTexturedQuad(encoder, t2.texture, transformPosition,
-                            transformScale, tileWidth, tileHeight, t2.region);
+                            transformScale, tileWidth, tileHeight, uv);
                     drawX += mapComponent.map.tileWidth;
                 }
                 drawY += mapComponent.map.tileHeight;

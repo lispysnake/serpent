@@ -184,7 +184,8 @@ package:
         foreach (tileID; 0 .. tileset.tileCount)
         {
             auto region = rectanglef(x, y, tileset.tileWidth, tileset.tileHeight);
-            Tile t = Tile(region);
+            auto uv = UVCoordinates(width, height, region);
+            Tile t = Tile(uv);
             t.texture = texture;
             tileset.setTile(tileID, t);
 

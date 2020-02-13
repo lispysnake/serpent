@@ -34,18 +34,18 @@ public import serpent.graphics.texture;
  */
 final struct Tile
 {
-    box2f region; /**<Defines the renderable region for the tile */
+    UVCoordinates uv; /**<Defines the renderable region for the tile */
     Texture texture = null; /**<The texture to draw */
 
-    this(box2f region) @safe @nogc nothrow
+    this(UVCoordinates uv) @safe @nogc nothrow
     {
-        this.region = region;
+        this.uv = uv;
     }
 
     this(Texture texture) @safe @nogc nothrow
     {
         this.texture = texture;
-        this.region = texture.clip();
+        this.uv = texture.uv();
     }
 
     @disable this();
