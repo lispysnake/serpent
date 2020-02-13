@@ -25,6 +25,7 @@ module serpent.graphics.sprite;
 public import serpent.core.entity;
 public import serpent.graphics.sprite.renderer;
 public import serpent.graphics.texture;
+public import serpent.graphics : FlipMode;
 
 /**
  * SpriteComponent should be added to any entity that is rendered in a sprite
@@ -33,4 +34,5 @@ public import serpent.graphics.texture;
 @serpentComponent final struct SpriteComponent
 {
     Texture texture; /**Our texture handle. */
+    FlipMode flip = FlipMode.None; /**< Our flip mode for rendering */
 }

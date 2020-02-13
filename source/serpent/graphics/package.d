@@ -31,3 +31,13 @@ public import serpent.graphics.shader;
 public import serpent.graphics.sprite;
 public import serpent.graphics.uv;
 public import serpent.graphics.vertex;
+
+/**
+ * Flip mode for graphical operations
+ */
+enum FlipMode
+{
+    None = 1 << 0,
+    Horizontal = 1 << 1,
+    Vertical = 1 << 2,
+};

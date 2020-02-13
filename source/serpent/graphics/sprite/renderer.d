@@ -24,6 +24,7 @@ module serpent.graphics.sprite.renderer;
 
 public import serpent.graphics.renderer;
 
+import serpent.graphics : FlipMode;
 import serpent.graphics.sprite : SpriteComponent;
 import serpent.core.transform;
 
@@ -59,6 +60,17 @@ public:
     {
         auto transform = queryView.data!TransformComponent(entity);
         auto sprite = queryView.data!SpriteComponent(entity);
-        batch.drawTexturedQuad(encoder, sprite.texture, transform.position, transform.scale);
+        UVCoordinates uv = sprite.texture.uv;
+        if ((sprite.flip & FlipMode.Horizontal) == FlipMode.Horizontal)
+        {
+            uv.flipHorizontal();
+        }
+        if ((sprite.flip & FlipMode.Vertical) == FlipMode.Vertical)
+        {
+            uv.flipVertical();
+        }
+
+        batch.drawTexturedQuad(encoder, sprite.texture, transform.position,
+                transform.scale, sprite.texture.width, sprite.texture.height, uv);
     }
 }
