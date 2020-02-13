@@ -43,7 +43,7 @@ private:
     string _path = null;
 
     /**
-     * Default clip is to use the whole size.
+     * Default clip will be set later.
      */
     box2f _clip = box2f(0.0f, 0.0f, 1.0f, 1.0f);
 
@@ -73,6 +73,8 @@ public:
 
         _width = surface.w;
         _height = surface.h;
+
+        _clip = rectanglef(0.0f, 0.0f, _width, _height);
 
         /* TODO: Optimise to the platform. */
         auto fmt = bgfx_texture_format_t.BGFX_TEXTURE_FORMAT_RGBA8;
