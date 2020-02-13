@@ -89,4 +89,20 @@ public:
     {
         return v.y;
     }
+
+    /**
+     * Flip the UVs vertically.
+     */
+    final void flipVertical() @safe @nogc nothrow
+    {
+        v = vec2f(1.0f, 1.0f) - v;
+    }
+
+    /**
+     * Flip the UVs horizontally
+     */
+    final void flipHorizontal() @safe @nogc nothrow
+    {
+        u = vec2f(1.0f, 1.0f) - u;
+    }
 }
