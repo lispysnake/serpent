@@ -28,7 +28,7 @@ public import serpent.core.entity;
 public import serpent.core.processor;
 public import serpent.core.view;
 
-import serpent.tiled : FlipMode;
+import serpent.tiled : TileFlipMode;
 import serpent.graphics.batch;
 
 import serpent.graphics.renderer;
@@ -149,7 +149,7 @@ public:
                 foreach (x; offsets.firstColumn .. offsets.maxColumn)
                 {
                     auto gid = layer.data[x + y * layer.width];
-                    auto tile = gid & ~FlipMode.Mask;
+                    auto tile = gid & ~TileFlipMode.Mask;
                     auto tileset = mapComponent.map.findTileSet(tile);
                     if (tileset is null)
                     {
@@ -180,11 +180,11 @@ public:
 
                     /* Currently only support horizontal + vertical flip */
                     UVCoordinates uv = t2.uv;
-                    if ((gid & FlipMode.Horizontal) == FlipMode.Horizontal)
+                    if ((gid & TileFlipMode.Horizontal) == TileFlipMode.Horizontal)
                     {
                         uv.flipHorizontal();
                     }
-                    if ((gid & FlipMode.Vertical) == FlipMode.Vertical)
+                    if ((gid & TileFlipMode.Vertical) == TileFlipMode.Vertical)
                     {
                         uv.flipVertical();
                     }
