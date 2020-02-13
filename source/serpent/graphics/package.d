@@ -29,4 +29,5 @@ public import serpent.graphics.pipeline;
 public import serpent.graphics.shader;
 
 public import serpent.graphics.sprite;
+public import serpent.graphics.uv;
 public import serpent.graphics.vertex;

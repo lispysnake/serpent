@@ -30,6 +30,7 @@ import serpent.camera : WorldOrigin;
 import serpent.graphics.shader;
 import serpent.graphics.blend;
 import serpent.graphics.vertex;
+import serpent.graphics.uv : UVCoordinates;
 import serpent.graphics.batch.queue : BatchQueue;
 import serpent.graphics.batch : TexturedQuad;
 import serpent.core.ringbuffer;
@@ -196,12 +197,8 @@ public:
 
     final void renderQuad(bgfx_encoder_t* encoder, uint drawIndex, ref TexturedQuad quad) @trusted
     {
-        auto invWidth = 1.0f / quad.texture.width;
-        auto invHeight = 1.0f / quad.texture.height;
-        auto u1 = quad.clip.min.x * invWidth;
-        auto v1 = quad.clip.min.y * invHeight;
-        auto u2 = (quad.clip.min.x + quad.width) * invWidth;
-        auto v2 = (quad.clip.min.y + quad.height) * invHeight;
+        auto uv = UVCoordinates(rectanglef(0.0f, 0.0f, quad.texture.width,
+                quad.texture.height), quad.clip);
 
         auto realWidth = context.display.logicalWidth;
         auto realHeight = context.display.logicalHeight;
@@ -234,13 +231,13 @@ public:
         /* Push vertices */
         PosUVVertex[4] vdata = [
             PosUVVertex(vec3f(transformPosition.x, transformPosition.y,
-                    transformPosition.z), vec2f(u1, v1)),
-            PosUVVertex(vec3f(transformPosition.x + spriteWidth, transformPosition.y,
-                    transformPosition.z), vec2f(u2, v1)),
-            PosUVVertex(vec3f(transformPosition.x + spriteWidth, transformPosition.y + spriteHeight,
-                    transformPosition.z), vec2f(u2, v2)),
-            PosUVVertex(vec3f(transformPosition.x,
-                    transformPosition.y + spriteHeight, transformPosition.z), vec2f(u1, v2))
+                    transformPosition.z), vec2f(uv.u1, uv.v1)),
+            PosUVVertex(vec3f(transformPosition.x + spriteWidth,
+                    transformPosition.y, transformPosition.z), vec2f(uv.u2, uv.v1)),
+            PosUVVertex(vec3f(transformPosition.x + spriteWidth,
+                    transformPosition.y + spriteHeight, transformPosition.z), vec2f(uv.u2, uv.v2)),
+            PosUVVertex(vec3f(transformPosition.x, transformPosition.y + spriteHeight,
+                    transformPosition.z), vec2f(uv.u1, uv.v2))
         ];
         queue.pushVertices(vdata);
     }
