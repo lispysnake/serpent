@@ -197,8 +197,7 @@ public:
 
     final void renderQuad(bgfx_encoder_t* encoder, uint drawIndex, ref TexturedQuad quad) @trusted
     {
-        auto uv = UVCoordinates(rectanglef(0.0f, 0.0f, quad.texture.width,
-                quad.texture.height), quad.clip);
+        auto uv = UVCoordinates(quad.texture.width, quad.texture.height, quad.clip);
 
         auto realWidth = context.display.logicalWidth;
         auto realHeight = context.display.logicalHeight;

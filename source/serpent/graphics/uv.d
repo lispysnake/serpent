@@ -36,26 +36,21 @@ package:
 
 public:
 
-    /**
-     * Construct UVCoordinates from the given size (2D dimensions)
-     */
-    this(box2f size)
-    {
-        this(size, size);
-    }
-
-    /**
+    /*
      * Construct UVCoordinates from the given size (2D dimensions) and
      * clipping box.
      */
-    this(box2f size, box2f clip)
+    this(float width, float height, box2f clip)
     {
-        auto invWidth = 1.0f / size.max.x;
-        auto invHeight = 1.0f / size.max.y;
-        auto v2 = (clip.min.y + size.max.y) * invHeight;
+        auto invWidth = 1.0f / width;
+        auto invHeight = 1.0f / height;
+        auto v2 = (clip.min.y + height) * invHeight;
 
-        u = vec2f(clip.min.x * invWidth, (clip.min.x + size.max.x) * invWidth);
-        v = vec2f(clip.min.y * invHeight, (clip.min.y + size.max.y) * invHeight);
+        auto texWidth = clip.max.x - clip.min.x;
+        auto texHeight = clip.max.y - clip.min.y;
+
+        u = vec2f(clip.min.x * invWidth, (clip.min.x + texWidth) * invWidth);
+        v = vec2f(clip.min.y * invHeight, (clip.min.y + texHeight) * invHeight);
     }
 
     /**
