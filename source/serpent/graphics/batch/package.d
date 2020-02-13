@@ -23,6 +23,7 @@
 module serpent.graphics.batch;
 
 public import serpent.graphics.batch.quad;
+public import serpent.graphics.uv : UVCoordinates;
 
 /**
  * TexturedQuad is a stacked drawing operation that helps us
@@ -31,7 +32,7 @@ public import serpent.graphics.batch.quad;
 final struct TexturedQuad
 {
     Texture texture;
-    box2f clip;
+    UVCoordinates uv;
     vec3f transformPosition;
     vec3f transformScale;
     float width;

@@ -110,7 +110,7 @@ public:
             immutable(Texture) texture, vec3f transformPosition, vec3f transformScale) @trusted
     {
         drawTexturedQuad(encoder, texture, transformPosition, transformScale,
-                texture.width, texture.height, texture.clip());
+                texture.width, texture.height, texture.uv());
     }
 
     /**
@@ -121,7 +121,7 @@ public:
             vec3f transformPosition, vec3f transformScale, float width, float height) @trusted
     {
         drawTexturedQuad(encoder, texture, transformPosition, transformScale,
-                width, height, texture.clip());
+                width, height, texture.uv());
     }
 
     /**
@@ -137,7 +137,8 @@ public:
      * Draw the sprite texture using the given transform, width, height and clip region.
      */
     final void drawTexturedQuad(bgfx_encoder_t* encoder, immutable(Texture) texture,
-            vec3f transformPosition, vec3f transformScale, float width, float height, box2f clip) @trusted
+            vec3f transformPosition, vec3f transformScale, float width,
+            float height, UVCoordinates uv) @trusted
     {
         /* When too many quads are added, force a flush */
         if (drawOps.full())
@@ -152,7 +153,7 @@ public:
         quad.transformScale = transformScale;
         quad.width = width;
         quad.height = height;
-        quad.clip = clip;
+        quad.uv = uv;
 
         drawOps.add(quad);
     }
@@ -197,8 +198,6 @@ public:
 
     final void renderQuad(bgfx_encoder_t* encoder, uint drawIndex, ref TexturedQuad quad) @trusted
     {
-        auto uv = UVCoordinates(quad.texture.width, quad.texture.height, quad.clip);
-
         auto realWidth = context.display.logicalWidth;
         auto realHeight = context.display.logicalHeight;
         auto transformPosition = quad.transformPosition;
@@ -230,13 +229,14 @@ public:
         /* Push vertices */
         PosUVVertex[4] vdata = [
             PosUVVertex(vec3f(transformPosition.x, transformPosition.y,
-                    transformPosition.z), vec2f(uv.u1, uv.v1)),
+                    transformPosition.z), vec2f(quad.uv.u1, quad.uv.v1)),
             PosUVVertex(vec3f(transformPosition.x + spriteWidth,
-                    transformPosition.y, transformPosition.z), vec2f(uv.u2, uv.v1)),
+                    transformPosition.y, transformPosition.z), vec2f(quad.uv.u2, quad.uv.v1)),
             PosUVVertex(vec3f(transformPosition.x + spriteWidth,
-                    transformPosition.y + spriteHeight, transformPosition.z), vec2f(uv.u2, uv.v2)),
+                    transformPosition.y + spriteHeight, transformPosition.z),
+                    vec2f(quad.uv.u2, quad.uv.v2)),
             PosUVVertex(vec3f(transformPosition.x, transformPosition.y + spriteHeight,
-                    transformPosition.z), vec2f(uv.u1, uv.v2))
+                    transformPosition.z), vec2f(quad.uv.u1, quad.uv.v2))
         ];
         queue.pushVertices(vdata);
     }
