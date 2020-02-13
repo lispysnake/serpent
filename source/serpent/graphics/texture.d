@@ -26,7 +26,9 @@ import bindbc.sdl;
 import bindbc.sdl.image;
 import std.string : toStringz;
 import bindbc.bgfx;
-import gfm.math;
+
+public import gfm.math;
+public import serpent.graphics.uv : UVCoordinates;
 
 /**
  * This is a very temporary type which will undergo many changes as
@@ -48,6 +50,8 @@ private:
     box2f _clip = box2f(0.0f, 0.0f, 1.0f, 1.0f);
 
     bgfx_texture_handle_t _handle = cast(bgfx_texture_handle_t) 0;
+
+    UVCoordinates _uv;
 
 public:
 
@@ -75,6 +79,7 @@ public:
         _height = surface.h;
 
         _clip = rectanglef(0.0f, 0.0f, _width, _height);
+        _uv = UVCoordinates(_width, _height, _clip);
 
         /* TODO: Optimise to the platform. */
         auto fmt = bgfx_texture_format_t.BGFX_TEXTURE_FORMAT_RGBA8;
@@ -130,5 +135,13 @@ public:
     pure @property final const string path() @nogc @safe nothrow
     {
         return _path;
+    }
+
+    /**
+     * Return the default UV coordinates for this texture.
+     */
+    pure @property final const UVCoordinates uv() @nogc @safe nothrow
+    {
+        return _uv;
     }
 }
