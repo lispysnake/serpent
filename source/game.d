@@ -26,6 +26,7 @@ import std.exception;
 import bindbc.sdl;
 import serpent.tiled;
 import std.format;
+import std.datetime;
 
 /**
  * We apply a PhysicsComponent when there is some position manipulation
@@ -59,6 +60,51 @@ final class BasicPhysics : Processor!ReadWrite
 }
 
 /**
+ * Absurdly simple Animation helper.
+ */
+final struct Animation
+{
+    Texture[] textures;
+    ulong textureIndex = 0;
+    Duration passed;
+    Entity entity;
+    Duration interval;
+
+    this(Entity entity, Duration interval)
+    {
+        this.entity = entity;
+        this.interval = interval;
+    }
+
+    /**
+     * Add a texture to our known set
+     */
+    void addTexture(Texture t)
+    {
+        textures ~= t;
+    }
+
+    /**
+     * Update with the given duration
+     */
+    void update(View!ReadWrite view, Duration dt)
+    {
+        passed += dt;
+        if (passed <= this.interval)
+        {
+            return;
+        }
+        passed = dt;
+        textureIndex++;
+        if (textureIndex >= textures.length)
+        {
+            textureIndex = 0;
+        }
+        view.data!SpriteComponent(entity).texture = textures[textureIndex];
+    }
+}
+
+/**
  * Provided merely for demo purposes.
  */
 final class DemoGame : App
@@ -67,15 +113,10 @@ final class DemoGame : App
 private:
     Scene s;
     Entity[] background;
-    Texture[7] robotTextures;
-    Texture[10] mechTextures;
     Entity sprite;
     Entity mech;
-    ulong robotIndex;
-    Duration passed;
-
-    Duration passedMech;
-    ulong mechIndex;
+    Animation robotAnim;
+    Animation mechAnim;
 
     /**
      * A keyboard key was just released
@@ -156,30 +197,34 @@ public:
                 .position.y = texture.height - floortexture.height;
         }
 
+        /* Create the robot */
+        sprite = initView.createEntity();
+        initView.addComponent!SpriteComponent(sprite);
+        robotAnim = Animation(sprite, dur!"msecs"(80));
         foreach (i; 0 .. 7)
         {
-            robotTextures[i] = new Texture(
-                    "assets/SciFi/Sprites/bipedal-Unit/PNG/sprites/bipedal-unit%d.png".format(i + 1));
+            robotAnim.addTexture(new Texture(
+                    "assets/SciFi/Sprites/bipedal-Unit/PNG/sprites/bipedal-unit%d.png".format(i + 1)));
         }
+        initView.data!SpriteComponent(sprite).texture = robotAnim.textures[0];
 
-        sprite = initView.createEntity();
-        initView.addComponent!SpriteComponent(sprite).texture = robotTextures[0];
         initView.data!TransformComponent(sprite).position.x = 30.0f;
         initView.data!TransformComponent(sprite).position.y = texture.height - 73.0f;
         initView.data!TransformComponent(sprite).position.z = 0.1f;
 
+        mech = initView.createEntity();
+        initView.addComponent!SpriteComponent(mech);
+        mechAnim = Animation(mech, dur!"msecs"(80));
         foreach (i; 0 .. 10)
         {
-            mechTextures[i] = new Texture(
-                    "assets/SciFi/Sprites/mech-unit/sprites/mech-unit-export%d.png".format(i + 1));
+            mechAnim.addTexture(new Texture(
+                    "assets/SciFi/Sprites/mech-unit/sprites/mech-unit-export%d.png".format(i + 1)));
         }
-
-        mech = initView.createEntity();
-        initView.addComponent!SpriteComponent(mech).texture = mechTextures[0];
+        initView.data!SpriteComponent(mech).texture = mechAnim.textures[0];
         initView.data!TransformComponent(mech).position.z = 0.1f;
         initView.data!TransformComponent(mech).position.x = -80.0f;
         initView.data!TransformComponent(mech)
-            .position.y = texture.height - mechTextures[0].height - 12;
+            .position.y = texture.height - mechAnim.textures[0].height - 12;
 
         auto meterSize = 70; /* 70 pixels is our one meter */
 
@@ -196,54 +241,23 @@ public:
 
     final override void update(View!ReadWrite view)
     {
-        updateRobot(view);
-        updateMech(view);
+        mechAnim.update(view, context.deltaTime());
+        robotAnim.update(view, context.deltaTime());
+        updateCamera(view);
     }
 
-    final void updateMech(View!ReadWrite view)
-    {
-        import std.datetime;
-
-        passedMech += context.deltaTime();
-        if (passedMech <= dur!"msecs"(80))
-        {
-            return;
-        }
-        passedMech = context.deltaTime();
-        mechIndex++;
-        if (mechIndex >= mechTextures.length)
-        {
-            mechIndex = 0;
-        }
-        view.data!SpriteComponent(mech).texture = mechTextures[mechIndex];
-    }
-
-    final void updateRobot(View!ReadWrite view)
+    final void updateCamera(View!ReadWrite view)
     {
         import gfm.math;
 
         auto component = view.data!TransformComponent(sprite);
 
-        auto boundsX = (component.position.x + robotTextures[robotIndex].width / 2) - (
+        auto boundsX = (component.position.x + robotAnim.textures[robotAnim.textureIndex].width / 2) - (
                 context.display.logicalWidth() / 2);
         auto boundsY = 0.0f;
         s.camera.position = vec3f(boundsX, 0.0f, 0.0f);
         auto bounds = rectanglef(0.0f, 0.0f, 480.0f + 200.0f, 176.0f);
         auto viewport = rectanglef(0.0f, 0.0f, 480.0f, 176.0f);
         s.camera.clamp(bounds, viewport);
-        import std.datetime;
-
-        passed += context.deltaTime();
-        if (passed <= dur!"msecs"(80))
-        {
-            return;
-        }
-        passed = context.deltaTime();
-        robotIndex++;
-        if (robotIndex >= robotTextures.length)
-        {
-            robotIndex = 0;
-        }
-        view.data!SpriteComponent(sprite).texture = robotTextures[robotIndex];
     }
 }
