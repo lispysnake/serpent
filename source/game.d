@@ -38,6 +38,13 @@ import std.datetime;
     float velocityY = 0.0f;
 }
 
+enum SpriteDirection
+{
+    None = 1 << 0,
+    Left = 1 << 1,
+    Right = 1 << 2,
+};
+
 /**
  * Demo physics - if have velocity, go.
  */
@@ -123,6 +130,9 @@ private:
     Texture texture;
     const auto meterSize = 70;
 
+    SpriteDirection playerDirection = SpriteDirection.None;
+    SpriteDirection viewDirection = SpriteDirection.Right;
+
     /**
      * A keyboard key was just released
      */
@@ -140,8 +150,33 @@ private:
         case SDL_SCANCODE_D:
             context.display.pipeline.debugMode = !context.display.pipeline.debugMode;
             break;
+        case SDL_SCANCODE_RIGHT:
+            playerDirection = SpriteDirection.None;
+            viewDirection = SpriteDirection.Right;
+            break;
+        case SDL_SCANCODE_LEFT:
+            playerDirection = SpriteDirection.None;
+            viewDirection = SpriteDirection.Left;
+            break;
         default:
             writeln("Key released");
+            break;
+        }
+    }
+
+    final void onKeyPressed(KeyboardEvent e) @system
+    {
+        switch (e.scancode())
+        {
+        case SDL_SCANCODE_RIGHT:
+            playerDirection = SpriteDirection.Right;
+            viewDirection = SpriteDirection.Right;
+            break;
+        case SDL_SCANCODE_LEFT:
+            playerDirection = SpriteDirection.Left;
+            viewDirection = SpriteDirection.Left;
+            break;
+        default:
             break;
         }
     }
@@ -275,6 +310,7 @@ public:
 
         /* We need input working. */
         context.input.keyReleased.connect(&onKeyReleased);
+        context.input.keyPressed.connect(&onKeyPressed);
 
         /* Create our first scene */
         s = new Scene("sample");
@@ -301,12 +337,35 @@ public:
         bugAnim.update(view, context.deltaTime());
         updateCamera(view);
 
+        /*
         auto playerPos = view.data!TransformComponent(player);
         auto explosionPos = view.data!TransformComponent(explosion);
-
         explosionPos.position = playerPos.position;
         explosionPos.position.z = 0.9f;
-        explosionPos.position.y -= 30.0f;
+        explosionPos.position.y -= 30.0f;*/
+
+        auto velocityX = (meterSize * 0.9) / 1000.0f;
+        if (viewDirection == SpriteDirection.Left)
+        {
+            view.data!SpriteComponent(player).flip = FlipMode.Horizontal;
+        }
+        else
+        {
+            view.data!SpriteComponent(player).flip = FlipMode.None;
+            view.data!PhysicsComponent(player).velocityX = velocityX;
+        }
+
+        switch (playerDirection)
+        {
+        case SpriteDirection.Left:
+            view.data!PhysicsComponent(player).velocityX = -velocityX;
+            break;
+        case SpriteDirection.Right:
+            view.data!PhysicsComponent(player).velocityX = velocityX;
+            break;
+        default:
+            view.data!PhysicsComponent(player).velocityX = 0.0f;
+        }
     }
 
     final void updateCamera(View!ReadWrite view)
