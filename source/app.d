@@ -58,6 +58,15 @@ int main(string[] args)
     context.display.logicalSize(480, 270);
     context.display.backgroundColor = 0x0f;
 
+    if (vulkan)
+    {
+        context.display.title = context.display.title ~ " [Vulkan]";
+    }
+    else
+    {
+        context.display.title = context.display.title ~ " [OpenGL]";
+    }
+
     /* We want OpenGL or Vulkan? */
     if (vulkan)
     {
