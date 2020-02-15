@@ -132,6 +132,7 @@ private:
 
     SpriteDirection playerDirection = SpriteDirection.None;
     SpriteDirection viewDirection = SpriteDirection.Right;
+    bool playerSpeedUp = false;
 
     /**
      * A keyboard key was just released
@@ -158,6 +159,9 @@ private:
             playerDirection = SpriteDirection.None;
             viewDirection = SpriteDirection.Left;
             break;
+        case SDL_SCANCODE_LCTRL:
+            playerSpeedUp = false;
+            break;
         default:
             writeln("Key released");
             break;
@@ -175,6 +179,9 @@ private:
         case SDL_SCANCODE_LEFT:
             playerDirection = SpriteDirection.Left;
             viewDirection = SpriteDirection.Left;
+            break;
+        case SDL_SCANCODE_LCTRL:
+            playerSpeedUp = true;
             break;
         default:
             break;
@@ -345,6 +352,10 @@ public:
         explosionPos.position.y -= 30.0f;*/
 
         auto velocityX = (meterSize * 0.9) / 1000.0f;
+        if (playerSpeedUp)
+        {
+            velocityX *= 2.5f;
+        }
         if (viewDirection == SpriteDirection.Left)
         {
             view.data!SpriteComponent(player).flip = FlipMode.Horizontal;
