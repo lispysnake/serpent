@@ -117,6 +117,7 @@ private:
     Entity mech;
     Animation robotAnim;
     Animation mechAnim;
+    Animation explosionAnim;
 
     /**
      * A keyboard key was just released
@@ -212,6 +213,7 @@ public:
         initView.data!TransformComponent(sprite).position.y = texture.height - 73.0f;
         initView.data!TransformComponent(sprite).position.z = 0.1f;
 
+        /* Create the mech */
         mech = initView.createEntity();
         initView.addComponent!SpriteComponent(mech);
         mechAnim = Animation(mech, dur!"msecs"(80));
@@ -225,6 +227,20 @@ public:
         initView.data!TransformComponent(mech).position.x = -80.0f;
         initView.data!TransformComponent(mech)
             .position.y = texture.height - mechAnim.textures[0].height - 12;
+
+        /* Create the explosion */
+        auto explosion = initView.createEntity();
+        initView.addComponent!SpriteComponent(explosion);
+        explosionAnim = Animation(explosion, dur!"msecs"(80));
+        foreach (i; 0 .. 10)
+        {
+            explosionAnim.addTexture(new Texture(
+                    "assets/SciFi/Sprites/Explosion/sprites/explosion-animation%d.png".format(i + 1)));
+        }
+        initView.data!SpriteComponent(explosion).texture = explosionAnim.textures[0];
+        initView.data!TransformComponent(explosion).position.x = 90.0f;
+        initView.data!TransformComponent(explosion).position.y = texture.height - 93.0f;
+        initView.data!TransformComponent(explosion).position.z = 0.9f;
 
         auto meterSize = 70; /* 70 pixels is our one meter */
 
@@ -243,6 +259,7 @@ public:
     {
         mechAnim.update(view, context.deltaTime());
         robotAnim.update(view, context.deltaTime());
+        explosionAnim.update(view, context.deltaTime());
         updateCamera(view);
     }
 
