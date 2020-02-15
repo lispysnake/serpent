@@ -119,7 +119,9 @@ private:
     Animation explosionAnim;
     Animation playerAnim;
     Animation shipAnim;
+    Animation bugAnim;
     Texture texture;
+    const auto meterSize = 70;
 
     /**
      * A keyboard key was just released
@@ -146,8 +148,6 @@ private:
 
     final void createPlayer(View!ReadWrite initView)
     {
-        auto meterSize = 70; /* 70 pixels is our one meter */
-
         /* Create player */
         player = initView.createEntity();
         auto rootTexture = new Texture("assets/SciFi/Sprites/tank-unit/PNG/tank-unit.png");
@@ -170,8 +170,6 @@ private:
 
     final void createShip(View!ReadWrite initView)
     {
-        auto meterSize = 70;
-
         ship = initView.createEntity();
         auto rootTexture = new Texture(
                 "assets/SciFi/Sprites/spaceship-unit/PNG/ship-unit-with-thrusts.png");
@@ -208,6 +206,22 @@ private:
         initView.data!TransformComponent(explosion).position.x = 40.0f;
         initView.data!TransformComponent(explosion).position.y = texture.height - 93.0f;
         initView.data!TransformComponent(explosion).position.z = 0.9f;
+    }
+
+    final void createBug(View!ReadWrite initView)
+    {
+        auto bug = initView.createEntity();
+        initView.addComponent!SpriteComponent(bug);
+        bugAnim = Animation(bug, dur!"msecs"(50));
+        foreach (i; 0 .. 8)
+        {
+            bugAnim.addTexture(new Texture(
+                    "assets/SciFi/Sprites/alien-flying-enemy/sprites/alien-enemy-flying%d.png".format(
+                    i + 1)));
+        }
+        initView.data!SpriteComponent(bug).flip = FlipMode.Horizontal;
+        initView.addComponent!PhysicsComponent(bug).velocityX = (meterSize * 1.5) / 1000.0f;
+        initView.data!SpriteComponent(bug).texture = bugAnim.textures[0];
     }
 
     final void createBackground(View!ReadWrite initView)
@@ -274,6 +288,7 @@ public:
         createPlayer(initView);
         createExplosion(initView);
         createShip(initView);
+        createBug(initView);
 
         return true;
     }
@@ -283,6 +298,7 @@ public:
         explosionAnim.update(view, context.deltaTime());
         playerAnim.update(view, context.deltaTime());
         shipAnim.update(view, context.deltaTime());
+        bugAnim.update(view, context.deltaTime());
         updateCamera(view);
 
         auto playerPos = view.data!TransformComponent(player);
