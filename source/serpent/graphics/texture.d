@@ -50,8 +50,21 @@ private:
     box2f _clip = box2f(0.0f, 0.0f, 1.0f, 1.0f);
 
     bgfx_texture_handle_t _handle = cast(bgfx_texture_handle_t) 0;
+    Texture root = null;
 
     UVCoordinates _uv;
+
+    this(Texture parent, box2f clipregion)
+    {
+        _path = parent.path;
+        _handle = parent._handle;
+        _width = clipregion.max.x - clipregion.min.x;
+        _height = clipregion.max.y - clipregion.min.y;
+        _clip = clipregion;
+        _uv = UVCoordinates(parent._width, parent._height, _clip);
+    }
+
+    @disable this();
 
 public:
 
@@ -90,11 +103,16 @@ public:
 
     ~this()
     {
-        if (surface !is null)
+        if (surface !is null && root is null)
         {
             bgfx_destroy_texture(handle);
             SDL_FreeSurface(surface);
         }
+    }
+
+    final Texture subtexture(box2f clipregion)
+    {
+        return new Texture(this, clipregion);
     }
 
     /**

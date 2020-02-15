@@ -113,11 +113,10 @@ final class DemoGame : App
 private:
     Scene s;
     Entity[] background;
-    Entity sprite;
-    Entity mech;
-    Animation robotAnim;
-    Animation mechAnim;
+    Entity player;
     Animation explosionAnim;
+    Animation playerAnim;
+    Texture texture;
 
     /**
      * A keyboard key was just released
@@ -142,27 +141,50 @@ private:
         }
     }
 
-public:
-
-    /**
-     * All initial game setup should be done from bootstrap.
-     */
-    final override bool bootstrap(View!ReadWrite initView) @system
+    final void createPlayer(View!ReadWrite initView)
     {
-        writeln("Game Init");
+        auto meterSize = 70; /* 70 pixels is our one meter */
 
-        /* We need input working. */
-        context.input.keyReleased.connect(&onKeyReleased);
+        /* Create player */
+        player = initView.createEntity();
+        auto rootTexture = new Texture("assets/SciFi/Sprites/tank-unit/PNG/tank-unit.png");
+        auto frameSize = rootTexture.width / 4.0f;
+        playerAnim = Animation(player, dur!"msecs"(100));
+        initView.addComponent!SpriteComponent(player)
+            .texture = rootTexture.subtexture(rectanglef(0.0f, 0.0f, frameSize,
+                    rootTexture.height));
+        initView.data!TransformComponent(player)
+            .position.y = texture.height - rootTexture.height - 13.0f;
+        initView.addComponent!PhysicsComponent(player).velocityX = (meterSize * 0.9) / 1000.0f;
 
-        /* Create our first scene */
-        s = new Scene("sample");
-        context.display.addScene(s);
-        s.addCamera(new OrthographicCamera());
+        foreach (i; 0 .. 4)
+        {
+            auto frame = rootTexture.subtexture(rectanglef(i * frameSize, 0.0f,
+                    frameSize, rootTexture.height));
+            playerAnim.addTexture(frame);
+        }
+    }
 
-        context.component.registerComponent!PhysicsComponent;
-        context.systemGroup.add(new BasicPhysics());
+    final void createExplosion(View!ReadWrite initView)
+    {
+        /* Create the explosion */
+        auto explosion = initView.createEntity();
+        initView.addComponent!SpriteComponent(explosion);
+        explosionAnim = Animation(explosion, dur!"msecs"(80));
+        foreach (i; 0 .. 10)
+        {
+            explosionAnim.addTexture(new Texture(
+                    "assets/SciFi/Sprites/Explosion/sprites/explosion-animation%d.png".format(i + 1)));
+        }
+        initView.data!SpriteComponent(explosion).texture = explosionAnim.textures[0];
+        initView.data!TransformComponent(explosion).position.x = 40.0f;
+        initView.data!TransformComponent(explosion).position.y = texture.height - 93.0f;
+        initView.data!TransformComponent(explosion).position.z = 0.9f;
+    }
 
-        auto texture = new Texture("assets/SciFi/Environments/bulkhead-walls/PNG/bg-wall.png");
+    final void createBackground(View!ReadWrite initView)
+    {
+        texture = new Texture("assets/SciFi/Environments/bulkhead-walls/PNG/bg-wall.png");
         auto floortexture = new Texture("assets/SciFi/Environments/bulkhead-walls/PNG/floor.png");
         auto altTexture = new Texture(
                 "assets/SciFi/Environments/bulkhead-walls/PNG/bg-wall-with-supports.png");
@@ -198,68 +220,39 @@ public:
                 .position.y = texture.height - floortexture.height;
         }
 
-        /* Create the robot */
-        sprite = initView.createEntity();
-        initView.addComponent!SpriteComponent(sprite);
-        robotAnim = Animation(sprite, dur!"msecs"(80));
-        foreach (i; 0 .. 7)
-        {
-            robotAnim.addTexture(new Texture(
-                    "assets/SciFi/Sprites/bipedal-Unit/PNG/sprites/bipedal-unit%d.png".format(i + 1)));
-        }
-        initView.data!SpriteComponent(sprite).texture = robotAnim.textures[0];
+    }
 
-        initView.data!TransformComponent(sprite).position.x = 30.0f;
-        initView.data!TransformComponent(sprite).position.y = texture.height - 73.0f;
-        initView.data!TransformComponent(sprite).position.z = 0.1f;
+public:
 
-        /* Create the mech */
-        mech = initView.createEntity();
-        initView.addComponent!SpriteComponent(mech);
-        mechAnim = Animation(mech, dur!"msecs"(80));
-        foreach (i; 0 .. 10)
-        {
-            mechAnim.addTexture(new Texture(
-                    "assets/SciFi/Sprites/mech-unit/sprites/mech-unit-export%d.png".format(i + 1)));
-        }
-        initView.data!SpriteComponent(mech).texture = mechAnim.textures[0];
-        initView.data!TransformComponent(mech).position.z = 0.1f;
-        initView.data!TransformComponent(mech).position.x = -80.0f;
-        initView.data!TransformComponent(mech)
-            .position.y = texture.height - mechAnim.textures[0].height - 12;
+    /**
+     * All initial game setup should be done from bootstrap.
+     */
+    final override bool bootstrap(View!ReadWrite initView) @system
+    {
+        writeln("Game Init");
 
-        /* Create the explosion */
-        auto explosion = initView.createEntity();
-        initView.addComponent!SpriteComponent(explosion);
-        explosionAnim = Animation(explosion, dur!"msecs"(80));
-        foreach (i; 0 .. 10)
-        {
-            explosionAnim.addTexture(new Texture(
-                    "assets/SciFi/Sprites/Explosion/sprites/explosion-animation%d.png".format(i + 1)));
-        }
-        initView.data!SpriteComponent(explosion).texture = explosionAnim.textures[0];
-        initView.data!TransformComponent(explosion).position.x = 40.0f;
-        initView.data!TransformComponent(explosion).position.y = texture.height - 93.0f;
-        initView.data!TransformComponent(explosion).position.z = 0.9f;
+        /* We need input working. */
+        context.input.keyReleased.connect(&onKeyReleased);
 
-        auto meterSize = 70; /* 70 pixels is our one meter */
+        /* Create our first scene */
+        s = new Scene("sample");
+        context.display.addScene(s);
+        s.addCamera(new OrthographicCamera());
 
-        /* Mech travels 70cm per second */
-        auto physMech = initView.addComponent!PhysicsComponent(mech);
-        physMech.velocityX = (meterSize * 0.7) / 1000.0f;
+        context.component.registerComponent!PhysicsComponent;
+        context.systemGroup.add(new BasicPhysics());
 
-        /* Robot travels 90cm per second */
-        auto physRobot = initView.addComponent!PhysicsComponent(sprite);
-        physRobot.velocityX = (meterSize * 0.9f) / 1000.0f;
+        createBackground(initView);
+        createPlayer(initView);
+        createExplosion(initView);
 
         return true;
     }
 
     final override void update(View!ReadWrite view)
     {
-        mechAnim.update(view, context.deltaTime());
-        robotAnim.update(view, context.deltaTime());
         explosionAnim.update(view, context.deltaTime());
+        playerAnim.update(view, context.deltaTime());
         updateCamera(view);
     }
 
@@ -267,10 +260,10 @@ public:
     {
         import gfm.math;
 
-        auto component = view.data!TransformComponent(sprite);
+        auto component = view.data!TransformComponent(player);
 
-        auto boundsX = (component.position.x + robotAnim.textures[robotAnim.textureIndex].width / 2) - (
-                context.display.logicalWidth() / 2);
+        auto boundsX = (component.position.x + playerAnim.textures[playerAnim.textureIndex].width
+                / 2) - (context.display.logicalWidth() / 2);
         auto boundsY = 0.0f;
         s.camera.position = vec3f(boundsX, 0.0f, 0.0f);
         auto bounds = rectanglef(0.0f, 0.0f, 480.0f + 200.0f, 176.0f);
