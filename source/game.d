@@ -115,6 +115,7 @@ private:
     Entity[] background;
     Entity player;
     Entity ship;
+    Entity explosion;
     Animation explosionAnim;
     Animation playerAnim;
     Animation shipAnim;
@@ -179,9 +180,11 @@ private:
         initView.addComponent!SpriteComponent(ship)
             .texture = rootTexture.subtexture(rectanglef(0.0f, 0.0f, frameSize,
                     rootTexture.height));
+        initView.data!SpriteComponent(ship).flip = FlipMode.Horizontal;
         initView.data!TransformComponent(ship).position.y = 60.0f;
-        initView.addComponent!PhysicsComponent(ship).velocityX = (meterSize * 1.2) / 1000.0f;
-        initView.data!PhysicsComponent(ship).velocityY = (meterSize * -0.2) / 1000.0f;
+        initView.data!TransformComponent(ship).position.x = 500.0f;
+        initView.addComponent!PhysicsComponent(ship).velocityX = (meterSize * -1.2) / 1000.0f;
+        initView.data!PhysicsComponent(ship).velocityY = (meterSize * -0.1) / 1000.0f;
         foreach (i; 0 .. 8)
         {
             auto frame = rootTexture.subtexture(rectanglef(i * frameSize, 0.0f,
@@ -193,7 +196,7 @@ private:
     final void createExplosion(View!ReadWrite initView)
     {
         /* Create the explosion */
-        auto explosion = initView.createEntity();
+        explosion = initView.createEntity();
         initView.addComponent!SpriteComponent(explosion);
         explosionAnim = Animation(explosion, dur!"msecs"(80));
         foreach (i; 0 .. 10)
@@ -281,6 +284,13 @@ public:
         playerAnim.update(view, context.deltaTime());
         shipAnim.update(view, context.deltaTime());
         updateCamera(view);
+
+        auto playerPos = view.data!TransformComponent(player);
+        auto explosionPos = view.data!TransformComponent(explosion);
+
+        explosionPos.position = playerPos.position;
+        explosionPos.position.z = 0.9f;
+        explosionPos.position.y -= 30.0f;
     }
 
     final void updateCamera(View!ReadWrite view)
