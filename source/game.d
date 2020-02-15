@@ -114,8 +114,10 @@ private:
     Scene s;
     Entity[] background;
     Entity player;
+    Entity ship;
     Animation explosionAnim;
     Animation playerAnim;
+    Animation shipAnim;
     Texture texture;
 
     /**
@@ -162,6 +164,29 @@ private:
             auto frame = rootTexture.subtexture(rectanglef(i * frameSize, 0.0f,
                     frameSize, rootTexture.height));
             playerAnim.addTexture(frame);
+        }
+    }
+
+    final void createShip(View!ReadWrite initView)
+    {
+        auto meterSize = 70;
+
+        ship = initView.createEntity();
+        auto rootTexture = new Texture(
+                "assets/SciFi/Sprites/spaceship-unit/PNG/ship-unit-with-thrusts.png");
+        auto frameSize = rootTexture.width / 8.0f;
+        shipAnim = Animation(ship, dur!"msecs"(50));
+        initView.addComponent!SpriteComponent(ship)
+            .texture = rootTexture.subtexture(rectanglef(0.0f, 0.0f, frameSize,
+                    rootTexture.height));
+        initView.data!TransformComponent(ship).position.y = 60.0f;
+        initView.addComponent!PhysicsComponent(ship).velocityX = (meterSize * 1.2) / 1000.0f;
+        initView.data!PhysicsComponent(ship).velocityY = (meterSize * -0.2) / 1000.0f;
+        foreach (i; 0 .. 8)
+        {
+            auto frame = rootTexture.subtexture(rectanglef(i * frameSize, 0.0f,
+                    frameSize, rootTexture.height));
+            shipAnim.addTexture(frame);
         }
     }
 
@@ -245,6 +270,7 @@ public:
         createBackground(initView);
         createPlayer(initView);
         createExplosion(initView);
+        createShip(initView);
 
         return true;
     }
@@ -253,6 +279,7 @@ public:
     {
         explosionAnim.update(view, context.deltaTime());
         playerAnim.update(view, context.deltaTime());
+        shipAnim.update(view, context.deltaTime());
         updateCamera(view);
     }
 
