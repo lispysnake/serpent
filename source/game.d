@@ -238,7 +238,7 @@ public:
                     "assets/SciFi/Sprites/Explosion/sprites/explosion-animation%d.png".format(i + 1)));
         }
         initView.data!SpriteComponent(explosion).texture = explosionAnim.textures[0];
-        initView.data!TransformComponent(explosion).position.x = 90.0f;
+        initView.data!TransformComponent(explosion).position.x = 40.0f;
         initView.data!TransformComponent(explosion).position.y = texture.height - 93.0f;
         initView.data!TransformComponent(explosion).position.z = 0.9f;
 

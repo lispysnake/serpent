@@ -44,12 +44,28 @@ public:
     /**
      * Find all sprites. We should add camera culling here but meh.
      */
-    final override void queryVisibles(View!ReadOnly queryView, ref FramePacket packet) @safe
+    final override void queryVisibles(View!ReadOnly queryView, ref FramePacket packet) @trusted
     {
+        /* Computed visible viewport */
+        auto position = context.display.scene.camera.position;
+        auto viewport = rectanglef(position.x, position.y,
+                context.display.logicalWidth(), context.display.logicalHeight());
+
         foreach (entity; queryView.withComponent!SpriteComponent)
         {
             auto transform = queryView.data!TransformComponent(entity);
-            packet.pushVisibleEntity(entity, this, transform.position);
+            auto sprite = queryView.data!SpriteComponent(entity);
+
+            /* Bounding box for the entity */
+            auto bounds = rectanglef(transform.position.x, transform.position.y,
+                    sprite.texture.width, sprite.texture.height);
+            auto intersection = viewport.intersection(bounds);
+
+            /* Only push visibles */
+            if (intersection.isSorted() && !intersection.empty())
+            {
+                packet.pushVisibleEntity(entity, this, transform.position);
+            }
         }
     }
 
