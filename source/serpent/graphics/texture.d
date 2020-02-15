@@ -56,6 +56,7 @@ private:
 
     this(Texture parent, box2f clipregion)
     {
+        root = parent;
         _path = parent.path;
         _handle = parent._handle;
         _width = clipregion.max.x - clipregion.min.x;
