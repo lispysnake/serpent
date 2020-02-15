@@ -200,7 +200,7 @@ private:
                     rootTexture.height));
         initView.data!TransformComponent(player)
             .position.y = texture.height - rootTexture.height - 13.0f;
-        initView.addComponent!PhysicsComponent(player).velocityX = (meterSize * 0.9) / 1000.0f;
+        initView.addComponent!PhysicsComponent(player).velocityX = 0.0f;
 
         foreach (i; 0 .. 4)
         {
@@ -306,6 +306,60 @@ private:
 
     }
 
+    /**
+     * Update the player sprite + velocity. TODO: Let's not actually
+     * write this change on every frame unless its really needed.
+     */
+    final void updatePlayer(View!ReadWrite view)
+    {
+        playerAnim.update(view, context.deltaTime());
+
+        auto velocityX = (meterSize * 0.9) / 1000.0f;
+        if (playerSpeedUp)
+        {
+            velocityX *= 2.5f;
+        }
+        if (viewDirection == SpriteDirection.Left)
+        {
+            view.data!SpriteComponent(player).flip = FlipMode.Horizontal;
+        }
+        else
+        {
+            view.data!SpriteComponent(player).flip = FlipMode.None;
+            view.data!PhysicsComponent(player).velocityX = velocityX;
+        }
+
+        switch (playerDirection)
+        {
+        case SpriteDirection.Left:
+            view.data!PhysicsComponent(player).velocityX = -velocityX;
+            break;
+        case SpriteDirection.Right:
+            view.data!PhysicsComponent(player).velocityX = velocityX;
+            break;
+        default:
+            view.data!PhysicsComponent(player).velocityX = 0.0f;
+        }
+    }
+
+    /**
+     * Update the camera to center on the player
+     */
+    final void updateCamera(View!ReadWrite view)
+    {
+        import gfm.math;
+
+        auto component = view.data!TransformComponent(player);
+
+        auto boundsX = (component.position.x + playerAnim.textures[playerAnim.textureIndex].width
+                / 2) - (context.display.logicalWidth() / 2);
+        auto boundsY = 0.0f;
+        s.camera.position = vec3f(boundsX, 0.0f, 0.0f);
+        auto bounds = rectanglef(0.0f, 0.0f, 480.0f + 200.0f, 176.0f);
+        auto viewport = rectanglef(0.0f, 0.0f, 480.0f, 176.0f);
+        s.camera.clamp(bounds, viewport);
+    }
+
 public:
 
     /**
@@ -339,9 +393,9 @@ public:
     final override void update(View!ReadWrite view)
     {
         explosionAnim.update(view, context.deltaTime());
-        playerAnim.update(view, context.deltaTime());
         shipAnim.update(view, context.deltaTime());
         bugAnim.update(view, context.deltaTime());
+        updatePlayer(view);
         updateCamera(view);
 
         /*
@@ -350,47 +404,5 @@ public:
         explosionPos.position = playerPos.position;
         explosionPos.position.z = 0.9f;
         explosionPos.position.y -= 30.0f;*/
-
-        auto velocityX = (meterSize * 0.9) / 1000.0f;
-        if (playerSpeedUp)
-        {
-            velocityX *= 2.5f;
-        }
-        if (viewDirection == SpriteDirection.Left)
-        {
-            view.data!SpriteComponent(player).flip = FlipMode.Horizontal;
-        }
-        else
-        {
-            view.data!SpriteComponent(player).flip = FlipMode.None;
-            view.data!PhysicsComponent(player).velocityX = velocityX;
-        }
-
-        switch (playerDirection)
-        {
-        case SpriteDirection.Left:
-            view.data!PhysicsComponent(player).velocityX = -velocityX;
-            break;
-        case SpriteDirection.Right:
-            view.data!PhysicsComponent(player).velocityX = velocityX;
-            break;
-        default:
-            view.data!PhysicsComponent(player).velocityX = 0.0f;
-        }
-    }
-
-    final void updateCamera(View!ReadWrite view)
-    {
-        import gfm.math;
-
-        auto component = view.data!TransformComponent(player);
-
-        auto boundsX = (component.position.x + playerAnim.textures[playerAnim.textureIndex].width
-                / 2) - (context.display.logicalWidth() / 2);
-        auto boundsY = 0.0f;
-        s.camera.position = vec3f(boundsX, 0.0f, 0.0f);
-        auto bounds = rectanglef(0.0f, 0.0f, 480.0f + 200.0f, 176.0f);
-        auto viewport = rectanglef(0.0f, 0.0f, 480.0f, 176.0f);
-        s.camera.clamp(bounds, viewport);
     }
 }
