@@ -29,12 +29,9 @@ import serpent.graphics.sprite : SpriteComponent;
 import serpent.core.transform;
 
 /**
- * The SpriteRenderer will collect and draw all visible sprites within
- * the current scene.
- *
- * TODO: Optimise this into a batching sprite renderer. For now we're
- * going to be ugly and draw a quad at a time. This results in multiple
- * draw calls per frame, and is hella inefficient.
+ * The SpriteRenderer collects all entities with the SpriteComponent,
+ * and submits them for batch rendering, if they're within the visible
+ * viewport.
  */
 final class SpriteRenderer : Renderer
 {
