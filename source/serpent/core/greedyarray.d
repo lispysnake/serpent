@@ -42,7 +42,7 @@ private:
     ulong _realSize = 0;
     ulong _curSize = 0;
     Array!T _array;
-    static auto growthFactor = 4; /* Quadruple in size */
+    static auto growthFactor = 2; /* Double in size */
 
 public:
 
