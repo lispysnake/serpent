@@ -93,7 +93,7 @@ public:
         queue = BatchQueue!(PosUVVertex, uint16_t)(128, 100_000, 6, 4);
 
         /* Allow 100k sprites max */
-        drawOps = RingBuffer!TexturedQuad(100_000);
+        drawOps = RingBuffer!TexturedQuad(128, 100_000);
     }
 
     ~this()

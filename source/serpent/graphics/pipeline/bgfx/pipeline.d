@@ -160,7 +160,7 @@ public:
         super(context, display);
 
         /* Allow tuning this in future */
-        packet = FramePacket(30_000);
+        packet = FramePacket(128, 30_000);
     }
 
     final void addRenderer(Renderer r) @safe

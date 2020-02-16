@@ -25,6 +25,7 @@ module serpent.core;
 public import serpent.core.component;
 public import serpent.core.context;
 public import serpent.core.entity;
+public import serpent.core.greedyarray;
 public import serpent.core.group;
 public import serpent.core.policy;
 public import serpent.core.processor;

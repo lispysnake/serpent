@@ -35,9 +35,9 @@ public:
      * Right now the 2D centric framepacket is incredibly simple, but
      * we may flesh it out in future.
      */
-    this(ulong entityLimit) @trusted nothrow
+    this(ulong min, ulong entityLimit) @trusted nothrow
     {
-        _visibleEntities = RingBuffer!FramePacketVisible(entityLimit);
+        _visibleEntities = RingBuffer!FramePacketVisible(min, entityLimit);
         this.entityLimit = entityLimit;
     }
 
