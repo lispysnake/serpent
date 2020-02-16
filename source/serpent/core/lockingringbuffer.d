@@ -20,28 +20,30 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.core.ringbuffer;
+module serpent.core.lockingringbuffer;
 
 import serpent.core.greedyarray;
+import core.sync.mutex;
 
 /**
- * The RingBuffer provides a circular buffer implementation around a potentially
+ * The LockingRingBuffer provides a circular buffer implementation around a potentially
  * greedily-reallocated array for cache coherency. This will also help to reduce
  * the total memory usage by only sizing-up when required. While this ma result
  * in some potential initial 'stutters' for misconfigured sizes, the growths should
  * be rare enough in most game cycles as we don't shrink.
  */
-final struct RingBuffer(T)
+final struct LockingRingBuffer(T)
 {
 private:
 
     __gshared GreedyArray!T _array;
     ulong insertIndex = 0;
+    shared Mutex mtx;
 
 public:
 
     /**
-     * Construct a new RingBuffer.
+     * Construct a new LockingRingBuffer.
      *
      * The maximum size must be non-zero as this is a ring buffer.
      */
@@ -49,16 +51,19 @@ public:
     {
         assert(maxSize > 0);
         _array = GreedyArray!T(minSize, maxSize);
+        mtx = new shared Mutex();
     }
 
     final void add(T datum) @trusted @nogc nothrow
     {
+        mtx.lock_nothrow();
         if (insertIndex >= _array.maxSize)
         {
             insertIndex = 0;
         }
         _array[insertIndex] = datum;
         ++insertIndex;
+        mtx.unlock_nothrow();
     }
 
     /**
@@ -74,8 +79,10 @@ public:
      */
     final void reset()
     {
+        mtx.lock_nothrow();
         insertIndex = 0;
         _array.reset();
+        mtx.unlock_nothrow();
     }
 
     final const @property bool full() @trusted @nogc nothrow

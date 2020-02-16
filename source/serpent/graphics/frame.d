@@ -1,7 +1,7 @@
 module serpent.graphics.frame;
 
 public import serpent.core.entity : EntityID;
-public import serpent.core.ringbuffer;
+public import serpent.core.lockingringbuffer;
 
 import serpent.graphics.renderer;
 
@@ -25,7 +25,7 @@ final struct FramePacket
 
 private:
     __gshared bool running = false;
-    __gshared RingBuffer!FramePacketVisible _visibleEntities;
+    __gshared LockingRingBuffer!FramePacketVisible _visibleEntities;
     ulong entityLimit = 0;
 
 public:
@@ -37,7 +37,7 @@ public:
      */
     this(ulong min, ulong entityLimit) @trusted nothrow
     {
-        _visibleEntities = RingBuffer!FramePacketVisible(min, entityLimit);
+        _visibleEntities = LockingRingBuffer!FramePacketVisible(min, entityLimit);
         this.entityLimit = entityLimit;
     }
 

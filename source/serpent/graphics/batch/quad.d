@@ -33,7 +33,7 @@ import serpent.graphics.vertex;
 import serpent.graphics.uv : UVCoordinates;
 import serpent.graphics.batch.queue : BatchQueue;
 import serpent.graphics.batch : TexturedQuad;
-import serpent.core.ringbuffer;
+import serpent.core.lockingringbuffer;
 
 public import serpent.core.context;
 public import serpent.graphics.texture;
@@ -62,7 +62,7 @@ private:
     bgfx_transient_vertex_buffer_t tvb;
     ulong quadIndex = 0;
 
-    RingBuffer!TexturedQuad drawOps;
+    LockingRingBuffer!TexturedQuad drawOps;
 
     BatchQueue!(PosUVVertex, uint16_t) queue;
 
@@ -92,8 +92,8 @@ public:
 
         queue = BatchQueue!(PosUVVertex, uint16_t)(128, 100_000, 6, 4);
 
-        /* Allow 100k sprites max */
-        drawOps = RingBuffer!TexturedQuad(128, 100_000);
+        /* Allow 131K sprites max */
+        drawOps = LockingRingBuffer!TexturedQuad(2 << 6, 2 << 16);
     }
 
     ~this()
