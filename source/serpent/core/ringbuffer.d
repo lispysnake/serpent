@@ -1,71 +1,92 @@
+/*
+ * This file is part of serpent.
+ *
+ * Copyright © 2019-2020 Lispy Snake, Ltd.
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty. In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ *
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ *
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software
+ *    in a product, an acknowledgment in the product documentation would be
+ *    appreciated but is not required.
+ * 2. Altered source versions must be plainly marked as such, and must not be
+ *    misrepresented as being the original software.
+ * 3. This notice may not be removed or altered from any source distribution.
+ */
+
 module serpent.core.ringbuffer;
 
-import std.container.array;
+import serpent.core.greedyarray;
 import core.sync.mutex;
 
 /**
- * Our ringbuffer implementation is very simple and crude, it provides a way
- * for us to mass-insert items into the buffer with one set of threads in
- * a write operation.
- *
- * Later we may access the data either sequentially or in parallel but with
- * a guarantee of being read-only, so there are no race conditions for us to
- * consider.
+ * The RingBuffer provides a circular buffer implementation around a potentially
+ * greedily-reallocated array for cache coherency. This will also help to reduce
+ * the total memory usage by only sizing-up when required. While this ma result
+ * in some potential initial 'stutters' for misconfigured sizes, the growths should
+ * be rare enough in most game cycles as we don't shrink.
  */
 final struct RingBuffer(T)
 {
-
 private:
-    __gshared Array!T _buffer; /* Classic non-TLS */
-    ulong _bufferIndex = 0;
-    ulong _bufferLimit = 0;
+
+    __gshared GreedyArray!T _array;
+    ulong insertIndex = 0;
     shared Mutex mtx;
 
 public:
 
     /**
-     * Construct a new MPQueue with the given upper limit
+     * Construct a new RingBuffer.
+     *
+     * The maximum size must be non-zero as this is a ring buffer.
      */
-    this(ulong bufferLimit) @trusted nothrow
+    this(ulong minSize, ulong maxSize) @trusted nothrow
     {
-        _bufferLimit = bufferLimit;
-        _buffer.reserve(_bufferLimit);
-        _buffer.length = _bufferLimit;
+        assert(maxSize > 0);
+        _array = GreedyArray!T(minSize, maxSize);
         mtx = new shared Mutex();
     }
 
-    /**
-     * Reset the buffer for the current frame
-     */
-    final void reset() @safe @nogc nothrow
+    final void add(T datum) @trusted @nogc nothrow
     {
         mtx.lock_nothrow();
-        _bufferIndex = 0;
-        mtx.unlock_nothrow();
-    }
-
-    /**
-     * Add a single item to the queue
-     */
-    final void add(T item) @trusted @nogc nothrow
-    {
-        mtx.lock_nothrow();
-        if (_bufferIndex >= _bufferLimit)
+        if (insertIndex >= _array.maxSize)
         {
-            _bufferIndex = 0;
+            insertIndex = 0;
         }
-        _buffer[_bufferIndex] = item;
-        ++_bufferIndex;
+        _array[insertIndex] = datum;
+        ++insertIndex;
         mtx.unlock_nothrow();
     }
 
-    final const @property auto data() @trusted @nogc nothrow
+    /**
+     * Return underlying data
+     */
+    final @property auto data() @trusted @nogc nothrow
     {
-        return _buffer[0 .. _bufferIndex];
+        return _array.data;
+    }
+
+    /**
+     * Rewind to start of buffer.
+     */
+    final void reset()
+    {
+        mtx.lock_nothrow();
+        insertIndex = 0;
+        _array.reset();
+        mtx.unlock_nothrow();
     }
 
     final const @property bool full() @trusted @nogc nothrow
     {
-        return _bufferIndex == _bufferLimit - 1;
+        return insertIndex == _array.maxSize - 1;
     }
 }
