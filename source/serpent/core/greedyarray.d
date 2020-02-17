@@ -84,7 +84,7 @@ public:
     /**
      * Return indexing for underlying array
      */
-    pure final auto opIndex(ulong i) @trusted
+    pure final ref auto opIndex(ulong i) @trusted
     {
         assert(i < _array.length);
         return _array[i];
