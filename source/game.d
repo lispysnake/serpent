@@ -131,6 +131,7 @@ private:
     SpriteDirection playerDirection = SpriteDirection.None;
     SpriteDirection viewDirection = SpriteDirection.Right;
     bool playerSpeedUp = false;
+    bool destroyed = false;
 
     /**
      * A keyboard key was just released
@@ -156,6 +157,10 @@ private:
         case SDL_SCANCODE_LEFT:
             playerDirection = SpriteDirection.None;
             viewDirection = SpriteDirection.Left;
+            break;
+        case SDL_SCANCODE_C: /* clear */
+            destroyed = true;
+            context.entity.clear();
             break;
         case SDL_SCANCODE_LCTRL:
             playerSpeedUp = false;
@@ -398,6 +403,10 @@ public:
 
     final override void update(View!ReadWrite view)
     {
+        if (destroyed)
+        {
+            return;
+        }
         explosionAnim.update(view, context.deltaTime());
         shipAnim.update(view, context.deltaTime());
         bugAnim.update(view, context.deltaTime());
