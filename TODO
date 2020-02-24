@@ -9,3 +9,10 @@
 - Fix TransformComponent problems (Potentially want a Transform2D + Transform3D)
 - Consider removing all immediate APIs
 - Require componentregistration before running the game?
+- Add an Animation Timeline concept
+
+    - components cannot contain slices to textures.
+    - textures should be handles anyway.
+    - an Animation should likely be a handle which returns the correct
+      texture handle for a Timeline.
+    - Then we can have multithreaded lightweight SpriteAnimation.
