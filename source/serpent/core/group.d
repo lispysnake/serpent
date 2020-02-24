@@ -144,7 +144,7 @@ package:
      */
     final void bootstrap() @system
     {
-        auto view = View!T(this.context.entity, this.context.component);
+        auto view = View!T(this.context.entity);
 
         foreach (ref p; processors)
         {
@@ -158,7 +158,7 @@ package:
      */
     final void run(TaskPool tp) @system
     {
-        auto view = View!T(this.context.entity, this.context.component);
+        auto view = View!T(this.context.entity);
 
         /* If parallel is set+supported, execute units in parallel */
         if (this.parallel())
@@ -186,7 +186,7 @@ package:
      */
     final void finish() @system
     {
-        auto view = View!T(this.context.entity, this.context.component);
+        auto view = View!T(this.context.entity);
 
         foreach (ref p; processors)
         {

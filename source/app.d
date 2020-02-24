@@ -100,8 +100,8 @@ int main(string[] args)
     /* Set our root directory up */
     context.resource.root = context.resource.root ~ "/assets/built";
 
-    context.component.registerComponent!SpriteComponent;
-    context.component.registerComponent!MapComponent;
+    context.entity.registerComponent!SpriteComponent;
+    context.entity.registerComponent!MapComponent;
 
     /* HAX: Add bgfx specific renderer. We need to abstract renderer
      * and textures!

@@ -66,10 +66,10 @@ public:
 
     final override void queryVisibles(View!ReadOnly queryView, ref FramePacket packet)
     {
-        foreach (entity; queryView.withComponent!MapComponent)
+        foreach (entity, transform, map; queryView.withComponents!(TransformComponent,
+                MapComponent))
         {
-            auto transform = queryView.data!TransformComponent(entity);
-            packet.pushVisibleEntity(entity, this, transform.position);
+            packet.pushVisibleEntity(entity.id, this, transform.position);
         }
     }
 

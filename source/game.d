@@ -53,11 +53,9 @@ final class BasicPhysics : Processor!ReadWrite
     final override void run(View!ReadWrite view)
     {
         /* Find all physics entities */
-        foreach (ent; view.withComponent!PhysicsComponent())
+        foreach (ent, transform, physics; view.withComponents!(TransformComponent,
+                PhysicsComponent))
         {
-            auto transform = view.data!TransformComponent(ent);
-            auto physics = view.data!PhysicsComponent(ent);
-
             auto frameTime = context.frameTime();
 
             transform.position.x += physics.velocityX * frameTime;
@@ -74,10 +72,10 @@ final struct Animation
     Texture[] textures;
     ulong textureIndex = 0;
     Duration passed;
-    Entity entity;
+    EntityID entity;
     Duration interval;
 
-    this(Entity entity, Duration interval)
+    this(EntityID entity, Duration interval)
     {
         this.entity = entity;
         this.interval = interval;
@@ -119,10 +117,10 @@ final class DemoGame : App
 
 private:
     Scene s;
-    Entity[] background;
-    Entity player;
-    Entity ship;
-    Entity explosion;
+    EntityID[] background;
+    EntityID player;
+    EntityID ship;
+    EntityID explosion;
     Animation explosionAnim;
     Animation playerAnim;
     Animation shipAnim;
@@ -192,6 +190,7 @@ private:
     {
         /* Create player */
         player = initView.createEntity();
+        initView.addComponent!TransformComponent(player);
         auto rootTexture = new Texture("assets/SciFi/Sprites/tank-unit/PNG/tank-unit.png");
         auto frameSize = rootTexture.width / 4.0f;
         playerAnim = Animation(player, dur!"msecs"(100));
@@ -213,6 +212,7 @@ private:
     final void createShip(View!ReadWrite initView)
     {
         ship = initView.createEntity();
+        initView.addComponent!TransformComponent(ship);
         auto rootTexture = new Texture(
                 "assets/SciFi/Sprites/spaceship-unit/PNG/ship-unit-with-thrusts.png");
         auto frameSize = rootTexture.width / 8.0f;
@@ -237,6 +237,7 @@ private:
     {
         /* Create the explosion */
         explosion = initView.createEntity();
+        initView.addComponent!TransformComponent(explosion);
         initView.addComponent!SpriteComponent(explosion);
         explosionAnim = Animation(explosion, dur!"msecs"(80));
         foreach (i; 0 .. 10)
@@ -253,6 +254,7 @@ private:
     final void createBug(View!ReadWrite initView)
     {
         auto bug = initView.createEntity();
+        initView.addComponent!TransformComponent(bug);
         initView.addComponent!SpriteComponent(bug);
         bugAnim = Animation(bug, dur!"msecs"(50));
         foreach (i; 0 .. 8)
@@ -278,6 +280,7 @@ private:
         while (x < context.display.logicalWidth + 300)
         {
             background ~= initView.createEntity();
+            initView.addComponent!TransformComponent(background[idx]);
             auto component = initView.addComponent!SpriteComponent(background[idx]);
             if (idx % 2 == 0)
             {
@@ -298,6 +301,7 @@ private:
         foreach (i; 0 .. columns)
         {
             auto floor = initView.createEntity();
+            initView.addComponent!TransformComponent(floor);
             initView.addComponent!SpriteComponent(floor).texture = floortexture;
             initView.data!TransformComponent(floor).position.x = i * floortexture.width;
             initView.data!TransformComponent(floor)
@@ -378,8 +382,10 @@ public:
         context.display.addScene(s);
         s.addCamera(new OrthographicCamera());
 
-        context.component.registerComponent!PhysicsComponent;
+        context.entity.registerComponent!PhysicsComponent;
         context.systemGroup.add(new BasicPhysics());
+
+        context.entity.begin();
 
         createBackground(initView);
         createPlayer(initView);

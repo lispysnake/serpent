@@ -48,11 +48,9 @@ public:
         auto viewport = rectanglef(position.x, position.y,
                 context.display.logicalWidth(), context.display.logicalHeight());
 
-        foreach (entity; queryView.withComponent!SpriteComponent)
+        foreach (entity, transform, sprite; queryView.withComponents!(TransformComponent,
+                SpriteComponent))
         {
-            auto transform = queryView.data!TransformComponent(entity);
-            auto sprite = queryView.data!SpriteComponent(entity);
-
             /* Bounding box for the entity */
             auto bounds = rectanglef(transform.position.x, transform.position.y,
                     sprite.texture.width, sprite.texture.height);
@@ -61,7 +59,7 @@ public:
             /* Only push visibles */
             if (intersection.isSorted() && !intersection.empty())
             {
-                packet.pushVisibleEntity(entity, this, transform.position);
+                packet.pushVisibleEntity(entity.id, this, transform.position);
             }
         }
     }

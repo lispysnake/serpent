@@ -106,8 +106,8 @@ public:
      * Draw a sprite with the given texture and transform. The default clip region
      * is assumed as are the width and height
      */
-    final void drawTexturedQuad(bgfx_encoder_t* encoder,
-            immutable(Texture) texture, vec3f transformPosition, vec3f transformScale) @trusted
+    final void drawTexturedQuad(bgfx_encoder_t* encoder, const(Texture) texture,
+            vec3f transformPosition, vec3f transformScale) @trusted
     {
         drawTexturedQuad(encoder, texture, transformPosition, transformScale,
                 texture.width, texture.height, texture.uv());
@@ -117,7 +117,7 @@ public:
      * Draw a sprite with the given width and height, texture and transform.
      * The default clip region is assumed.
      */
-    final void drawTexturedQuad(bgfx_encoder_t* encoder, immutable(Texture) texture,
+    final void drawTexturedQuad(bgfx_encoder_t* encoder, const(Texture) texture,
             vec3f transformPosition, vec3f transformScale, float width, float height) @trusted
     {
         drawTexturedQuad(encoder, texture, transformPosition, transformScale,
@@ -136,7 +136,7 @@ public:
     /**
      * Draw the sprite texture using the given transform, width, height and clip region.
      */
-    final void drawTexturedQuad(bgfx_encoder_t* encoder, immutable(Texture) texture,
+    final void drawTexturedQuad(bgfx_encoder_t* encoder, const(Texture) texture,
             vec3f transformPosition, vec3f transformScale, float width,
             float height, UVCoordinates uv) @trusted
     {

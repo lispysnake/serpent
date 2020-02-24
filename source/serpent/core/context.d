@@ -78,7 +78,6 @@ private:
     ResourceManager _resource;
     InputManager _input;
     EntityManager _entity;
-    ComponentManager _component;
     App _app;
     Display _display;
     __gshared bool _running = false;
@@ -159,11 +158,10 @@ public:
         tp.isDaemon = false;
 
         /* Core ECS */
-        _component = new ComponentManager();
-        _entity = new EntityManager(_component);
+        _entity = new EntityManager();
 
         /* Configure must-have storage */
-        _component.registerComponent!TransformComponent;
+        _entity.registerComponent!TransformComponent;
 
         _systemGroup = new Group!ReadWrite("system").add(new InputProcessor)
             .add(new AppUpdateProcessor());
@@ -192,7 +190,7 @@ public:
         /* Bootstrap processor groups before app loads anything */
         bootstrapGroups();
 
-        auto view = View!ReadWrite(this.entity, this.component);
+        auto view = View!ReadWrite(this.entity);
         if (!app.bootstrap(view))
         {
             return 1;
@@ -227,7 +225,7 @@ public:
             /* Force stepping through the Entity system */
             _entity.step();
             scheduledExecution();
-            _display.pipeline.render(View!ReadOnly(entity, component));
+            _display.pipeline.render(View!ReadOnly(entity));
 
             timeStart = timeNow;
         }
@@ -330,17 +328,9 @@ public:
     /**
      * Return the EntityManager instance.
      */
-    pure @property final EntityManager entity() @safe @nogc nothrow
+    pure @property final ref EntityManager entity() @safe @nogc nothrow
     {
         return _entity;
-    }
-
-    /**
-     * Return the ComponentManager instance
-     */
-    pure @property final ComponentManager component() @safe @nogc nothrow
-    {
-        return _component;
     }
 
     /**
