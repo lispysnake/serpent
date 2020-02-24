@@ -1,0 +1,6 @@
+- Fix use of begin() to be private. Only Context should call this
+- Cleanup demo to use deferred APIs only
+- Massively improve performance of Renderer/FramePacket APIs.
+  Should likely remove the copy steps for simple 2D types and just
+  blit all visibles straight to the quadbatch and cut out the middleman.
+- Fix segfaults in release build, likely too many inlines.
