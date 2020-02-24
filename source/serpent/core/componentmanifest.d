@@ -42,7 +42,8 @@ alias storeRemoveFunc = void delegate(void* chunk, ulong idx) @trusted nothrow;
 final struct ComponentManifest
 {
 
-    private : GreedyBitArray entities;
+private:
+    GreedyBitArray entities;
     bool _alive = false; /*<Whether we're 'alive' (active) in the game world */
     void* _pool = null;
     ulong _members = 0;
