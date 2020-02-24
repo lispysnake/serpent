@@ -35,7 +35,7 @@ final struct RingBuffer(T)
 {
 private:
 
-    __gshared GreedyArray!T _array;
+    GreedyArray!T _array;
     ulong insertIndex = 0;
 
 public:
@@ -51,7 +51,7 @@ public:
         _array = GreedyArray!T(minSize, maxSize);
     }
 
-    final void add(T datum) @trusted @nogc nothrow
+    final void add(T datum) @trusted nothrow
     {
         if (insertIndex >= _array.maxSize)
         {

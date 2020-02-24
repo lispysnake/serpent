@@ -24,6 +24,8 @@ module serpent.core.greedyarray;
 
 import std.container.array : Array;
 
+alias GreedyBitArray = GreedyArray!bool;
+
 /**
  * The GreedyArray is a wrapper around std.container.array that provides
  * greedy regrowth characteristics to avoid memory fragmentation for long
@@ -41,7 +43,7 @@ private:
     ulong _maxSize = 0;
     ulong _realSize = 0;
     ulong _curSize = 0;
-    Array!T _array;
+    T[] _array;
     static auto growthFactor = 2; /* Double in size */
 
 public:
@@ -56,7 +58,6 @@ public:
         {
             assert(minSize <= maxSize, "minSize cannot exeed maxSize for bounded Array");
         }
-        _array = Array!T();
         _minSize = minSize;
         _maxSize = maxSize;
         _array.reserve(minSize);
@@ -108,7 +109,7 @@ public:
     /**
      * Return the current data slice for ranging
      */
-    final @property auto data() @trusted @nogc nothrow
+    final @property auto data() @trusted
     {
         return _array[0 .. _curSize];
     }
@@ -134,6 +135,11 @@ public:
         return (_curSize + nElements >= _maxSize);
     }
 
+    pragma(inline, true) pure final @property ulong count() @safe @nogc nothrow
+    {
+        return _curSize;
+    }
+
 package:
 
     /**
@@ -149,7 +155,7 @@ private:
     /**
      * Check if a resize is needed and attempt to do so.
      */
-    final void checkResize(ulong idx) @trusted @nogc nothrow
+    final void checkResize(ulong idx) @trusted
     {
         if (idx + 1 > _curSize)
         {

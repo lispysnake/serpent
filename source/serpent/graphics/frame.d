@@ -47,7 +47,7 @@ public:
      * go on screen.
      */
     pragma(inline, true) final void pushVisibleEntity(EntityID entityID,
-            Renderer renderer, vec3f transformPosition) @trusted @nogc nothrow
+            Renderer renderer, vec3f transformPosition) @trusted nothrow
     {
         _visibleEntities.add(FramePacketVisible(entityID, renderer, transformPosition));
     }

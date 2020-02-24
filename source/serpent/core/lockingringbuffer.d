@@ -36,7 +36,7 @@ final struct LockingRingBuffer(T)
 {
 private:
 
-    __gshared GreedyArray!T _array;
+    GreedyArray!T _array;
     ulong insertIndex = 0;
     shared Mutex mtx;
 
@@ -54,16 +54,20 @@ public:
         mtx = new shared Mutex();
     }
 
-    final void add(T datum) @trusted @nogc nothrow
+    final void add(T datum) @trusted nothrow
     {
+        scope (exit)
+        {
+            mtx.unlock_nothrow();
+        }
         mtx.lock_nothrow();
+
         if (insertIndex >= _array.maxSize)
         {
             insertIndex = 0;
         }
         _array[insertIndex] = datum;
         ++insertIndex;
-        mtx.unlock_nothrow();
     }
 
     /**
@@ -79,10 +83,14 @@ public:
      */
     final void reset()
     {
+        scope (exit)
+        {
+            mtx.unlock_nothrow();
+        }
         mtx.lock_nothrow();
+
         insertIndex = 0;
         _array.reset();
-        mtx.unlock_nothrow();
     }
 
     final const @property bool full() @trusted @nogc nothrow
