@@ -52,14 +52,18 @@ final class BasicPhysics : Processor!ReadWrite
 {
     final override void run(View!ReadWrite view)
     {
-        /* Find all physics entities */
-        foreach (ent, transform, physics; view.withComponents!(TransformComponent,
-                PhysicsComponent))
-        {
-            auto frameTime = context.frameTime();
+        import std.parallelism : parallel;
 
-            transform.position.x += physics.velocityX * frameTime;
-            transform.position.y += physics.velocityY * frameTime;
+        foreach (chunk; parallel(view.withComponentsChunked!(TransformComponent, PhysicsComponent)))
+        {
+            /* Find all physics entities */
+            foreach (ent, transform, physics; chunk)
+            {
+                auto frameTime = context.frameTime();
+
+                transform.position.x += physics.velocityX * frameTime;
+                transform.position.y += physics.velocityY * frameTime;
+            }
         }
     }
 }
