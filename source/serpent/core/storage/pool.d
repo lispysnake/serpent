@@ -38,12 +38,12 @@ final struct PoolAllocator(C)
 private:
 
     alias Chunk = StorageChunk!C;
-    __gshared GreedyArray!Chunk chunks;
+    GreedyArray!Chunk chunks;
     ulong _minChunks = 0;
     ulong _maxChunks = 0;
-    __gshared ulong _poolIndex = 0;
+    ulong _poolIndex = 0;
 
-    __gshared Chunk*[] freeChunks; /* Chunks can be returned but not deallocated. */
+    Chunk*[] freeChunks; /* Chunks can be returned but not deallocated. */
 
 public:
 
