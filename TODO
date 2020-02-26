@@ -1,9 +1,5 @@
 - Fix use of begin() to be private. Only Context should call this
 - Cleanup demo to use deferred APIs only
-- Massively improve performance of Renderer/FramePacket APIs:
-    - It seems bottleneck lies in QuadBatch. Sorting isn't the issue.
-  Should likely remove the copy steps for simple 2D types and just
-  blit all visibles straight to the quadbatch and cut out the middleman.
 - Fix segfaults in release build, likely too many inlines.
 - Mark nearly *all* EntityManager methods as package access. We want
   to discourage all use of this and promote View API access.
