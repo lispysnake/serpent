@@ -13,3 +13,7 @@
     - an Animation should likely be a handle which returns the correct
       texture handle for a Timeline.
     - Then we can have multithreaded lightweight SpriteAnimation.
+
+- Sprite batch performance:
+    - Use instancing where possible (OpenGL 3.1+)
+    - Use existing implementation when instancing unavailable
