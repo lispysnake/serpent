@@ -12,7 +12,7 @@ fi
 
 function buildProject()
 {
-    dub build --parallel -c demo -b "${MODE}" --compiler="${COMPILER}" --skip-registry=all
+    dub build --parallel -c demo -b "${MODE}" --compiler="${COMPILER}" --skip-registry=all -v
 }
 
 if [[ "$MODE" == "release" ]]; then
