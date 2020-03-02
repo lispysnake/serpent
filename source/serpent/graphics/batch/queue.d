@@ -192,7 +192,7 @@ public:
     /**
      * Push vertices into the vertex data buffer.
      */
-    pragma(inline, true) final void pushVertices(V[] vertexData) @trusted
+    final void pushVertices(V[] vertexData) @trusted
     {
         if (checkResizeVertices())
         {
@@ -209,7 +209,7 @@ public:
     /**
      * Push indices into the indices data buffer
      */
-    pragma(inline, true) final void pushIndices(I[] indexData) @trusted
+    final void pushIndices(I[] indexData) @trusted
     {
         if (checkResizeIndices())
         {
