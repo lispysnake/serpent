@@ -10,3 +10,6 @@
 [submodule "external/gfm"]
 	path = external/gfm
 	url = https://github.com/d-gamedev-team/gfm.git
+[submodule "external/intel-intrinsics"]
+	path = external/intel-intrinsics
+	url = https://github.com/AuburnSounds/intel-intrinsics.git

@@ -27,6 +27,9 @@
 		"bindbc-sdl": {
 			"path": "external/bindbc-sdl",
 		},
+		"intel-intrinsics": {
+			"path": "external/intel-intrinsics",
+		},
 		"gfm": {
 			"path": "external/gfm",
 		}
