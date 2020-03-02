@@ -52,7 +52,9 @@
 	],
 	"buildTypes": {
 		"debug": {
-			"buildOptions": ["debugMode", "optimize"]
+			"buildOptions": ["debugMode", "optimize"],
+			"dflags-dmd": ["-g"],
+			"dflags-ldc": ["-g", "-O2"]
 		},
 		"release": {
 			"buildOptions": ["releaseMode", "optimize", "inline"],
