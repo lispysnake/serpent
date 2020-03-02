@@ -860,14 +860,11 @@ package:
         _components[idx].join(id);
 
         /* Flush last staged component assignments */
-        if (id != lastStaged)
+        if (id != lastStaged && lastStaged != 0)
         {
-            if (lastStaged != 0)
-            {
-                assignmentRequests ~= id;
-            }
-            lastStaged = id;
+            assignmentRequests ~= lastStaged;
         }
+        lastStaged = id;
 
         /* Put it into staging. Should probably cache archetype too */
         if (!stagingArchetype.hasEntity(id))
