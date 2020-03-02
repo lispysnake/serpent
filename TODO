@@ -1,6 +1,6 @@
 - Fix use of begin() to be private. Only Context should call this. DONE
 - Cleanup demo to use deferred APIs only.  DONE
-- Fix segfaults in release build, likely too many inlines.
+- Fix segfaults in release build. Seems an assert is going wonky somewhere.
 - Mark nearly *all* EntityManager methods as package access. We want
   to discourage all use of this and promote View API access.
 - Fix TransformComponent problems (Potentially want a Transform2D + Transform3D)
