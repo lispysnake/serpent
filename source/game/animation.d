@@ -25,6 +25,59 @@ module game.animation;
 import serpent;
 import std.datetime;
 
+@serpentComponent final struct SpriteAnimationComponent
+{
+    ulong textureIndex = 0;
+    Duration passed;
+    bool repeat;
+    SpriteAnimation *animation;
+}
+
+final struct SpriteAnimation
+{
+    Texture[] textures;
+    Duration interval;
+
+    this(Duration interval)
+    {
+        this.interval = interval;
+    }
+
+    void addTexture(Texture t)
+    {
+        this.textures ~= t;
+    }
+}
+
+final class SpriteAnimationProcessor : Processor!ReadWrite
+{
+    final override void run(View!ReadWrite view)
+    {
+        import std.parallelism;
+        auto passed = context.deltaTime();
+
+        foreach (chunk; parallel(view.withComponentsChunked!(SpriteComponent,SpriteAnimationComponent)))
+        {
+            foreach (ent, sprite, anim; chunk)
+            {
+                anim.passed += passed;
+                if (anim.passed <= anim.animation.interval)
+                {
+                    continue;
+                }
+                anim.passed = passed;
+
+                anim.textureIndex++;
+                if (anim.textureIndex >= anim.animation.textures.length)
+                {
+                    anim.textureIndex = 0;
+                }
+                sprite.texture = anim.animation.textures[anim.textureIndex];
+            }
+        }
+    }
+}
+
 /**
  * Absurdly simple Animation helper.
  */

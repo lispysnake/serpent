@@ -29,9 +29,9 @@ import game.physics;
 import std.datetime;
 import std.format;
 
-Animation createExplosionAnimation()
+SpriteAnimation createExplosionAnimation()
 {
-    Animation ret = Animation(0, dur!"msecs"(80));
+    SpriteAnimation ret = SpriteAnimation(dur!"msecs"(80));
     foreach (i; 0..10)
     {
         ret.addTexture(new Texture(
@@ -40,10 +40,9 @@ Animation createExplosionAnimation()
     return ret;
 }
 
-EntityID createExplosion(View!ReadWrite initView, ref Animation anim)
+EntityID createExplosion(View!ReadWrite initView, SpriteAnimation *anim)
 {
         auto explosion = initView.createEntity();
-        anim.entity = explosion; /* HACK */
         auto transform = TransformComponent();
         auto sprite = SpriteComponent();
         sprite.texture = anim.textures[0];
@@ -51,9 +50,11 @@ EntityID createExplosion(View!ReadWrite initView, ref Animation anim)
         transform.position.z = 0.9f;
         transform.position.y = 120.0f;
 
-
+        auto explosionAnim = SpriteAnimationComponent();
+        explosionAnim.animation = anim;
         initView.addComponentDeferred(explosion, transform);
         initView.addComponentDeferred(explosion, sprite);
+        initView.addComponentDeferred(explosion, explosionAnim);
 
         return explosion;
 }

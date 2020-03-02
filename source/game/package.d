@@ -57,7 +57,7 @@ private:
     EntityID player;
     EntityID ship;
     EntityID explosion;
-    Animation explosionAnim;
+    SpriteAnimation explosionAnim;
     Animation playerAnim;
     Animation shipAnim;
     Animation bugAnim;
@@ -246,7 +246,9 @@ public:
         s.addCamera(new OrthographicCamera());
 
         context.entity.registerComponent!PhysicsComponent;
+        context.entity.registerComponent!SpriteAnimationComponent;
         context.systemGroup.add(new BasicPhysics());
+        context.systemGroup.add(new SpriteAnimationProcessor());
 
         createBackground(initView);
 
@@ -254,7 +256,7 @@ public:
         player = createPlayer(initView, playerAnim);
 
         explosionAnim = createExplosionAnimation();
-        explosion = createExplosion(initView, explosionAnim);
+        explosion = createExplosion(initView, &explosionAnim);
         shipAnim = createShipAnimation();
         ship = createShip(initView, shipAnim);
         bugAnim = createBugAnimation();
@@ -269,7 +271,6 @@ public:
         {
             return;
         }
-        explosionAnim.update(view, context.deltaTime());
         shipAnim.update(view, context.deltaTime());
         bugAnim.update(view, context.deltaTime());
         updatePlayer(view);
