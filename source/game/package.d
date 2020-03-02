@@ -30,15 +30,7 @@ import serpent.tiled;
 import std.format;
 import std.datetime;
 
-/**
- * We apply a PhysicsComponent when there is some position manipulation
- * to be had.
- */
-@serpentComponent final struct PhysicsComponent
-{
-    float velocityX = 0.0f;
-    float velocityY = 0.0f;
-}
+import game.physics;
 
 enum SpriteDirection
 {
@@ -46,29 +38,6 @@ enum SpriteDirection
     Left = 1 << 1,
     Right = 1 << 2,
 };
-
-/**
- * Demo physics - if have velocity, go.
- */
-final class BasicPhysics : Processor!ReadWrite
-{
-    final override void run(View!ReadWrite view)
-    {
-        import std.parallelism : parallel;
-
-        foreach (chunk; parallel(view.withComponentsChunked!(TransformComponent, PhysicsComponent)))
-        {
-            /* Find all physics entities */
-            foreach (ent, transform, physics; chunk)
-            {
-                auto frameTime = context.frameTime();
-
-                transform.position.x += physics.velocityX * frameTime;
-                transform.position.y += physics.velocityY * frameTime;
-            }
-        }
-    }
-}
 
 /**
  * Absurdly simple Animation helper.
