@@ -101,7 +101,6 @@ int main(string[] args)
     context.resource.root = context.resource.root ~ "/assets/built";
 
     context.entity.registerComponent!SpriteComponent;
-    context.entity.registerComponent!MapComponent;
 
     /* HAX: Add bgfx specific renderer. We need to abstract renderer
      * and textures!
@@ -109,7 +108,6 @@ int main(string[] args)
     import serpent.graphics.pipeline.bgfx.pipeline;
 
     auto pipeline = cast(BgfxPipeline) context.display.pipeline;
-    pipeline.addRenderer(new MapRenderer);
     pipeline.addRenderer(new SpriteRenderer);
 
     /* Run the game now. */
