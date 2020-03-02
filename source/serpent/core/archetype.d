@@ -215,8 +215,8 @@ package:
                 (a) => this.manifests.canFind(a));
 
         ulong oldIndex = 0;
-        Page* oldPage = null;
-        assert((oldPage = originalArchetype.findEntity(id, oldIndex)) !is null, "EPIC FAIL");
+        Page* oldPage = originalArchetype.findEntity(id, oldIndex);
+        assert(oldPage !is null, "Cannot locate page for entity");
         /* For each in the same-manifest-set, we need to clone it in */
         foreach (ref manifest; similarManifests)
         {
