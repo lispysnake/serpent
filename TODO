@@ -1,5 +1,5 @@
 - Fix use of begin() to be private. Only Context should call this
-- Cleanup demo to use deferred APIs only
+- Cleanup demo to use deferred APIs only.  DONE
 - Fix segfaults in release build, likely too many inlines.
 - Mark nearly *all* EntityManager methods as package access. We want
   to discourage all use of this and promote View API access.
