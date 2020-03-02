@@ -33,6 +33,8 @@ import std.datetime;
 import game.animation;
 import game.physics;
 
+import game.bug;
+
 enum SpriteDirection
 {
     None = 1 << 0,
@@ -57,7 +59,6 @@ private:
     Animation shipAnim;
     Animation bugAnim;
     Texture texture;
-    const auto meterSize = 70;
 
     SpriteDirection playerDirection = SpriteDirection.None;
     SpriteDirection viewDirection = SpriteDirection.Right;
@@ -187,23 +188,6 @@ private:
         initView.data!TransformComponent(explosion).position.z = 0.9f;
     }
 
-    final void createBug(View!ReadWrite initView)
-    {
-        auto bug = initView.createEntity();
-        initView.addComponent!TransformComponent(bug);
-        initView.addComponent!SpriteComponent(bug);
-        bugAnim = Animation(bug, dur!"msecs"(50));
-        foreach (i; 0 .. 8)
-        {
-            bugAnim.addTexture(new Texture(
-                    "assets/SciFi/Sprites/alien-flying-enemy/sprites/alien-enemy-flying%d.png".format(
-                    i + 1)));
-        }
-        initView.data!SpriteComponent(bug).flip = FlipMode.Horizontal;
-        initView.addComponent!PhysicsComponent(bug).velocityX = (meterSize * 1.5) / 1000.0f;
-        initView.data!SpriteComponent(bug).texture = bugAnim.textures[0];
-    }
-
     final void createBackground(View!ReadWrite initView)
     {
         texture = new Texture("assets/SciFi/Environments/bulkhead-walls/PNG/bg-wall.png");
@@ -327,7 +311,9 @@ public:
         createPlayer(initView);
         createExplosion(initView);
         createShip(initView);
-        createBug(initView);
+
+        bugAnim = createBugAnimation();
+        createBug(initView, bugAnim);
 
         return true;
     }
