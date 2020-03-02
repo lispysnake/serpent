@@ -6,7 +6,7 @@
 - Fix TransformComponent problems (Potentially want a Transform2D + Transform3D)
 - Consider removing all immediate APIs
 - Require componentregistration before running the game? NOT NEEDED
-- Add an Animation Timeline concept
+- Add an Animation Timeline concept. DONE
 
     - components cannot contain slices to textures.
     - textures should be handles anyway.
