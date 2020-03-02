@@ -34,6 +34,7 @@ import game.animation;
 import game.physics;
 
 import game.bug;
+import game.explosion;
 import game.player;
 import game.ship;
 
@@ -123,24 +124,6 @@ private:
         default:
             break;
         }
-    }
-
-    final void createExplosion(View!ReadWrite initView)
-    {
-        /* Create the explosion */
-        explosion = initView.createEntity();
-        initView.addComponent!TransformComponent(explosion);
-        initView.addComponent!SpriteComponent(explosion);
-        explosionAnim = Animation(explosion, dur!"msecs"(80));
-        foreach (i; 0 .. 10)
-        {
-            explosionAnim.addTexture(new Texture(
-                    "assets/SciFi/Sprites/Explosion/sprites/explosion-animation%d.png".format(i + 1)));
-        }
-        initView.data!SpriteComponent(explosion).texture = explosionAnim.textures[0];
-        initView.data!TransformComponent(explosion).position.x = 40.0f;
-        initView.data!TransformComponent(explosion).position.y = texture.height - 93.0f;
-        initView.data!TransformComponent(explosion).position.z = 0.9f;
     }
 
     final void createBackground(View!ReadWrite initView)
@@ -263,11 +246,12 @@ public:
         context.entity.begin();
 
         createBackground(initView);
-        createExplosion(initView);
 
         playerAnim = createPlayerAnimation();
         player = createPlayer(initView, playerAnim);
 
+        explosionAnim = createExplosionAnimation();
+        explosion = createExplosion(initView, explosionAnim);
         shipAnim = createShipAnimation();
         ship = createShip(initView, shipAnim);
         bugAnim = createBugAnimation();
