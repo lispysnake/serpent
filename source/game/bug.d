@@ -54,9 +54,9 @@ EntityID createBug(View!ReadWrite initView, ref Animation anim)
         sprite.texture = anim.textures[0];
         sprite.flip = FlipMode.Horizontal;
 
-        initView.addComponent(bug, transform);
-        initView.addComponent(bug, physics);
-        initView.addComponent(bug, sprite);
+        initView.addComponentDeferred(bug, transform);
+        initView.addComponentDeferred(bug, physics);
+        initView.addComponentDeferred(bug, sprite);
 
         return bug;
 }

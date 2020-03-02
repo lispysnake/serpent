@@ -63,9 +63,9 @@ EntityID createPlayer(View!ReadWrite initView, ref Animation anim)
         physics.velocityX = 0.0f;
         physics.velocityY = 0.0f;
 
-        initView.addComponent(player, transform);
-        initView.addComponent(player, physics);
-        initView.addComponent(player, sprite);
+        initView.addComponentDeferred(player, transform);
+        initView.addComponentDeferred(player, physics);
+        initView.addComponentDeferred(player, sprite);
 
         return player;
 }

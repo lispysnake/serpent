@@ -133,25 +133,26 @@ private:
         auto altTexture = new Texture(
                 "assets/SciFi/Environments/bulkhead-walls/PNG/bg-wall-with-supports.png");
 
-        float x = 0;
+        float x = 0.0f;
         int idx = 0;
         while (x < context.display.logicalWidth + 300)
         {
             background ~= initView.createEntity();
-            initView.addComponent!TransformComponent(background[idx]);
-            auto component = initView.addComponent!SpriteComponent(background[idx]);
+            auto sprite = SpriteComponent();
             if (idx % 2 == 0)
             {
-                component.texture = altTexture;
+                sprite.texture = altTexture;
             }
             else
             {
-                component.texture = texture;
+                sprite.texture = texture;
             }
-            auto transform = initView.data!TransformComponent(background[idx]);
+            auto transform = TransformComponent();
             transform.position.x = x;
             transform.position.z = -0.1f;
-            x += component.texture.width;
+            initView.addComponentDeferred(background[idx], transform);
+            initView.addComponentDeferred(background[idx], sprite);
+            x += sprite.texture.width;
             idx++;
         }
 
@@ -159,11 +160,15 @@ private:
         foreach (i; 0 .. columns)
         {
             auto floor = initView.createEntity();
-            initView.addComponent!TransformComponent(floor);
-            initView.addComponent!SpriteComponent(floor).texture = floortexture;
-            initView.data!TransformComponent(floor).position.x = i * floortexture.width;
-            initView.data!TransformComponent(floor)
-                .position.y = texture.height - floortexture.height;
+            auto sprite = SpriteComponent();
+            auto transform = TransformComponent();
+
+            sprite.texture = floortexture;
+            transform.position.x = i * floortexture.width;
+            transform.position.y = texture.height - floortexture.height;
+
+            initView.addComponentDeferred(floor, sprite);
+            initView.addComponentDeferred(floor, transform);
         }
 
     }

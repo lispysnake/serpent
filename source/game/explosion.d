@@ -52,8 +52,8 @@ EntityID createExplosion(View!ReadWrite initView, ref Animation anim)
         transform.position.y = 120.0f;
 
 
-        initView.addComponent(explosion, transform);
-        initView.addComponent(explosion, sprite);
+        initView.addComponentDeferred(explosion, transform);
+        initView.addComponentDeferred(explosion, sprite);
 
         return explosion;
 }
