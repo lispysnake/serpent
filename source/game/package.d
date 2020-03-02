@@ -58,7 +58,7 @@ private:
     EntityID ship;
     EntityID explosion;
     SpriteAnimation explosionAnim;
-    Animation playerAnim;
+    SpriteAnimation playerAnim;
     SpriteAnimation shipAnim;
     SpriteAnimation bugAnim;
     Texture texture;
@@ -179,8 +179,6 @@ private:
      */
     final void updatePlayer(View!ReadWrite view)
     {
-        playerAnim.update(view, context.deltaTime());
-
         auto velocityX = (meterSize * 0.9) / 1000.0f;
         if (playerSpeedUp)
         {
@@ -218,7 +216,7 @@ private:
 
         auto component = view.data!TransformComponent(player);
 
-        auto boundsX = (component.position.x + playerAnim.textures[playerAnim.textureIndex].width
+        auto boundsX = (component.position.x + playerAnim.textures[0].width
                 / 2) - (context.display.logicalWidth() / 2);
         auto boundsY = 0.0f;
         s.camera.position = vec3f(boundsX, 0.0f, 0.0f);
@@ -253,7 +251,7 @@ public:
         createBackground(initView);
 
         playerAnim = createPlayerAnimation();
-        player = createPlayer(initView, playerAnim);
+        player = createPlayer(initView, &playerAnim);
 
         explosionAnim = createExplosionAnimation();
         explosion = createExplosion(initView, &explosionAnim);
@@ -273,12 +271,5 @@ public:
         }
         updatePlayer(view);
         updateCamera(view);
-
-        /*
-        auto playerPos = view.data!TransformComponent(player);
-        auto explosionPos = view.data!TransformComponent(explosion);
-        explosionPos.position = playerPos.position;
-        explosionPos.position.z = 0.9f;
-        explosionPos.position.y -= 30.0f;*/
     }
 }

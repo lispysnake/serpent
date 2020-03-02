@@ -32,9 +32,9 @@ import std.format;
 /**
  * Create the bug animation
  */
-Animation createPlayerAnimation()
+SpriteAnimation createPlayerAnimation()
 {
-    Animation ret = Animation(0, dur!"msecs"(100));
+    SpriteAnimation ret = SpriteAnimation(dur!"msecs"(100));
     auto rootTexture = new Texture(
             "assets/SciFi/Sprites/tank-unit/PNG/tank-unit.png");
     auto frameSize = rootTexture.width / 4.0f;
@@ -47,10 +47,9 @@ Animation createPlayerAnimation()
     return ret;
 }
 
-EntityID createPlayer(View!ReadWrite initView, ref Animation anim)
+EntityID createPlayer(View!ReadWrite initView, SpriteAnimation* anim)
 {
         auto player = initView.createEntity();
-        anim.entity = player; /* HACK */
         auto transform = TransformComponent();
         auto physics = PhysicsComponent();
         auto sprite = SpriteComponent();
@@ -63,9 +62,13 @@ EntityID createPlayer(View!ReadWrite initView, ref Animation anim)
         physics.velocityX = 0.0f;
         physics.velocityY = 0.0f;
 
+        auto playerAnim = SpriteAnimationComponent();
+        playerAnim.animation = anim;
+
         initView.addComponentDeferred(player, transform);
         initView.addComponentDeferred(player, physics);
         initView.addComponentDeferred(player, sprite);
+        initView.addComponentDeferred(player, playerAnim);
 
         return player;
 }
