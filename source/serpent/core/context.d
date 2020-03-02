@@ -196,6 +196,12 @@ public:
             return 1;
         }
 
+        /* Ensure EntityManager is always built */
+        if (!_entity.built)
+        {
+            _entity.build();
+        }
+
         /* Get the basics in */
         _entity.step();
 

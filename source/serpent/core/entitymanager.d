@@ -534,6 +534,7 @@ public:
      */
     final void step() @safe
     {
+        assert(_built == true, "Cannot use EntityManager before it is built");
         processComponentRemovals();
         processComponentAssignments();
         processEntityKills();
@@ -680,6 +681,7 @@ public:
                 "withComponentsRW: Maximum of 5 components supported in signature");
         static assert(C.length > 0,
                 "withComponentsRW: Minimum of 1 component required in signature");
+        assert(_built == true, "Cannot use EntityManager before it is built");
         ulong[C.length] indices = 0;
         static foreach (i, c; C)
         {
@@ -708,6 +710,7 @@ public:
                 "withComponentsRO: Maximum of 5 components supported in signature");
         static assert(C.length > 0,
                 "withComponentsRO: Minimum of 1 component required in signature");
+        assert(_built == true, "Cannot use EntityManager before it is built");
         ulong[C.length] indices = 0;
         static foreach (i, c; C)
         {
@@ -739,6 +742,7 @@ public:
                 "withComponentsRW: Maximum of 5 components supported in signature");
         static assert(C.length > 0,
                 "withComponentsRW: Minimum of 1 component required in signature");
+        assert(_built == true, "Cannot use EntityManager before it is built");
         ulong[C.length] indices = 0;
         static foreach (i, c; C)
         {
@@ -770,6 +774,7 @@ public:
                 "withComponentsRO: Maximum of 5 components supported in signature");
         static assert(C.length > 0,
                 "withComponentsRO: Minimum of 1 component required in signature");
+        assert(_built == true, "Cannot use EntityManager before it is built");
         ulong[C.length] indices = 0;
         static foreach (i, c; C)
         {
@@ -792,6 +797,8 @@ public:
     final C* dataRW(C)(EntityID id) @safe
     {
         assert(isRegistered!C, "Unknown component %s".format(C.stringof));
+        assert(_built == true, "Cannot use EntityManager before it is built");
+
         auto idx = getComponentID!C - 1;
         auto comp = _components[idx];
         assert(hasComponent!C(id),
