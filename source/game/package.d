@@ -59,7 +59,7 @@ private:
     EntityID explosion;
     SpriteAnimation explosionAnim;
     Animation playerAnim;
-    Animation shipAnim;
+    SpriteAnimation shipAnim;
     Animation bugAnim;
     Texture texture;
 
@@ -258,7 +258,7 @@ public:
         explosionAnim = createExplosionAnimation();
         explosion = createExplosion(initView, &explosionAnim);
         shipAnim = createShipAnimation();
-        ship = createShip(initView, shipAnim);
+        ship = createShip(initView, &shipAnim);
         bugAnim = createBugAnimation();
         createBug(initView, bugAnim);
 
@@ -271,7 +271,6 @@ public:
         {
             return;
         }
-        shipAnim.update(view, context.deltaTime());
         bugAnim.update(view, context.deltaTime());
         updatePlayer(view);
         updateCamera(view);

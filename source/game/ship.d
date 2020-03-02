@@ -32,9 +32,9 @@ import std.format;
 /**
  * Create the bug animation
  */
-Animation createShipAnimation()
+SpriteAnimation createShipAnimation()
 {
-    Animation ret = Animation(0, dur!"msecs"(50));
+    SpriteAnimation ret = SpriteAnimation(dur!"msecs"(50));
     auto rootTexture = new Texture(
             "assets/SciFi/Sprites/spaceship-unit/PNG/ship-unit-with-thrusts.png");
     auto frameSize = rootTexture.width / 8.0f;
@@ -47,10 +47,9 @@ Animation createShipAnimation()
     return ret;
 }
 
-EntityID createShip(View!ReadWrite initView, ref Animation anim)
+EntityID createShip(View!ReadWrite initView, SpriteAnimation* anim)
 {
         auto ship = initView.createEntity();
-        anim.entity = ship; /* HACK */
         auto transform = TransformComponent();
         auto physics = PhysicsComponent();
         auto sprite = SpriteComponent();
@@ -63,9 +62,13 @@ EntityID createShip(View!ReadWrite initView, ref Animation anim)
         physics.velocityX = (meterSize * -1.2) / 1000.0f;
         physics.velocityY = (meterSize * -0.1) / 1000.0f;
 
+        auto spriteAnim = SpriteAnimationComponent();
+        spriteAnim.animation = anim;
+
         initView.addComponentDeferred(ship, transform);
         initView.addComponentDeferred(ship, physics);
         initView.addComponentDeferred(ship, sprite);
+        initView.addComponentDeferred(ship, spriteAnim);
 
         return ship;
 }
