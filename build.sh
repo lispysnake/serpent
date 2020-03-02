@@ -3,16 +3,26 @@ set -e
 set -x
 
 MODE="debug"
+COMPILER="dmd"
 
 if [[ ! -z "$1" ]]; then
     MODE="$1"
 fi
 
+function buildProject()
+{
+    dub build --parallel -c demo -b "${MODE}" --compiler="${COMPILER}" --skip-registry=all
+}
+
 if [[ "$MODE" == "release" ]]; then
-    dub build --parallel -c demo -b release --compiler=ldc2  --skip-registry=all
+    COMPILER="ldc2"
+    buildProject
     strip ./serpent
+elif [[ "$MODE" == "optimized" ]]; then
+    MODE="release"
+    buildProject
 elif [[ "$MODE" == "debug" ]]; then
-    dub build --parallel -c demo -b debug --compiler=ldc2 --skip-registry=all
+    buildProject
 else
     echo "Unknown build mode"
     exit 1
