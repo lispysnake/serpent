@@ -248,8 +248,6 @@ public:
         context.entity.registerComponent!PhysicsComponent;
         context.systemGroup.add(new BasicPhysics());
 
-        context.entity.begin();
-
         createBackground(initView);
 
         playerAnim = createPlayerAnimation();

@@ -81,6 +81,7 @@ private:
     EntityID[] freeIDs;
     EntityID[] killRequests;
     shared Mutex killMutex;
+    bool _built = false;
 
 private:
 
@@ -419,8 +420,14 @@ public:
     /**
      * Internal factory
      */
-    final EntityID createInternal() @safe nothrow
+    final EntityID createInternal() @safe
     {
+        /* Ensure we're built before giving out entity IDs */
+        if (!_built)
+        {
+            build();
+        }
+
         /* Attempt to recycle old ID first */
         if (freeIDs.length > 0)
         {
@@ -489,9 +496,37 @@ public:
         killRequests ~= entity;
     }
 
-    final void begin() @safe
+    /**
+     * Must be called before the EntityManager is usable, i.e. all registrations
+     * have completed.
+     */
+    final void build() @safe
     {
+        scope (exit)
+        {
+            removalMutex.unlock_nothrow();
+            assignmentMutex.unlock_nothrow();
+            idMutex.unlock_nothrow();
+        }
+
+        removalMutex.lock_nothrow();
+        assignmentMutex.lock_nothrow();
+        idMutex.lock_nothrow();
+
+        if (_built)
+        {
+            return;
+        }
         constructStagingArchetype();
+        _built = true;
+    }
+
+    /**
+     * Return true if this EntityManager has been built
+     */
+    final pure @property bool built() @safe @nogc nothrow
+    {
+        return _built;
     }
 
     /**
@@ -514,6 +549,7 @@ public:
     {
         static assert(isValidComponent!C);
         assert(!isRegistered!C, "Cannot re-register component %s".format(C.stringof));
+        assert(!built, "Cannot register component with built EntityManager");
         auto idx = getComponentID!C - 1;
 
         /* Sort out the component */
@@ -606,6 +642,7 @@ public:
         static assert(isValidComponent!C);
         static assert(!(is(C == EntityIdentifier)), "Cannot remove EntityIdentifier component");
         assert(isRegistered!C, "removeComponent: Unknown component %s".format(C.stringof));
+        assert(built, "Can only remove component from built EntityManager");
 
         auto idx = getComponentID!C - 1;
         _components[idx].unjoin(ent);
@@ -811,6 +848,7 @@ public:
         {
             manifest.clear();
         }
+        _built = false;
     }
 
 package:
