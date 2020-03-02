@@ -58,14 +58,14 @@ EntityID createShip(View!ReadWrite initView, ref Animation anim)
         sprite.flip = FlipMode.Horizontal;
 
         /* Update movement */
-        transform.position.x = 60.0f;
-        transform.position.y = 500.0f;
+        transform.position.x = 500.0f;
+        transform.position.y = 60.0f;
         physics.velocityX = (meterSize * -1.2) / 1000.0f;
         physics.velocityY = (meterSize * -0.1) / 1000.0f;
 
-        initView.addComponent(ship, transform);
-        initView.addComponent(ship, physics);
-        initView.addComponent(ship, sprite);
+        initView.addComponentDeferred(ship, transform);
+        initView.addComponentDeferred(ship, physics);
+        initView.addComponentDeferred(ship, sprite);
 
         return ship;
 }
