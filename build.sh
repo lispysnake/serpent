@@ -3,7 +3,8 @@ set -e
 set -x
 
 MODE="debug"
-COMPILER="dmd"
+# COMPILER="dmd"
+COMPILER="ldc2"
 
 if [[ ! -z "$1" ]]; then
     MODE="$1"
