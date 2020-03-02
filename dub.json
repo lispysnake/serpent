@@ -58,7 +58,7 @@
 		},
 		"release": {
 			"buildOptions": ["releaseMode", "optimize", "inline"],
-			"dflags-ldc": ["-flto=thin"]
+			"dflags-ldc": ["-flto=thin", "--relocation-model=pic"]
 		}
 	}
 }
