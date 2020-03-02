@@ -196,6 +196,9 @@ public:
             return 1;
         }
 
+        /* Get the basics in */
+        _entity.step();
+
         scope (exit)
         {
             tp.finish(true);
