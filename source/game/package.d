@@ -262,9 +262,12 @@ public:
 
         foreach (i; 0..50)
         {
-            auto x = (-100.0f) * i + (25.0f);
-            auto y = 0.0f;
-            auto bug = createBug(initView, &bugAnim, x, y);
+            foreach (j; 0..20)
+            {
+                auto x = (-100.0f) * i + (25.0f);
+                auto y = j * 60.0f;
+                auto bug = createBug(initView, &bugAnim, x, y);
+            }
         }
         return true;
     }

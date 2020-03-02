@@ -58,6 +58,7 @@ EntityID createBug(View!ReadWrite initView, SpriteAnimation * anim, float x, flo
 
         transform.position.x = x;
         transform.position.y = y;
+        transform.position.z = 0.9f;
 
         initView.addComponentDeferred(bug, transform);
         initView.addComponentDeferred(bug, physics);
