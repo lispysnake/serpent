@@ -96,6 +96,7 @@ private:
         case SDL_SCANCODE_C: /* clear */
             destroyed = true;
             context.entity.clear();
+            context.entity.build();
             break;
         case SDL_SCANCODE_LCTRL:
             playerSpeedUp = false;
