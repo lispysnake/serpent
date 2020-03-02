@@ -30,6 +30,7 @@ import serpent.tiled;
 import std.format;
 import std.datetime;
 
+import game.animation;
 import game.physics;
 
 enum SpriteDirection
@@ -38,51 +39,6 @@ enum SpriteDirection
     Left = 1 << 1,
     Right = 1 << 2,
 };
-
-/**
- * Absurdly simple Animation helper.
- */
-final struct Animation
-{
-    Texture[] textures;
-    ulong textureIndex = 0;
-    Duration passed;
-    EntityID entity;
-    Duration interval;
-
-    this(EntityID entity, Duration interval)
-    {
-        this.entity = entity;
-        this.interval = interval;
-    }
-
-    /**
-     * Add a texture to our known set
-     */
-    void addTexture(Texture t)
-    {
-        textures ~= t;
-    }
-
-    /**
-     * Update with the given duration
-     */
-    void update(View!ReadWrite view, Duration dt)
-    {
-        passed += dt;
-        if (passed <= this.interval)
-        {
-            return;
-        }
-        passed = dt;
-        textureIndex++;
-        if (textureIndex >= textures.length)
-        {
-            textureIndex = 0;
-        }
-        view.data!SpriteComponent(entity).texture = textures[textureIndex];
-    }
-}
 
 /**
  * Provided merely for demo purposes.
