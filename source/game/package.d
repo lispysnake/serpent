@@ -34,6 +34,7 @@ import game.animation;
 import game.physics;
 
 import game.bug;
+import game.player;
 import game.ship;
 
 enum SpriteDirection
@@ -121,29 +122,6 @@ private:
             break;
         default:
             break;
-        }
-    }
-
-    final void createPlayer(View!ReadWrite initView)
-    {
-        /* Create player */
-        player = initView.createEntity();
-        initView.addComponent!TransformComponent(player);
-        auto rootTexture = new Texture("assets/SciFi/Sprites/tank-unit/PNG/tank-unit.png");
-        auto frameSize = rootTexture.width / 4.0f;
-        playerAnim = Animation(player, dur!"msecs"(100));
-        initView.addComponent!SpriteComponent(player)
-            .texture = rootTexture.subtexture(rectanglef(0.0f, 0.0f, frameSize,
-                    rootTexture.height));
-        initView.data!TransformComponent(player)
-            .position.y = texture.height - rootTexture.height - 13.0f;
-        initView.addComponent!PhysicsComponent(player).velocityX = 0.0f;
-
-        foreach (i; 0 .. 4)
-        {
-            auto frame = rootTexture.subtexture(rectanglef(i * frameSize, 0.0f,
-                    frameSize, rootTexture.height));
-            playerAnim.addTexture(frame);
         }
     }
 
@@ -285,11 +263,13 @@ public:
         context.entity.begin();
 
         createBackground(initView);
-        createPlayer(initView);
         createExplosion(initView);
 
+        playerAnim = createPlayerAnimation();
+        player = createPlayer(initView, playerAnim);
+
         shipAnim = createShipAnimation();
-        createShip(initView, shipAnim);
+        ship = createShip(initView, shipAnim);
         bugAnim = createBugAnimation();
         createBug(initView, bugAnim);
 
