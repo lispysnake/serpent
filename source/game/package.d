@@ -34,6 +34,7 @@ import game.animation;
 import game.physics;
 
 import game.bug;
+import game.ship;
 
 enum SpriteDirection
 {
@@ -143,30 +144,6 @@ private:
             auto frame = rootTexture.subtexture(rectanglef(i * frameSize, 0.0f,
                     frameSize, rootTexture.height));
             playerAnim.addTexture(frame);
-        }
-    }
-
-    final void createShip(View!ReadWrite initView)
-    {
-        ship = initView.createEntity();
-        initView.addComponent!TransformComponent(ship);
-        auto rootTexture = new Texture(
-                "assets/SciFi/Sprites/spaceship-unit/PNG/ship-unit-with-thrusts.png");
-        auto frameSize = rootTexture.width / 8.0f;
-        shipAnim = Animation(ship, dur!"msecs"(50));
-        initView.addComponent!SpriteComponent(ship)
-            .texture = rootTexture.subtexture(rectanglef(0.0f, 0.0f, frameSize,
-                    rootTexture.height));
-        initView.data!SpriteComponent(ship).flip = FlipMode.Horizontal;
-        initView.data!TransformComponent(ship).position.y = 60.0f;
-        initView.data!TransformComponent(ship).position.x = 500.0f;
-        initView.addComponent!PhysicsComponent(ship).velocityX = (meterSize * -1.2) / 1000.0f;
-        initView.data!PhysicsComponent(ship).velocityY = (meterSize * -0.1) / 1000.0f;
-        foreach (i; 0 .. 8)
-        {
-            auto frame = rootTexture.subtexture(rectanglef(i * frameSize, 0.0f,
-                    frameSize, rootTexture.height));
-            shipAnim.addTexture(frame);
         }
     }
 
@@ -310,8 +287,9 @@ public:
         createBackground(initView);
         createPlayer(initView);
         createExplosion(initView);
-        createShip(initView);
 
+        shipAnim = createShipAnimation();
+        createShip(initView, shipAnim);
         bugAnim = createBugAnimation();
         createBug(initView, bugAnim);
 
