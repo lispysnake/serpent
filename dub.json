@@ -53,8 +53,8 @@
 	"buildTypes": {
 		"debug": {
 			"buildOptions": ["debugMode", "optimize"],
-			"dflags-dmd": ["-g"],
-			"dflags-ldc": ["-g", "-O2"]
+			"dflags-dmd": ["-g", "-fPIC"],
+			"dflags-ldc": ["-gc", "-O2", "--relocation-model=pic"]
 		},
 		"release": {
 			"buildOptions": ["releaseMode", "optimize", "inline"],
