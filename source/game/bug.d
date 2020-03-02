@@ -43,7 +43,7 @@ SpriteAnimation createBugAnimation()
     return ret;
 }
 
-EntityID createBug(View!ReadWrite initView, SpriteAnimation * anim)
+EntityID createBug(View!ReadWrite initView, SpriteAnimation * anim, float x, float y)
 {
         auto bug = initView.createEntity();
         auto transform = TransformComponent();
@@ -55,6 +55,9 @@ EntityID createBug(View!ReadWrite initView, SpriteAnimation * anim)
 
         auto bugAnim = SpriteAnimationComponent();
         bugAnim.animation = anim;
+
+        transform.position.x = x;
+        transform.position.y = y;
 
         initView.addComponentDeferred(bug, transform);
         initView.addComponentDeferred(bug, physics);
