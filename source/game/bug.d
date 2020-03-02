@@ -32,9 +32,9 @@ import std.format;
 /**
  * Create the bug animation
  */
-Animation createBugAnimation()
+SpriteAnimation createBugAnimation()
 {
-    Animation ret = Animation(0, dur!"msecs"(50));
+    SpriteAnimation ret = SpriteAnimation(dur!"msecs"(50));
     foreach (i; 0..8)
     {
         ret.addTexture(new Texture(
@@ -43,10 +43,9 @@ Animation createBugAnimation()
     return ret;
 }
 
-EntityID createBug(View!ReadWrite initView, ref Animation anim)
+EntityID createBug(View!ReadWrite initView, SpriteAnimation * anim)
 {
         auto bug = initView.createEntity();
-        anim.entity = bug; /* HACK */
         auto transform = TransformComponent();
         auto physics = PhysicsComponent();
         physics.velocityX = (meterSize * 1.5) / 1000.0f;
@@ -54,9 +53,13 @@ EntityID createBug(View!ReadWrite initView, ref Animation anim)
         sprite.texture = anim.textures[0];
         sprite.flip = FlipMode.Horizontal;
 
+        auto bugAnim = SpriteAnimationComponent();
+        bugAnim.animation = anim;
+
         initView.addComponentDeferred(bug, transform);
         initView.addComponentDeferred(bug, physics);
         initView.addComponentDeferred(bug, sprite);
+        initView.addComponentDeferred(bug, bugAnim);
 
         return bug;
 }

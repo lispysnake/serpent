@@ -60,7 +60,7 @@ private:
     SpriteAnimation explosionAnim;
     Animation playerAnim;
     SpriteAnimation shipAnim;
-    Animation bugAnim;
+    SpriteAnimation bugAnim;
     Texture texture;
 
     SpriteDirection playerDirection = SpriteDirection.None;
@@ -260,7 +260,7 @@ public:
         shipAnim = createShipAnimation();
         ship = createShip(initView, &shipAnim);
         bugAnim = createBugAnimation();
-        createBug(initView, bugAnim);
+        createBug(initView, &bugAnim);
 
         return true;
     }
@@ -271,7 +271,6 @@ public:
         {
             return;
         }
-        bugAnim.update(view, context.deltaTime());
         updatePlayer(view);
         updateCamera(view);
 
