@@ -37,7 +37,7 @@
 	"description": "Serpent Game Framework",
 	"libs": [
 		"SDL2", "SDL2_image",
-		"bgfxRelease", "bxRelease", "bimgRelease",
+		"bgfxRelease", "bimgRelease",
 		"stdc++", "GL", "x11", "bxRelease",
 	],
 	"lflags": ["-L../serpent-support/runtime/lib"],
