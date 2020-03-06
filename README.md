@@ -42,7 +42,7 @@ included demo, build the `demo` subcomponent in denig mode.
 
     git submodule init
     git submodule update
-    ./build.sh
+    ./scripts/build.sh
     
 To build this on Solus you will need the following build dependencies:
 
@@ -56,7 +56,7 @@ it will enable components such as bgfx.
 ## Modifications
 
 Please note any modifications must be hygienic - compiling with neither
-warning nor error. Additionally you must have run `update_format.sh` to
+warning nor error. Additionally you must have run `scripts/update_format.sh` to
 ensure consistent code-styling before sending in changes.
 
 ## Design Considerations
