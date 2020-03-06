@@ -9,7 +9,7 @@
 				"source/game/*.d",
 			],
 			"name": "library",
-			"targetType": "none"
+			"targetType": "library"
 		},
 		{
 			"name": "demo",
