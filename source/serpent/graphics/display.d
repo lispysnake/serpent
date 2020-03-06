@@ -29,7 +29,6 @@ import std.exception : enforce;
 public import gfm.math;
 public import std.stdint;
 
-import serpent : SystemException;
 import serpent.core.context;
 import serpent.scene;
 import serpent.graphics.pipeline;
@@ -80,10 +79,8 @@ private:
      */
     final void init() @system
     {
-        if (SDL_Init(0 | SDL_INIT_GAMECONTROLLER) != 0)
-        {
-            throw new SystemException("Failed to initialise SDL: %s".format(SDL_GetError()));
-        }
+        auto status = SDL_Init(0 | SDL_INIT_GAMECONTROLLER);
+        enforce(status == 0, "Failed to initialise SDL: %s".format(SDL_GetError()));
     }
 
     /**
@@ -198,10 +195,7 @@ public:
 
         window = SDL_CreateWindow(toStringz(_title), SDL_WINDOWPOS_UNDEFINED,
                 SDL_WINDOWPOS_UNDEFINED, _width, _height, flags);
-        if (!window)
-        {
-            throw new SystemException("Couldn't create Window: %s".format(SDL_GetError()));
-        }
+        enforce(window !is null, "Couldn't create serpent.Window: %s".format(SDL_GetError()));
 
         /* Ensure we always update internal w/h to what we actually got.
          * It may be wise for devs to use logical dimensions to counteract

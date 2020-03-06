@@ -30,11 +30,3 @@ public import serpent.event;
 public import serpent.input;
 public import serpent.resource;
 public import serpent.scene;
-
-final class SystemException : Exception
-{
-    this(string msg, string file = __FILE__, size_t line = __LINE__)
-    {
-        super(msg, file, line);
-    }
-}

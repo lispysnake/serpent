@@ -36,7 +36,6 @@ import bindbc.sdl;
 
 import serpent.graphics.batch;
 import serpent.graphics.pipeline;
-import serpent : SystemException;
 import std.format;
 
 import serpent.graphics.pipeline.bgfx : convDriver, convRenderer;
@@ -129,11 +128,9 @@ private:
     {
         SDL_SysWMinfo wm;
         SDL_VERSION(&wm.version_);
+        auto status = SDL_GetWindowWMInfo(display.window, &wm);
 
-        if (!SDL_GetWindowWMInfo(display.window, &wm))
-        {
-            throw new SystemException("Couldn't get Window Info: %s".format(SDL_GetError()));
-        }
+        enforce(status != false, "Couldn't get Window Info: %s".format(SDL_GetError()));
 
         bgfx_platform_data_t pd;
         version (Posix)
