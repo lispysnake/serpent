@@ -142,9 +142,13 @@ private:
             pd.ndt = wm.info.x11.display;
             pd.nwh = cast(void*) wm.info.x11.window;
         }
+        else version (Windows)
+        {
+            pd.nwh = wm.info.win.window;
+        }
         else
         {
-            throw new SystemException("Unsupported platform");
+            static assert(0, "Unsupported platform");
         }
 
         pd.context = null;
