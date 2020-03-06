@@ -1,6 +1,6 @@
 {
 	"authors": [
-		"Ikey Doherty"
+		"Lispy Snake, Ltd."
 	],
 	"configurations": [
 		{
@@ -16,7 +16,7 @@
 			"targetType": "executable"
 		}
 	],
-	"copyright": "Copyright © 2019 Lispy Snake, Ltd.",
+	"copyright": "Copyright © 2019-2020 Lispy Snake, Ltd.",
 	"dependencies": {
 		"bindbc-bgfx": {
 			"path": "external/bindbc-bgfx",
