@@ -20,7 +20,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module game.player;
+module game.tank;
 
 import serpent;
 
@@ -30,9 +30,9 @@ import std.datetime;
 import std.format;
 
 /**
- * Create the player animation
+ * Create the tank animation
  */
-SpriteAnimation createPlayerAnimation()
+SpriteAnimation createTankAnimation()
 {
     SpriteAnimation ret = SpriteAnimation(dur!"msecs"(100));
     auto rootTexture = new Texture(
@@ -47,9 +47,9 @@ SpriteAnimation createPlayerAnimation()
     return ret;
 }
 
-EntityID createPlayer(View!ReadWrite initView, SpriteAnimation* anim)
+EntityID createTank(View!ReadWrite initView, SpriteAnimation* anim)
 {
-        auto player = initView.createEntity();
+        auto tank = initView.createEntity();
         auto transform = TransformComponent();
         auto physics = PhysicsComponent();
         auto sprite = SpriteComponent();
@@ -62,13 +62,13 @@ EntityID createPlayer(View!ReadWrite initView, SpriteAnimation* anim)
         physics.velocityX = 0.0f;
         physics.velocityY = 0.0f;
 
-        auto playerAnim = SpriteAnimationComponent();
-        playerAnim.animation = anim;
+        auto tankAnim = SpriteAnimationComponent();
+        tankAnim.animation = anim;
 
-        initView.addComponentDeferred(player, transform);
-        initView.addComponentDeferred(player, physics);
-        initView.addComponentDeferred(player, sprite);
-        initView.addComponentDeferred(player, playerAnim);
+        initView.addComponentDeferred(tank, transform);
+        initView.addComponentDeferred(tank, physics);
+        initView.addComponentDeferred(tank, sprite);
+        initView.addComponentDeferred(tank, tankAnim);
 
-        return player;
+        return tank;
 }
