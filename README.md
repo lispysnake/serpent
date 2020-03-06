@@ -53,6 +53,13 @@ parallel to this checkout. This is a bit janky but we're focusing
 more on code right now than the runtime support project. Building
 it will enable components such as bgfx.
 
+## Running
+
+You'll need the shared libraries accessible when running a development
+build of serpent, or alternatively use `serpent-support`:
+
+    LD_LIBRARY_PATH=../serpent-support/runtime/lib ./serpent
+
 ## Modifications
 
 Please note any modifications must be hygienic - compiling with neither

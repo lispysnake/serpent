@@ -37,12 +37,12 @@
 	"description": "Serpent Game Framework",
 	"libs-posix": [
 		"SDL2", "SDL2_image",
-		"bgfxRelease", "bimgRelease",
-		"stdc++", "GL", "x11", "bxRelease",
+		"bgfxRelease-shared",
+		"stdc++", "GL", "x11",
 	],
 	"libs-windows": [
 		"SDL2", "SDL2_image",
-		"bgfxRelease", "bimgRelease", "bxRelease",
+		"bgfxRelease-shared",
 	],
 	"lflags": ["-L../serpent-support/runtime/lib"],
 	"license": "ZLib",
