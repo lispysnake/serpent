@@ -88,12 +88,12 @@ public:
          */
 
         /* Vulkan shaders */
-        static auto vp_vulkan = import("sprite/spirv.vertex");
-        static auto fp_vulkan = import("sprite/spirv.fragment");
+        static auto vp_vulkan = import("texturedQuad/spirv.vertex");
+        static auto fp_vulkan = import("texturedQuad/spirv.fragment");
 
         /* OpenGL shaders */
-        static auto vp_opengl = import("sprite/glsl.vertex");
-        static auto fp_opengl = import("sprite/glsl.fragment");
+        static auto vp_opengl = import("texturedQuad/glsl.vertex");
+        static auto fp_opengl = import("texturedQuad/glsl.fragment");
 
         import serpent.graphics.pipeline.info;
 
