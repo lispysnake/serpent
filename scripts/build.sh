@@ -10,9 +10,6 @@ if [[ ! -z "$1" ]]; then
     MODE="$1"
 fi
 
-# Make shaderc available
-export PATH="$PATH:../serpent-support/runtime/bin"
-
 function buildProject()
 {
     dub build --parallel -c demo -b "${MODE}" --compiler="${COMPILER}" --skip-registry=all -v
