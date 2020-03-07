@@ -27,7 +27,8 @@ import std.process;
 import std.path;
 import std.stdio;
 
-void compileShader(string outputPath, string shaderPath, string varyingPath, string shaderLang, bool vertex)
+void compileShader(string outputPath, string shaderPath, string varyingPath,
+        string shaderLang, bool vertex)
 {
     string platform;
 
@@ -44,35 +45,37 @@ void compileShader(string outputPath, string shaderPath, string varyingPath, str
     if (vertex)
     {
         outputFileName ~= ".vertex";
-    } else {
+    }
+    else
+    {
         outputFileName ~= ".fragment";
     }
 
     /* TODO: Support other platforms.  */
-    version(linux)
+    version (linux)
     {
         platform = "linux";
-    } else version(windows)
+    }
+    else version (windows)
     {
         platform = "windows";
-    } else
+    }
+    else
     {
         static assert(0, "Unsupported Platform");
     }
 
     string[] args = [
-        shaderc,
-        "-f", shaderPath,
-        "--type", vertex ? "vertex" : "fragment",
-        "-i", includedir,
-        "--platform", platform,
-        "-o", outputFileName,
-        "--varyingdef", varyingPath,
+        shaderc, "-f", shaderPath, "--type", vertex ? "vertex" : "fragment", "-i",
+        includedir, "--platform", platform, "-o", outputFileName, "--varyingdef",
+        varyingPath,
     ];
     /* Needed? */
-    if (platform != "linux" && shaderLang == "glsl") {
+    if (platform != "linux" && shaderLang == "glsl")
+    {
         args ~= ["--profile", "glsl"];
-    } else if (shaderLang != "glsl")
+    }
+    else if (shaderLang != "glsl")
     {
         args ~= ["--profile", shaderLang];
     }
