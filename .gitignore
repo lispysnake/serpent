@@ -17,3 +17,5 @@ dub.selections.json
 
 # Caused by autoformat
 *.d.orig
+prepare-shaders
+/built/
