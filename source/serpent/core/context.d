@@ -39,7 +39,6 @@ import core.time : MonoTime;
 public import serpent.graphics.display;
 public import serpent.app;
 public import serpent.input;
-public import serpent.resource;
 
 public import core.time : Duration;
 
@@ -75,7 +74,6 @@ final class Context
 
 private:
 
-    ResourceManager _resource;
     InputManager _input;
     EntityManager _entity;
     App _app;
@@ -170,7 +168,6 @@ public:
         /* Create a display with the default size */
         _input = new InputManager(this);
         _display = new Display(this, 640, 480);
-        _resource = new ResourceManager(this, dirName(thisExePath()));
     }
 
     /**
@@ -271,14 +268,6 @@ public:
         gr.layer.ro_group = ro;
         ro.context = this;
         groups ~= gr;
-    }
-
-    /**
-     * Return the context-wide ResourceManager
-     */
-    pure @property final ResourceManager resource() @nogc @safe nothrow
-    {
-        return _resource;
     }
 
     /**

@@ -97,9 +97,6 @@ int main(string[] args)
         context.display.pipeline.verticalSync = false;
     }
 
-    /* Set our root directory up */
-    context.resource.root = context.resource.root ~ "/assets/built";
-
     context.entity.registerComponent!SpriteComponent;
 
     /* HAX: Add bgfx specific renderer. We need to abstract renderer

@@ -28,5 +28,4 @@ public import serpent.core;
 public import serpent.graphics;
 public import serpent.event;
 public import serpent.input;
-public import serpent.resource;
 public import serpent.scene;
