@@ -29,6 +29,15 @@ import std.stdio;
 
 void compileShader(string outputPath, string shaderPath, string varyingPath, string shaderLang, bool vertex)
 {
+    auto rootDir = environment.get("DUB_ROOT_PACKAGE_DIR");
+    if (rootDir == "")
+    {
+        rootDir = environment.get("DUB_PACKAGE_DIR");
+    }
+
+    string shaderc = rootDir.buildPath("..", "serpent-support", "runtime", "bin", "shaderc");
+    string includedir = rootDir.buildPath("..", "serpent-support", "staging", "bgfx", "src");
+
     string outputFileName = outputPath.buildPath(shaderLang);
     if (vertex)
     {
@@ -40,10 +49,10 @@ void compileShader(string outputPath, string shaderPath, string varyingPath, str
     /* TODO: Fix */
     auto platform = "linux";
     string[] args = [
-        "shaderc",
+        shaderc,
         "-f", shaderPath,
         "--type", vertex ? "vertex" : "fragment",
-        "-i", "../serpent-support/staging/bgfx/src",
+        "-i", includedir,
         "--platform", platform,
         "-o", outputFileName,
         "--varyingdef", varyingPath,
