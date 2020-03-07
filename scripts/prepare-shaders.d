@@ -29,9 +29,6 @@ import std.stdio;
 
 void compileShader(string outputPath, string shaderPath, string varyingPath, string shaderLang, bool vertex)
 {
-    auto dir = environment.get("DUB_PACKAGE_DIR");
-    auto command = dir.buildPath("..", "serpent-support", "runtime", "bin", "shaderc");
-
     string outputFileName = outputPath.buildPath(shaderLang);
     if (vertex)
     {
@@ -43,7 +40,7 @@ void compileShader(string outputPath, string shaderPath, string varyingPath, str
     /* TODO: Fix */
     auto platform = "linux";
     string[] args = [
-        command,
+        "shaderc",
         "-f", shaderPath,
         "--type", vertex ? "vertex" : "fragment",
         "-i", "../serpent-support/staging/bgfx/src",
