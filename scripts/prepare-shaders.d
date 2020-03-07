@@ -29,6 +29,8 @@ import std.stdio;
 
 void compileShader(string outputPath, string shaderPath, string varyingPath, string shaderLang, bool vertex)
 {
+    string platform;
+
     auto rootDir = environment.get("DUB_ROOT_PACKAGE_DIR");
     if (rootDir == "")
     {
@@ -46,8 +48,18 @@ void compileShader(string outputPath, string shaderPath, string varyingPath, str
         outputFileName ~= ".fragment";
     }
 
-    /* TODO: Fix */
-    auto platform = "linux";
+    /* TODO: Support other platforms.  */
+    version(linux)
+    {
+        platform = "linux";
+    } else version(windows)
+    {
+        platform = "windows";
+    } else
+    {
+        static assert(0, "Unsupported Platform");
+    }
+
     string[] args = [
         shaderc,
         "-f", shaderPath,
