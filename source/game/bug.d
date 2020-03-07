@@ -35,35 +35,36 @@ import std.format;
 SpriteAnimation createBugAnimation()
 {
     SpriteAnimation ret = SpriteAnimation(dur!"msecs"(50));
-    foreach (i; 0..8)
+    foreach (i; 0 .. 8)
     {
         ret.addTexture(new Texture(
-                "assets/SciFi/Sprites/alien-flying-enemy/sprites/alien-enemy-flying%d.png".format(i+1)));
+                "assets/SciFi/Sprites/alien-flying-enemy/sprites/alien-enemy-flying%d.png".format(
+                i + 1)));
     }
     return ret;
 }
 
-EntityID createBug(View!ReadWrite initView, SpriteAnimation * anim, float x, float y)
+EntityID createBug(View!ReadWrite initView, SpriteAnimation* anim, float x, float y)
 {
-        auto bug = initView.createEntity();
-        auto transform = TransformComponent();
-        auto physics = PhysicsComponent();
-        physics.velocityX = (meterSize * 1.5) / 1000.0f;
-        auto sprite = SpriteComponent();
-        sprite.texture = anim.textures[0];
-        sprite.flip = FlipMode.Horizontal;
+    auto bug = initView.createEntity();
+    auto transform = TransformComponent();
+    auto physics = PhysicsComponent();
+    physics.velocityX = (meterSize * 1.5) / 1000.0f;
+    auto sprite = SpriteComponent();
+    sprite.texture = anim.textures[0];
+    sprite.flip = FlipMode.Horizontal;
 
-        auto bugAnim = SpriteAnimationComponent();
-        bugAnim.animation = anim;
+    auto bugAnim = SpriteAnimationComponent();
+    bugAnim.animation = anim;
 
-        transform.position.x = x;
-        transform.position.y = y;
-        transform.position.z = 0.9f;
+    transform.position.x = x;
+    transform.position.y = y;
+    transform.position.z = 0.9f;
 
-        initView.addComponentDeferred(bug, transform);
-        initView.addComponentDeferred(bug, physics);
-        initView.addComponentDeferred(bug, sprite);
-        initView.addComponentDeferred(bug, bugAnim);
+    initView.addComponentDeferred(bug, transform);
+    initView.addComponentDeferred(bug, physics);
+    initView.addComponentDeferred(bug, sprite);
+    initView.addComponentDeferred(bug, bugAnim);
 
-        return bug;
+    return bug;
 }

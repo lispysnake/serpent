@@ -217,8 +217,8 @@ private:
 
         auto component = view.data!TransformComponent(player);
 
-        auto boundsX = (component.position.x + playerAnim.textures[0].width
-                / 2) - (context.display.logicalWidth() / 2);
+        auto boundsX = (component.position.x + playerAnim.textures[0].width / 2) - (
+                context.display.logicalWidth() / 2);
         auto boundsY = 0.0f;
         s.camera.position = vec3f(boundsX, 0.0f, 0.0f);
         auto bounds = rectanglef(0.0f, 0.0f, 480.0f + 200.0f, 176.0f);

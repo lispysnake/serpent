@@ -96,10 +96,13 @@ public:
         static auto fp_opengl = import("sprite/glsl.fragment");
 
         import serpent.graphics.pipeline.info;
+
         if (context.display.pipeline.info.driverType == DriverType.OpenGL)
         {
             shader = new Program(Shader.fromContents(vp_opengl), Shader.fromContents(fp_opengl));
-        } else {
+        }
+        else
+        {
             shader = new Program(Shader.fromContents(vp_vulkan), Shader.fromContents(fp_vulkan));
         }
 

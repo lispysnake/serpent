@@ -26,7 +26,6 @@ import serpent;
 
 const auto meterSize = 70;
 
-
 /**
  * We apply a PhysicsComponent when there is some position manipulation
  * to be had.

@@ -32,29 +32,29 @@ import std.format;
 SpriteAnimation createExplosionAnimation()
 {
     SpriteAnimation ret = SpriteAnimation(dur!"msecs"(80));
-    foreach (i; 0..10)
+    foreach (i; 0 .. 10)
     {
         ret.addTexture(new Texture(
-                "assets/SciFi/Sprites/Explosion/sprites/explosion-animation%d.png".format(i+1)));
+                "assets/SciFi/Sprites/Explosion/sprites/explosion-animation%d.png".format(i + 1)));
     }
     return ret;
 }
 
-EntityID createExplosion(View!ReadWrite initView, SpriteAnimation *anim)
+EntityID createExplosion(View!ReadWrite initView, SpriteAnimation* anim)
 {
-        auto explosion = initView.createEntity();
-        auto transform = TransformComponent();
-        auto sprite = SpriteComponent();
-        sprite.texture = anim.textures[0];
-        transform.position.x = 40.0f;
-        transform.position.z = 0.9f;
-        transform.position.y = 120.0f;
+    auto explosion = initView.createEntity();
+    auto transform = TransformComponent();
+    auto sprite = SpriteComponent();
+    sprite.texture = anim.textures[0];
+    transform.position.x = 40.0f;
+    transform.position.z = 0.9f;
+    transform.position.y = 120.0f;
 
-        auto explosionAnim = SpriteAnimationComponent();
-        explosionAnim.animation = anim;
-        initView.addComponentDeferred(explosion, transform);
-        initView.addComponentDeferred(explosion, sprite);
-        initView.addComponentDeferred(explosion, explosionAnim);
+    auto explosionAnim = SpriteAnimationComponent();
+    explosionAnim.animation = anim;
+    initView.addComponentDeferred(explosion, transform);
+    initView.addComponentDeferred(explosion, sprite);
+    initView.addComponentDeferred(explosion, explosionAnim);
 
-        return explosion;
+    return explosion;
 }

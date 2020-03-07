@@ -49,26 +49,26 @@ SpriteAnimation createShipAnimation()
 
 EntityID createShip(View!ReadWrite initView, SpriteAnimation* anim)
 {
-        auto ship = initView.createEntity();
-        auto transform = TransformComponent();
-        auto physics = PhysicsComponent();
-        auto sprite = SpriteComponent();
-        sprite.texture = anim.textures[0];
-        sprite.flip = FlipMode.Horizontal;
+    auto ship = initView.createEntity();
+    auto transform = TransformComponent();
+    auto physics = PhysicsComponent();
+    auto sprite = SpriteComponent();
+    sprite.texture = anim.textures[0];
+    sprite.flip = FlipMode.Horizontal;
 
-        /* Update movement */
-        transform.position.x = 500.0f;
-        transform.position.y = 60.0f;
-        physics.velocityX = (meterSize * -1.2) / 1000.0f;
-        physics.velocityY = (meterSize * -0.1) / 1000.0f;
+    /* Update movement */
+    transform.position.x = 500.0f;
+    transform.position.y = 60.0f;
+    physics.velocityX = (meterSize * -1.2) / 1000.0f;
+    physics.velocityY = (meterSize * -0.1) / 1000.0f;
 
-        auto spriteAnim = SpriteAnimationComponent();
-        spriteAnim.animation = anim;
+    auto spriteAnim = SpriteAnimationComponent();
+    spriteAnim.animation = anim;
 
-        initView.addComponentDeferred(ship, transform);
-        initView.addComponentDeferred(ship, physics);
-        initView.addComponentDeferred(ship, sprite);
-        initView.addComponentDeferred(ship, spriteAnim);
+    initView.addComponentDeferred(ship, transform);
+    initView.addComponentDeferred(ship, physics);
+    initView.addComponentDeferred(ship, sprite);
+    initView.addComponentDeferred(ship, spriteAnim);
 
-        return ship;
+    return ship;
 }

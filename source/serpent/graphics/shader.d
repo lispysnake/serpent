@@ -62,7 +62,7 @@ public:
     static final Shader fromContents(ref string data)
     {
         auto ret = new Shader();
-        immutable char *dataz = toStringz(data);
+        immutable char* dataz = toStringz(data);
 
         auto memory = bgfx_copy(cast(const void*) dataz, cast(uint) data.length + 1);
         ret._handle = bgfx_create_shader(memory);

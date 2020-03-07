@@ -35,8 +35,7 @@ import std.format;
 SpriteAnimation createTankAnimation()
 {
     SpriteAnimation ret = SpriteAnimation(dur!"msecs"(100));
-    auto rootTexture = new Texture(
-            "assets/SciFi/Sprites/tank-unit/PNG/tank-unit.png");
+    auto rootTexture = new Texture("assets/SciFi/Sprites/tank-unit/PNG/tank-unit.png");
     auto frameSize = rootTexture.width / 4.0f;
     foreach (i; 0 .. 4)
     {
@@ -49,26 +48,26 @@ SpriteAnimation createTankAnimation()
 
 EntityID createTank(View!ReadWrite initView, SpriteAnimation* anim)
 {
-        auto tank = initView.createEntity();
-        auto transform = TransformComponent();
-        auto physics = PhysicsComponent();
-        auto sprite = SpriteComponent();
-        sprite.texture = anim.textures[0];
-        sprite.flip = FlipMode.Horizontal;
+    auto tank = initView.createEntity();
+    auto transform = TransformComponent();
+    auto physics = PhysicsComponent();
+    auto sprite = SpriteComponent();
+    sprite.texture = anim.textures[0];
+    sprite.flip = FlipMode.Horizontal;
 
-        /* Update movement */
-        transform.position.x = 0.0f;
-        transform.position.y = (48.0f * 3.0f) + 7.0f;
-        physics.velocityX = 0.0f;
-        physics.velocityY = 0.0f;
+    /* Update movement */
+    transform.position.x = 0.0f;
+    transform.position.y = (48.0f * 3.0f) + 7.0f;
+    physics.velocityX = 0.0f;
+    physics.velocityY = 0.0f;
 
-        auto tankAnim = SpriteAnimationComponent();
-        tankAnim.animation = anim;
+    auto tankAnim = SpriteAnimationComponent();
+    tankAnim.animation = anim;
 
-        initView.addComponentDeferred(tank, transform);
-        initView.addComponentDeferred(tank, physics);
-        initView.addComponentDeferred(tank, sprite);
-        initView.addComponentDeferred(tank, tankAnim);
+    initView.addComponentDeferred(tank, transform);
+    initView.addComponentDeferred(tank, physics);
+    initView.addComponentDeferred(tank, sprite);
+    initView.addComponentDeferred(tank, tankAnim);
 
-        return tank;
+    return tank;
 }

@@ -30,7 +30,7 @@ import std.datetime;
     ulong textureIndex = 0;
     Duration passed;
     bool repeat;
-    SpriteAnimation *animation;
+    SpriteAnimation* animation;
 }
 
 final struct SpriteAnimation
@@ -54,9 +54,11 @@ final class SpriteAnimationProcessor : Processor!ReadWrite
     final override void run(View!ReadWrite view)
     {
         import std.parallelism;
+
         auto passed = context.deltaTime();
 
-        foreach (chunk; parallel(view.withComponentsChunked!(SpriteComponent,SpriteAnimationComponent)))
+        foreach (chunk; parallel(view.withComponentsChunked!(SpriteComponent,
+                SpriteAnimationComponent)))
         {
             foreach (ent, sprite, anim; chunk)
             {
