@@ -15,6 +15,9 @@ serpent-test-*
 *.lst
 dub.selections.json
 
+# Linux specific
+libserpent.a
+
 # Caused by autoformat
 *.d.orig
 prepare-shaders
