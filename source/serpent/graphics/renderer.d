@@ -63,6 +63,15 @@ package:
     }
 
 public:
+
+    /**
+     * Implementations should bootstrap themselves here, having a valid
+     * serpent Context
+     */
+    void bootstrap() @safe
+    {
+    }
+
     /**
      * The renderer will be called with the given queryView, if it finds
      * entities it knows it can draw, then submit them to the packet.

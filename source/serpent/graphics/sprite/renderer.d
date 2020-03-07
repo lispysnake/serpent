@@ -38,6 +38,11 @@ final class SpriteRenderer : Renderer
 
 public:
 
+    final override void bootstrap() @safe
+    {
+        context.entity.tryRegisterComponent!SpriteComponent;
+    }
+
     /**
      * Find all sprites. We should add camera culling here but meh.
      */

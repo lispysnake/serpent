@@ -97,8 +97,6 @@ int main(string[] args)
         context.display.pipeline.verticalSync = false;
     }
 
-    context.entity.registerComponent!SpriteComponent;
-
     /* HAX: Add bgfx specific renderer. We need to abstract renderer
      * and textures!
      */

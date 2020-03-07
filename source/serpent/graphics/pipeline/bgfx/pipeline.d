@@ -169,6 +169,7 @@ public:
     {
         enforce(!context.running, "Cannot add renderers to a running context");
         r.context = context;
+        r.bootstrap();
         _renderers ~= r;
     }
     /**

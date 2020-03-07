@@ -64,6 +64,11 @@ final class MapRenderer : Renderer
 
 public:
 
+    final override void bootstrap() @safe
+    {
+        context.entity.tryRegisterComponent!MapComponent;
+    }
+
     final override void queryVisibles(View!ReadOnly queryView, ref FramePacket packet)
     {
         foreach (entity, transform, map; queryView.withComponents!(TransformComponent,

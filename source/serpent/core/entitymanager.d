@@ -541,6 +541,19 @@ public:
     }
 
     /**
+     * Attempt to register the component if not already registered
+     */
+    final void tryRegisterComponent(C)() @safe
+    {
+        static assert(isValidComponent!C);
+        if (isRegistered!C)
+        {
+            return;
+        }
+        registerComponent!C;
+    }
+
+    /**
      * Attempt to register the component
      *
      * This is important so that we have sufficient storage ahead of time
