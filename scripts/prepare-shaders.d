@@ -65,8 +65,13 @@ void compileShader(string outputPath, string shaderPath, string varyingPath, str
         args ~= ["--profile", shaderLang];
     }
 
+    writefln("  * compiling %s", outputFileName);
+
     auto cmd = execute(args);
-    writeln(cmd.output);
+    if (cmd.status != 0)
+    {
+        writeln(cmd.output);
+    }
 }
 
 void main()
@@ -105,5 +110,6 @@ void main()
         compileShader(outputPath, vertex, varying, "glsl", true);
         compileShader(outputPath, fragment, varying, "spirv", false);
         compileShader(outputPath, vertex, varying, "spirv", true);
+        writeln();
     }
 }
