@@ -69,4 +69,5 @@
 		}
 	},
 	"preBuildCommands": ["ldc2 --run scripts/prepare-shaders.d"],
+	"stringImportPaths": ["built/shaders"],
 }

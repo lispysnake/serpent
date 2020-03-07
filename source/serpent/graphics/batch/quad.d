@@ -82,13 +82,26 @@ public:
     this(Context context)
     {
         this.context = context;
-        auto vp = context.resource.substitutePath(
-                context.resource.root ~ "/shaders/${shaderModel}/sprite_2d_vertex.bin");
-        auto fp = context.resource.substitutePath(
-                context.resource.root ~ "/shaders/${shaderModel}/sprite_2d_fragment.bin");
-        auto vertex = new Shader(vp);
-        auto fragment = new Shader(fp);
-        shader = new Program(vertex, fragment);
+
+        /* TODO: Make this cleaner, we don't want each shader consumer picking the
+         * shader code itself, factoryfy it
+         */
+
+        /* Vulkan shaders */
+        static auto vp_vulkan = import("sprite/spirv.vertex");
+        static auto fp_vulkan = import("sprite/spirv.fragment");
+
+        /* OpenGL shaders */
+        static auto vp_opengl = import("sprite/glsl.vertex");
+        static auto fp_opengl = import("sprite/glsl.fragment");
+
+        import serpent.graphics.pipeline.info;
+        if (context.display.pipeline.info.driverType == DriverType.OpenGL)
+        {
+            shader = new Program(Shader.fromContents(vp_opengl), Shader.fromContents(fp_opengl));
+        } else {
+            shader = new Program(Shader.fromContents(vp_vulkan), Shader.fromContents(fp_vulkan));
+        }
 
         queue = BatchQueue!(PosUVVertex, uint16_t)(128, 100_000, 6, 4);
 

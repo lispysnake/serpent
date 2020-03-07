@@ -38,9 +38,11 @@ private:
     string _filename = null;
     bgfx_shader_handle_t _handle = cast(bgfx_shader_handle_t) 0;
 
-public:
+    this()
+    {
+    }
 
-    @disable this();
+public:
 
     /**
      * Construct a new Shader from the given filename.
@@ -55,6 +57,16 @@ public:
         _handle = bgfx_create_shader(memory);
         bgfx_set_shader_name(_handle, cast(const char*) toStringz(_filename),
                 cast(uint) filename.length + 1);
+    }
+
+    static final Shader fromContents(ref string data)
+    {
+        auto ret = new Shader();
+        immutable char *dataz = toStringz(data);
+
+        auto memory = bgfx_copy(cast(const void*) dataz, cast(uint) data.length + 1);
+        ret._handle = bgfx_create_shader(memory);
+        return ret;
     }
 
     /**
