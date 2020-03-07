@@ -29,7 +29,8 @@ import std.stdio;
 
 void compileShader(string outputPath, string shaderPath, string varyingPath, string shaderLang, bool vertex)
 {
-    string command = "../serpent-support/runtime/bin/shaderc";
+    auto dir = environment.get("DUB_PACKAGE_DIR");
+    auto command = dir.buildPath("..", "serpent-support", "runtime", "bin", "shaderc");
 
     string outputFileName = outputPath.buildPath(shaderLang);
     if (vertex)
