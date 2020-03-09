@@ -27,6 +27,9 @@
 		"bindbc-sdl": {
 			"path": "external/bindbc-sdl",
 		},
+		"chipmunkd": {
+			"path": "external/chipmunkd",
+		},
 		"intel-intrinsics": {
 			"path": "external/intel-intrinsics",
 		},
@@ -39,10 +42,12 @@
 		"SDL2", "SDL2_image",
 		"bgfxRelease-shared",
 		"stdc++", "GL", "x11",
+		"chipmunk",
 	],
 	"libs-windows": [
 		"SDL2", "SDL2_image",
 		"bgfxRelease-shared",
+		"chipmunk",
 	],
 	"lflags": ["-L../serpent-support/runtime/lib"],
 	"license": "ZLib",
