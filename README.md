@@ -131,11 +131,11 @@ We'll use SDL for our basic windowing, OS integration and input
 handling. This allows consumers to leverage the advanced controller
 support found within SDL (some would say a USP).
 
-#### Newton (??)
+#### Chipmunk2D
 
-The downfall of many a framework is to needlessly reinvent physics.
-We plan to integrate a proven solution. Currently we're checking
-some numbers and will revisit physics integration in the near future.
+After investigating several options, we're probably going to use Chipmunk2D
+for 2D physics, and find another 3D option should the need arise. We looked
+into Newton Dynamics and its too problematic for integration.
 
 #### OpenAL
 
