@@ -287,8 +287,8 @@ public:
         bgfx_encoder_set_transient_vertex_buffer(encoder, 0, &tvb, 0,
                 cast(uint) queue.verticesCount(), tvb.layoutHandle);
         bgfx_encoder_set_transient_index_buffer(encoder, &tib, 0, cast(uint) queue.indicesCount());
-        bgfx_encoder_set_texture(encoder, 0, cast(bgfx_uniform_handle_t) 0, texture.handle,
-                BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP | BGFX_SAMPLER_MAG_POINT);
+        bgfx_encoder_set_texture(encoder, 0, cast(bgfx_uniform_handle_t) 0,
+                texture.handle, uint32_t.max);
 
         bgfx_encoder_set_state(encoder, 0UL | BGFX_STATE_WRITE_RGB | BGFX_STATE_WRITE_A
                 | BGFX_STATE_DEPTH_TEST_LEQUAL | BGFX_STATE_WRITE_Z | BlendState.Alpha, 0);
