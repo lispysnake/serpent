@@ -39,7 +39,7 @@ void compileShader(string outputPath, string shaderPath, string varyingPath,
     }
 
     string shaderc = rootDir.buildPath("..", "serpent-support", "runtime", "bin", "shaderc");
-    string includedir = rootDir.buildPath("..", "serpent-support", "staging", "bgfx", "src");
+    string includedir = rootDir.buildPath("..", "serpent-support", "external", "bgfx", "src");
 
     string outputFileName = outputPath.buildPath(shaderLang);
     if (vertex)
