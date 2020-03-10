@@ -157,7 +157,7 @@ public:
      * Attempt to insert a data row into the chunk. If this succeeds
      * a pointer tothe datum is returned and the insert index is updated
      */
-    final C* insertRow(out ulong index) @trusted @nogc nothrow
+    final C* insertRow(out ulong index) @trusted
     {
         if (full())
         {
@@ -175,7 +175,7 @@ public:
      * Remove a row from this chunk, shiftinge everything after it
      * back one element
      */
-    final void removeRow(ulong index) @trusted nothrow
+    final void removeRow(ulong index) @trusted
     {
         assert(index < StorageChunk!C.maxElements);
         buffer[index] = C.init;

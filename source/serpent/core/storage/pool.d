@@ -96,7 +96,7 @@ public:
      *
      * If possible, we'll return a free chunk to reuse.
      */
-    final Chunk* allocateChunk() @trusted nothrow
+    final Chunk* allocateChunk() @trusted
     {
         /* Return from the free list */
         if (freeChunks.length > 0)

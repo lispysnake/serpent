@@ -575,14 +575,14 @@ public:
         /**
          * Internal helper for inserting a row
          */
-        void* insertHelper(void* blob, out ulong idx) @trusted nothrow
+        void* insertHelper(void* blob, out ulong idx) @trusted
         {
             auto realBlob = cast(StorageChunk!C*) blob;
             return realBlob.insertRow(idx);
         }
 
         /* Clone from one archetype to another */
-        void cloneHelper(void* source, ulong sourceIndex, void* target, ulong targetIndex) @trusted nothrow
+        void cloneHelper(void* source, ulong sourceIndex, void* target, ulong targetIndex) @trusted
         {
             StorageChunk!C* sourceBlob = cast(StorageChunk!C*) source;
             StorageChunk!C* targetBlob = cast(StorageChunk!C*) target;
@@ -590,13 +590,13 @@ public:
         }
 
         /* Remove from an archetype */
-        void removeHelper(void* source, ulong index) @trusted nothrow
+        void removeHelper(void* source, ulong index) @trusted
         {
             StorageChunk!C* blob = cast(StorageChunk!C*) source;
             blob.removeRow(index);
         }
 
-        void deallocateHelper(void* chunk) @trusted nothrow
+        void deallocateHelper(void* chunk) @trusted
         {
             StorageChunk!C* blob = cast(StorageChunk!C*) chunk;
             _components[idx].pool!C.deallocateChunk(blob);
