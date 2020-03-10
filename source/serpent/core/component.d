@@ -25,6 +25,11 @@ module serpent.core.component;
 import serpent.core.entity;
 
 /**
+ * The function should deal with freeing the given component.
+ */
+alias componentDeallocateFunc = void function(void* v);
+
+/**
  * The component User Defined Attribute is an essential part of the
  * serpent architecture. Like any other ECS, it provides a data tagging
  * facility which is also used to query and filter. Think of a component
@@ -39,6 +44,7 @@ import serpent.core.entity;
  */
 final struct serpentComponent
 {
+    public componentDeallocateFunc deallocate = null;
 }
 
 /**
@@ -96,11 +102,10 @@ pragma(inline, true) package auto getComponentID(C)()
 }
 
 /**
- * Return the component UDA, handling @component and @component() cases.
+ * Return the component UDA, handling @serpentComponent and @serpentComponent() cases.
  *
- * This is here so we can support meta-tags on the @component decorator
- * if needed. Once upon a time we supported compile-time switching of
- * storage, however this is always 'chunked' now.
+ * We specify helper metadata sometimes in the serpentComponent so that we can
+ * integrate stuff like the deallocate function.
  */
 pragma(inline, true) package auto getComponentUDA(C)()
 {
@@ -108,13 +113,15 @@ pragma(inline, true) package auto getComponentUDA(C)()
     import std.traits : getUDAs;
 
     /* If its actually a component() struct, return it. */
-    static if (is(typeof(getUDAs!(C, component)[0]) == serpentComponent))
+    static if (is(typeof(getUDAs!(C, serpentComponent)[0]) == serpentComponent))
     {
-        return getUDAs!(C, component)[0];
+        return getUDAs!(C, serpentComponent)[0];
     }
-
-    /* Otherwise its an empty tag, return default component */
-    return serpentComponent();
+    else
+    {
+        /* Otherwise its an empty tag, return default component */
+        return serpentComponent();
+    }
 }
 
 /**

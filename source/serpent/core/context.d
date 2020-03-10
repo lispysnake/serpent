@@ -238,6 +238,7 @@ public:
 
         finishGroups();
         _display.pipeline.shutdown();
+        _entity.clear();
 
         return 0;
     }

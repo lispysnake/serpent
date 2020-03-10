@@ -230,7 +230,7 @@ package:
      * Drop an entity from this archetype and remove all chunked data
      * for it.
      */
-    final void dropEntity(EntityID id) @trusted
+    final void dropEntity(EntityID id, bool killData) @trusted
     {
         --numEntities;
         entities[id] = false;
@@ -247,7 +247,7 @@ package:
         foreach (ref manifest; manifests)
         {
             auto oldChunk = oldPage.chunks[componentReverse[manifest.index]];
-            manifest.removeRow(oldChunk, oldIndex);
+            manifest.removeRow(oldChunk, oldIndex, killData);
         }
 
         /* Release old page */
@@ -256,7 +256,7 @@ package:
             foreach (ref manifest; manifests)
             {
                 auto chunk = oldPage.chunks[componentReverse[manifest.index]];
-                manifest.deallocateChunk(chunk);
+                manifest.deallocateChunk(chunk, false);
             }
 
             import std.algorithm.mutation : remove;
@@ -407,14 +407,14 @@ package:
     /**
      * Return any internal resources.
      */
-    final void close() @safe nothrow
+    final void close(bool killData = false) @safe
     {
         foreach (ref page; pages)
         {
             foreach (ref manifest; manifests)
             {
                 auto chunk = page.chunks[componentReverse[manifest.index]];
-                manifest.deallocateChunk(chunk);
+                manifest.deallocateChunk(chunk, killData);
             }
         }
     }

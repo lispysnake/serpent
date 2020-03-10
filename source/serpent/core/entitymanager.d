@@ -131,7 +131,7 @@ private:
     /**
      * Update the archetype for the given entity.
      */
-    final void updateArchetype(EntityID id, bool allowNewArchetype = true) @trusted
+    final void updateArchetype(EntityID id, bool allowNewArchetype = true, bool killData = false) @trusted
     {
         auto newSignature = computeSignature(id);
         Archetype* oldArchetype = null;
@@ -171,7 +171,7 @@ private:
             {
                 newArchetype.takeEntity(id, stagingArchetype);
             }
-            stagingArchetype.dropEntity(id);
+            stagingArchetype.dropEntity(id, killData);
             return;
         }
 
@@ -187,7 +187,7 @@ private:
         }
 
         /* Drop from old archetype, losing data */
-        oldArchetype.dropEntity(id);
+        oldArchetype.dropEntity(id, killData);
 
         if (!oldArchetype.empty())
         {
@@ -292,7 +292,7 @@ private:
             {
                 return;
             }
-            updateArchetype(id);
+            updateArchetype(id, true, true);
             lastEntity = id;
         }
 
@@ -377,7 +377,7 @@ private:
                 manifest.unjoin(kill);
             }
 
-            updateArchetype(kill, false);
+            updateArchetype(kill, false, true);
 
             freeIDs ~= kill;
         }
@@ -415,6 +415,7 @@ public:
      */
     ~this()
     {
+        clear();
     }
 
     /**
@@ -590,15 +591,31 @@ public:
         }
 
         /* Remove from an archetype */
-        void removeHelper(void* source, ulong index) @trusted nothrow
+        void removeHelper(void* source, ulong index, bool killData) @trusted
         {
             StorageChunk!C* blob = cast(StorageChunk!C*) source;
+            serpentComponent tag = getComponentUDA!C;
+            if (killData && tag.deallocate !is null)
+            {
+                tag.deallocate(&blob.buffer[index]);
+            }
             blob.removeRow(index);
         }
 
-        void deallocateHelper(void* chunk) @trusted nothrow
+        /* Deallocate underlying data */
+        void deallocateHelper(void* chunk, bool killData) @trusted
         {
             StorageChunk!C* blob = cast(StorageChunk!C*) chunk;
+            serpentComponent tag = getComponentUDA!C;
+
+            if (killData && tag.deallocate !is null)
+            {
+                foreach (idx; 0 .. blob.numElements)
+                {
+                    tag.deallocate(&blob.buffer[idx]);
+                }
+            }
+
             _components[idx].pool!C.deallocateChunk(blob);
         }
 
@@ -660,7 +677,7 @@ public:
 
         auto idx = getComponentID!C - 1;
         _components[idx].unjoin(ent);
-        updateArchetype(ent);
+        updateArchetype(ent, true, true);
     }
 
     /**
@@ -848,7 +865,7 @@ public:
 
         foreach (ref archetype; archetypes)
         {
-            archetype.close();
+            archetype.close(true);
             archetype.destroy();
         }
         archetypes = [];
@@ -859,7 +876,7 @@ public:
         _lastID = 0;
         freeIDs = [];
 
-        stagingArchetype.close();
+        stagingArchetype.close(true);
         stagingArchetype.destroy();
 
         constructStagingArchetype();

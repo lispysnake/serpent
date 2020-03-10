@@ -54,10 +54,10 @@ final struct StorageChunk(C)
 
 private:
 
-    ushort insertIndex = 0;
-    ushort numElements = 0;
+    ushort _insertIndex = 0;
+    ushort _numElements = 0;
 
-    static const uint metaSize = (insertIndex.sizeof + numElements.sizeof);
+    static const uint metaSize = (_insertIndex.sizeof + _numElements.sizeof);
 
 public:
     static const ulong maxElements = (ChunkSize - metaSize) / cast(int) C.sizeof;
@@ -150,7 +150,7 @@ public:
      */
     pure final @property const bool full() @safe @nogc nothrow
     {
-        return insertIndex == maxElements;
+        return _insertIndex == maxElements;
     }
 
     /**
@@ -164,10 +164,10 @@ public:
             index = 0;
             return null;
         }
-        buffer[insertIndex] = C.init;
-        index = insertIndex;
-        ++insertIndex;
-        ++numElements;
+        buffer[_insertIndex] = C.init;
+        index = _insertIndex;
+        ++_insertIndex;
+        ++_numElements;
         return &buffer[index];
     }
 
@@ -188,7 +188,12 @@ public:
             }
             buffer[idx] = buffer[idx + 1];
         }
-        insertIndex = cast(ushort)(numElements - 1);
-        --numElements;
+        _insertIndex = cast(ushort)(_numElements - 1);
+        --_numElements;
+    }
+
+    pure final @property const ushort numElements() @safe @nogc nothrow
+    {
+        return _numElements;
     }
 }

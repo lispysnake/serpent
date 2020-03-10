@@ -27,11 +27,11 @@ import serpent.core.greedyarray;
 import serpent.core.storage;
 
 alias storeAllocatorFunc = void* delegate() @trusted nothrow;
-alias storeDeallocatorFunc = void delegate(void* chunk) @trusted nothrow;
+alias storeDeallocatorFunc = void delegate(void* chunk, bool killData) @trusted;
 alias storeInsertFunc = void* delegate(void* chunk, out ulong idx) @trusted nothrow;
 alias storeCloneFunc = void delegate(void* sourceChunk, ulong sourceIndex,
         void* targetChunk, ulong targetIndex) @trusted nothrow;
-alias storeRemoveFunc = void delegate(void* chunk, ulong idx) @trusted nothrow;
+alias storeRemoveFunc = void delegate(void* chunk, ulong idx, bool killData) @trusted;
 
 /**
  * 
