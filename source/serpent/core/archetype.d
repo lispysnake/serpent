@@ -317,7 +317,7 @@ package:
     /**
      * Create a new storage page
      */
-    final Page* createPage() @safe
+    final Page* createPage() @safe nothrow
     {
         auto page = new Page(manifests.length);
 
@@ -407,7 +407,7 @@ package:
     /**
      * Return any internal resources.
      */
-    final void close() @safe
+    final void close() @safe nothrow
     {
         foreach (ref page; pages)
         {
