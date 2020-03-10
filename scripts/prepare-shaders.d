@@ -56,7 +56,7 @@ void compileShader(string outputPath, string shaderPath, string varyingPath,
     {
         platform = "linux";
     }
-    else version (windows)
+    else version (Windows)
     {
         platform = "windows";
     }
