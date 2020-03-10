@@ -22,3 +22,4 @@ libserpent.a
 *.d.orig
 prepare-shaders
 /built/
+/bin/

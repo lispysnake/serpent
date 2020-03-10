@@ -51,14 +51,16 @@ To build this on Solus you will need the following build dependencies:
 Note you will need to have `serpent-support` built in a directory
 parallel to this checkout. This is a bit janky but we're focusing
 more on code right now than the runtime support project. Building
-it will enable components such as bgfx.
+it will enable components such as bgfx, Chipmunk2D, etc.
 
 ## Running
 
-You'll need the shared libraries accessible when running a development
-build of serpent, or alternatively use `serpent-support`:
+Currently we statically link required components into the final binary,
+thus, you should strongly consider `-Wl,-as-needed`, functionality, full
+link time optimisation, and stripping the target binary. It will shrink
+drastically.
 
-    LD_LIBRARY_PATH=../serpent-support/runtime/lib ./serpent
+    ./bin/serpent
 
 ## Modifications
 

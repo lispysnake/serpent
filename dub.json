@@ -13,7 +13,8 @@
 		},
 		{
 			"name": "demo",
-			"targetType": "executable"
+			"targetType": "executable",
+			"targetPath": "bin"
 		}
 	],
 	"copyright": "Copyright © 2019-2020 Lispy Snake, Ltd.",
@@ -40,13 +41,13 @@
 	"description": "Serpent Game Framework",
 	"libs-posix": [
 		"SDL2", "SDL2_image",
-		"bgfxRelease-shared",
+		"bgfxRelease", "bimgRelease", "bxRelease",
 		"stdc++", "GL", "x11",
 		"chipmunk",
 	],
 	"libs-windows": [
 		"SDL2", "SDL2_image",
-		"bgfxRelease-shared",
+		"bgfxRelease", "bimgRelease", "bxRelease",
 		"chipmunk",
 	],
 	"lflags": ["-L../serpent-support/runtime/lib"],
