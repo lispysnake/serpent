@@ -70,7 +70,7 @@
 		},
 		"release": {
 			"buildOptions": ["releaseMode", "optimize", "inline"],
-			"dflags-ldc": ["-flto=thin", "--relocation-model=pic"]
+			"dflags-ldc": ["-flto=thin", "--relocation-model=pic", "-link-defaultlib-shared=false"]
 		}
 	},
 	"preBuildCommands": ["ldc2 --run scripts/prepare-shaders.d"],
