@@ -23,45 +23,6 @@ of the links below!
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VYHL9CEFSNCVA) [![Donate with Bitcoin](https://en.cryptobadges.io/badge/small/168AkAQszA7mZSv2epzYoPq4qnefiyhAKG)](https://en.cryptobadges.io/donate/168AkAQszA7mZSv2epzYoPq4qnefiyhAKG)
 
-
-### Disclaimer
-
-Our focus right now is providing just enough architecture to support some
-initial tech demos. The API is highly volatile and should not currently
-be relied on. As we flesh out feature requirements, parts of the design
-will begin to stabilize.
-
-We currently target [Solus](https://getsol.us/home/) for both development
-and testing, validating OpenGL and Vulkan configurations.
-
-
-## Building (Solus)
-
-We build serpent with the `ldc2` (LLVM-based) D compiler. To test the
-included demo, build the `demo` subcomponent in denig mode.
-
-    git submodule init
-    git submodule update
-    ./scripts/build.sh
-    
-To build this on Solus you will need the following build dependencies:
-
-	sudo eopkg it -c system.devel sdl2-image-devel sdl2-devel mesalib-devel ldc dub dmd
-
-Note you will need to have `serpent-support` built in a directory
-parallel to this checkout. This is a bit janky but we're focusing
-more on code right now than the runtime support project. Building
-it will enable components such as bgfx, Chipmunk2D, etc.
-
-## Running
-
-Currently we statically link required components into the final binary,
-thus, you should strongly consider `-Wl,-as-needed`, functionality, full
-link time optimisation, and stripping the target binary. It will shrink
-drastically.
-
-    ./bin/serpent
-
 ## Modifications
 
 Please note any modifications must be hygienic - compiling with neither

@@ -13,6 +13,3 @@
 [submodule "external/intel-intrinsics"]
 	path = external/intel-intrinsics
 	url = https://github.com/AuburnSounds/intel-intrinsics.git
-[submodule "external/chipmunkd"]
-	path = external/chipmunkd
-	url = https://github.com/rcorre/chipmunkd.git

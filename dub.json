@@ -2,21 +2,6 @@
 	"authors": [
 		"Lispy Snake, Ltd."
 	],
-	"configurations": [
-		{
-			"excludedSourceFiles": [
-				"source/app.d",
-				"source/game/*.d",
-			],
-			"name": "library",
-			"targetType": "library"
-		},
-		{
-			"name": "demo",
-			"targetType": "executable",
-			"targetPath": "bin"
-		}
-	],
 	"copyright": "Copyright © 2019-2020 Lispy Snake, Ltd.",
 	"dependencies": {
 		"bindbc-bgfx": {
@@ -28,9 +13,6 @@
 		"bindbc-sdl": {
 			"path": "external/bindbc-sdl",
 		},
-		"chipmunkd": {
-			"path": "external/chipmunkd",
-		},
 		"intel-intrinsics": {
 			"path": "external/intel-intrinsics",
 		},
@@ -38,17 +20,15 @@
 			"path": "external/gfm",
 		}
 	},
-	"description": "Serpent Game Framework",
+	"description": "Serpent Core Game Framework",
 	"libs-posix": [
 		"SDL2", "SDL2_image",
 		"bgfxRelease", "bimgRelease", "bxRelease",
 		"stdc++", "GL", "x11",
-		"chipmunk",
 	],
 	"libs-windows": [
 		"SDL2", "SDL2_image",
 		"bgfxRelease", "bimgRelease", "bxRelease",
-		"chipmunk",
 	],
 	"lflags": ["-L../serpent-support/runtime/lib"],
 	"license": "ZLib",
@@ -57,23 +37,12 @@
 		"bindbc-bgfx": "staticBC",
 		"bindbc-sdl": "staticBC"
 	},
-	"targetType": "none",
+	"targetType": "library",
 	"versions": [
 		"BindSDL_Static",
 		"BindSDL_Image",
 		"SDL_205",
 	],
-	"buildTypes": {
-		"debug": {
-			"buildOptions": ["debugMode", "optimize"],
-			"dflags-dmd": ["-g", "-fPIC"],
-			"dflags-ldc": ["-gc", "-O2", "--relocation-model=pic"]
-		},
-		"release": {
-			"buildOptions": ["releaseMode", "optimize", "inline"],
-			"dflags-ldc": ["-flto=thin", "--relocation-model=pic", "-link-defaultlib-shared=false"]
-		}
-	},
 	"preBuildCommands": ["ldc2 --run scripts/prepare-shaders.d"],
 	"stringImportPaths": ["built/shaders"],
 }
