@@ -37,7 +37,7 @@ import serpent.core.transform;
 import core.time : MonoTime;
 
 public import serpent.graphics.display;
-public import serpent.app;
+public import serpent.core.app;
 public import serpent.input;
 
 public import core.time : Duration;

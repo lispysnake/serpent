@@ -20,7 +20,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  */
 
-module serpent.app;
+module serpent.core.app;
 
 import serpent.core.context;
 
