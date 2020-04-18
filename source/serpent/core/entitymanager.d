@@ -109,7 +109,10 @@ private:
         import std.algorithm;
         import std.range;
 
-        return s.components.map!((a) => &_components[a - 1]).array();
+        return s.components
+            .filter!((a) => a != 0)
+            .map!((a) => &_components[a - 1])
+            .array();
     }
 
     /**
