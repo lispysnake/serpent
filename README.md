@@ -98,7 +98,7 @@ support found within SDL (some would say a USP).
 
 After investigating several options, we're probably going to use Chipmunk2D
 for 2D physics, and find another 3D option should the need arise. We looked
-into Newton Dynamics and its too problematic for integration.
+into Newton Dynamics and it is too problematic for integration.
 
 #### OpenAL
 
