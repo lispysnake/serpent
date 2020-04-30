@@ -31,6 +31,22 @@ public import gfm.math;
 public import serpent.graphics.uv : UVCoordinates;
 
 /**
+ * NOTE: TextureFilter API will eventually change to have default
+ * configuration settings in serpent. It is provided temporarily
+ * so we can override the texture filter in the paddle demo without
+ * breaking the other demos.
+ */
+final enum TextureFilter
+{
+    Linear = 0,
+    MinPoint,
+    MagPoint,
+    MipPoint,
+    MinAnisotropic,
+    MagAnisotropic,
+}
+
+/**
  * This is a very temporary type which will undergo many changes as
  * the engine evolves.
  */
@@ -75,7 +91,7 @@ public:
      * TODO: Make less hacky, try DDS load first, fallback to SDL_Image
      * unoptimised path.
      */
-    this(string filename)
+    this(string filename, TextureFilter filter = TextureFilter.MagPoint)
     {
         surface = IMG_Load(toStringz(filename));
         _path = filename;
@@ -97,9 +113,31 @@ public:
 
         /* TODO: Optimise to the platform. */
         auto fmt = bgfx_texture_format_t.BGFX_TEXTURE_FORMAT_RGBA8;
-        _handle = bgfx_create_texture_2d(cast(ushort) surface.w, cast(ushort) surface.h, false, 1, fmt,
-                BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP | BGFX_SAMPLER_MAG_POINT,
-                bgfx_make_ref(surface.pixels, surface.h * surface.pitch));
+        auto textureFlags = BGFX_SAMPLER_U_CLAMP | BGFX_SAMPLER_V_CLAMP;
+        final switch (filter)
+        {
+        case TextureFilter.Linear:
+            break;
+        case TextureFilter.MinAnisotropic:
+            textureFlags |= BGFX_SAMPLER_MIN_ANISOTROPIC;
+            break;
+        case TextureFilter.MagAnisotropic:
+            textureFlags |= BGFX_SAMPLER_MAG_ANISOTROPIC;
+            break;
+        case TextureFilter.MinPoint:
+            textureFlags |= BGFX_SAMPLER_MIN_POINT;
+            break;
+        case TextureFilter.MagPoint:
+            textureFlags |= BGFX_SAMPLER_MAG_POINT;
+            break;
+        case TextureFilter.MipPoint:
+            textureFlags |= BGFX_SAMPLER_MIN_POINT;
+            break;
+        }
+
+        _handle = bgfx_create_texture_2d(cast(ushort) surface.w, cast(ushort) surface.h,
+                false, 1, fmt, textureFlags, bgfx_make_ref(surface.pixels,
+                    surface.h * surface.pitch));
     }
 
     ~this()
