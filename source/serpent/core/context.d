@@ -165,6 +165,9 @@ public:
             .add(new AppUpdateProcessor());
         addGroup(_systemGroup);
 
+        _renderGroup = new Group!ReadOnly("render");
+        addGroup(_renderGroup);
+
         /* Create a display with the default size */
         _input = new InputManager(this);
         _display = new Display(this, 640, 480);
@@ -322,6 +325,16 @@ public:
     pure @property final Group!ReadWrite systemGroup() @safe @nogc nothrow
     {
         return _systemGroup;
+    }
+
+    /**
+     * Return the Group used within the rendering stage.
+     * This is separate to the internal pipeline and may be used for
+     * post-processing, etc.
+     */
+    pure @property final Group!ReadOnly renderGroup() @safe @nogc nothrow
+    {
+        return _renderGroup;
     }
 
     /**
