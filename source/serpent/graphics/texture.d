@@ -59,6 +59,7 @@ private:
     float _width = 0;
     float _height = 0;
     string _path = null;
+    vec4f _rgba = vec4f(1.0, 1.0f, 1.0f, 1.0f);
 
     /**
      * Default clip will be set later.
@@ -200,5 +201,23 @@ public:
     pure @property final const UVCoordinates uv() @nogc @safe nothrow
     {
         return _uv;
+    }
+
+    /**
+     * Return read-wrtie RGBA property which can be used to modify
+     * RGBA values for the texture
+     */
+    pure @property final ref vec4f rgba() @nogc @safe nothrow
+    {
+        return _rgba;
+    }
+
+    /**
+     * Return read-write RGBA property and set to new value
+     */
+    pure @property final ref vec4f rgba(vec4f r) @nogc @safe nothrow
+    {
+        _rgba = r;
+        return _rgba;
     }
 }

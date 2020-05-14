@@ -245,14 +245,15 @@ public:
         /* Push vertices */
         PosUVVertex[4] vdata = [
             PosUVVertex(vec3f(transformPosition.x, transformPosition.y,
-                    transformPosition.z), vec2f(quad.uv.u1, quad.uv.v1)),
+                    transformPosition.z), vec2f(quad.uv.u1, quad.uv.v1), quad.texture.rgba),
             PosUVVertex(vec3f(transformPosition.x + spriteWidth,
-                    transformPosition.y, transformPosition.z), vec2f(quad.uv.u2, quad.uv.v1)),
+                    transformPosition.y, transformPosition.z),
+                    vec2f(quad.uv.u2, quad.uv.v1), quad.texture.rgba),
             PosUVVertex(vec3f(transformPosition.x + spriteWidth,
                     transformPosition.y + spriteHeight, transformPosition.z),
-                    vec2f(quad.uv.u2, quad.uv.v2)),
+                    vec2f(quad.uv.u2, quad.uv.v2), quad.texture.rgba),
             PosUVVertex(vec3f(transformPosition.x, transformPosition.y + spriteHeight,
-                    transformPosition.z), vec2f(quad.uv.u1, quad.uv.v2))
+                    transformPosition.z), vec2f(quad.uv.u1, quad.uv.v2), quad.texture.rgba)
         ];
         queue.pushVertices(vdata);
     }

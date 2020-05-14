@@ -40,11 +40,11 @@ final struct PosUVVertex
 
     static bgfx_vertex_layout_t layout;
 
-    this(vec3f pos, vec2f tex)
+    this(vec3f pos, vec2f tex, vec4f rgba)
     {
         this.pos = pos;
         this.tex = tex;
-        this.rgba = vec4f(1.0f, 1.0f, 1.0f, 1.0f);
+        this.rgba = rgba;
     }
 
     static this()
