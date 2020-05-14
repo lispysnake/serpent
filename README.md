@@ -2,6 +2,10 @@
 
 [![License](https://img.shields.io/badge/License-ZLib-blue.svg)](https://opensource.org/licenses/ZLib)
 
+<p align="center">
+  <img width="165" height="222" src="https://github.com/lispysnake/serpent/raw/master/.github/logo.png">
+</p>
+
 The Serpent Game Framework is a brand new game framework from [Lispy Snake, Ltd](https://lispysnake.com) leveraging
 the latest technologies such as D, OpenGL and Vulkan, to make indie game
 development easier than ever.
