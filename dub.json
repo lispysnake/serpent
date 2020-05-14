@@ -39,8 +39,8 @@
 	},
 	"targetType": "library",
 	"versions": [
-		"BindSDL_Static",
-		"BindSDL_Image",
+		"SDL_Static",
+		"SDL_Image",
 		"SDL_205",
 	],
 	"preBuildCommands": ["ldc2 --run scripts/prepare-shaders.d"],
