@@ -33,6 +33,7 @@ final struct TexturedQuad
 {
     Texture texture;
     UVCoordinates uv;
+    vec4f rgba;
     vec3f transformPosition;
     vec3f transformScale;
     float width;

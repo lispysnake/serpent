@@ -25,7 +25,7 @@ module serpent.graphics.sprite.renderer;
 public import serpent.graphics.renderer;
 
 import serpent.graphics : FlipMode;
-import serpent.graphics.sprite : SpriteComponent;
+import serpent.graphics.sprite : ColorComponent, SpriteComponent;
 import serpent.core.transform;
 
 /**
@@ -40,6 +40,7 @@ public:
 
     final override void bootstrap() @safe
     {
+        context.entity.tryRegisterComponent!ColorComponent;
         context.entity.tryRegisterComponent!SpriteComponent;
     }
 
@@ -86,7 +87,13 @@ public:
             uv.flipVertical();
         }
 
+        auto rgba = vec4f(1.0f, 1.0f, 1.0f, 1.0f);
+        if (queryView.hasComponent!ColorComponent(entity))
+        {
+            rgba = queryView.data!ColorComponent(entity).rgba;
+        }
+
         batch.drawTexturedQuad(encoder, sprite.texture, transform.position,
-                transform.scale, sprite.texture.width, sprite.texture.height, uv);
+                transform.scale, sprite.texture.width, sprite.texture.height, uv, rgba);
     }
 }

@@ -203,6 +203,11 @@ public:
         return _uv;
     }
 
+    pure @property final const vec4f rgba() @nogc @safe nothrow
+    {
+        return _rgba;
+    }
+
     /**
      * Return read-wrtie RGBA property which can be used to modify
      * RGBA values for the texture

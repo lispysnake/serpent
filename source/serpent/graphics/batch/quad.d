@@ -126,7 +126,7 @@ public:
             vec3f transformPosition, vec3f transformScale) @trusted
     {
         drawTexturedQuad(encoder, texture, transformPosition, transformScale,
-                texture.width, texture.height, texture.uv());
+                texture.width, texture.height, texture.uv, texture.rgba);
     }
 
     /**
@@ -137,7 +137,7 @@ public:
             vec3f transformPosition, vec3f transformScale, float width, float height) @trusted
     {
         drawTexturedQuad(encoder, texture, transformPosition, transformScale,
-                width, height, texture.uv());
+                width, height, texture.uv(), texture.rgba);
     }
 
     /**
@@ -152,9 +152,8 @@ public:
     /**
      * Draw the sprite texture using the given transform, width, height and clip region.
      */
-    final void drawTexturedQuad(bgfx_encoder_t* encoder, const(Texture) texture,
-            vec3f transformPosition, vec3f transformScale, float width,
-            float height, UVCoordinates uv) @trusted
+    final void drawTexturedQuad(bgfx_encoder_t* encoder, const(Texture) texture, vec3f transformPosition,
+            vec3f transformScale, float width, float height, UVCoordinates uv, vec4f rgba) @trusted
     {
         /* When too many quads are added, force a flush */
         if (drawOps.full())
@@ -170,6 +169,7 @@ public:
         quad.width = width;
         quad.height = height;
         quad.uv = uv;
+        quad.rgba = rgba;
 
         drawOps.add(quad);
     }
@@ -245,15 +245,15 @@ public:
         /* Push vertices */
         PosUVVertex[4] vdata = [
             PosUVVertex(vec3f(transformPosition.x, transformPosition.y,
-                    transformPosition.z), vec2f(quad.uv.u1, quad.uv.v1), quad.texture.rgba),
+                    transformPosition.z), vec2f(quad.uv.u1, quad.uv.v1), quad.rgba),
             PosUVVertex(vec3f(transformPosition.x + spriteWidth,
                     transformPosition.y, transformPosition.z),
-                    vec2f(quad.uv.u2, quad.uv.v1), quad.texture.rgba),
+                    vec2f(quad.uv.u2, quad.uv.v1), quad.rgba),
             PosUVVertex(vec3f(transformPosition.x + spriteWidth,
                     transformPosition.y + spriteHeight, transformPosition.z),
-                    vec2f(quad.uv.u2, quad.uv.v2), quad.texture.rgba),
+                    vec2f(quad.uv.u2, quad.uv.v2), quad.rgba),
             PosUVVertex(vec3f(transformPosition.x, transformPosition.y + spriteHeight,
-                    transformPosition.z), vec2f(quad.uv.u1, quad.uv.v2), quad.texture.rgba)
+                    transformPosition.z), vec2f(quad.uv.u1, quad.uv.v2), quad.rgba)
         ];
         queue.pushVertices(vdata);
     }

@@ -36,3 +36,11 @@ public import serpent.graphics : FlipMode;
     Texture texture; /**Our texture handle. */
     FlipMode flip = FlipMode.None; /**< Our flip mode for rendering */
 }
+
+/**
+ * Used to modify the colour of a sprite
+ */
+@serpentComponent final struct ColorComponent
+{
+    vec4f rgba;
+}
