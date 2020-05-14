@@ -36,6 +36,7 @@ final struct PosUVVertex
 
     vec3f pos;
     vec2f tex;
+    vec4f rgba;
 
     static bgfx_vertex_layout_t layout;
 
@@ -43,6 +44,7 @@ final struct PosUVVertex
     {
         this.pos = pos;
         this.tex = tex;
+        this.rgba = vec4f(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     static this()
@@ -54,6 +56,8 @@ final struct PosUVVertex
                 bgfx_attrib_type_t.BGFX_ATTRIB_TYPE_FLOAT, false, false);
         bgfx_vertex_layout_add(&layout, bgfx_attrib_t.BGFX_ATTRIB_TEXCOORD0,
                 2, bgfx_attrib_type_t.BGFX_ATTRIB_TYPE_FLOAT, false, false);
+        bgfx_vertex_layout_add(&layout, bgfx_attrib_t.BGFX_ATTRIB_COLOR0, 4,
+                bgfx_attrib_type_t.BGFX_ATTRIB_TYPE_FLOAT, false, false);
 
         bgfx_vertex_layout_end(&layout);
     }
