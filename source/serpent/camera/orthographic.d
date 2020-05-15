@@ -41,8 +41,6 @@ private:
     float _nearPlane = -1.0f;
     float _farPlane = 1.0f;
 
-    bool _invertedY = false;
-
     /**
      * Camera viewerPosition within 3D space
      */
@@ -73,16 +71,8 @@ public:
      */
     final override void update() @nogc @safe nothrow
     {
-        if (invertedY)
-        {
-            up.y = 1.0;
-            direction.z = -1.0f;
-        }
-        else
-        {
-            up.y = -1.0f;
-            direction.z = -1.0f;
-        }
+        up.y = -1.0f;
+        direction.z = -1.0f;
 
         vec3f eyes = viewerPosition + direction;
 
@@ -155,27 +145,6 @@ public:
             return;
         }
         _farPlane = p;
-        update();
-    }
-
-    /**
-     * Returns whether invertedY is set
-     */
-    pure @property final bool invertedY() @nogc @safe nothrow
-    {
-        return _invertedY;
-    }
-
-    /**
-     * Set the invertedY property.
-     */
-    @property final void invertedY(bool b) @nogc @safe nothrow
-    {
-        if (_invertedY == b)
-        {
-            return;
-        }
-        _invertedY = b;
         update();
     }
 }
