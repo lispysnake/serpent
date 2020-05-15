@@ -27,7 +27,7 @@ import std.process;
 import std.path;
 import std.stdio;
 
-void compileShader(string outputPath, string shaderPath, string varyingPath,
+bool compileShader(string outputPath, string shaderPath, string varyingPath,
         string shaderLang, bool vertex)
 {
     string platform;
@@ -86,10 +86,12 @@ void compileShader(string outputPath, string shaderPath, string varyingPath,
     if (cmd.status != 0)
     {
         writeln(cmd.output);
+        return false;
     }
+    return true;
 }
 
-void main()
+int main(string[] args)
 {
     import std.stdio;
 
@@ -121,10 +123,28 @@ void main()
         auto outputPath = buildDir.buildPath(basenom);
         outputPath.mkdirRecurse();
 
-        compileShader(outputPath, fragment, varying, "glsl", false);
-        compileShader(outputPath, vertex, varying, "glsl", true);
-        compileShader(outputPath, fragment, varying, "spirv", false);
-        compileShader(outputPath, vertex, varying, "spirv", true);
+        if (!compileShader(outputPath, fragment, varying, "glsl", false))
+        {
+            return 1;
+        }
+
+        if (!compileShader(outputPath, vertex, varying, "glsl", true))
+        {
+            return 1;
+        }
+
+        if (!compileShader(outputPath, fragment, varying, "spirv", false))
+        {
+            return 1;
+        }
+
+        if (!compileShader(outputPath, vertex, varying, "spirv", true))
+        {
+            return 1;
+        }
+
         writeln();
     }
+
+    return 0;
 }
