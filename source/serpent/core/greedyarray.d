@@ -140,8 +140,6 @@ public:
         return _curSize;
     }
 
-package:
-
     /**
      * Rewind the array back to no-size
      */
