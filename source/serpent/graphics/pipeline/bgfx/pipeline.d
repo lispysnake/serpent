@@ -23,8 +23,8 @@
 module serpent.graphics.pipeline.bgfx.pipeline;
 
 public import serpent.core.context;
-public import serpent.core.policy;
-public import serpent.core.view;
+public import serpent.ecs.policy;
+public import serpent.ecs.view;
 public import serpent.graphics.display;
 public import serpent.graphics.renderer;
 

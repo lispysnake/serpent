@@ -22,8 +22,8 @@
 
 module serpent.graphics.renderer;
 
-public import serpent.core.policy;
-public import serpent.core.view;
+public import serpent.ecs.policy;
+public import serpent.ecs.view;
 
 public import serpent.graphics.frame;
 

@@ -33,7 +33,7 @@ import serpent.graphics.vertex;
 import serpent.graphics.uv : UVCoordinates;
 import serpent.graphics.batch.queue : BatchQueue;
 import serpent.graphics.batch : TexturedQuad;
-import serpent.core.lockingringbuffer;
+import serpent.ecs.lockingringbuffer;
 
 public import serpent.core.context;
 public import serpent.graphics.texture;

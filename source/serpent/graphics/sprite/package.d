@@ -22,7 +22,7 @@
 
 module serpent.graphics.sprite;
 
-public import serpent.core.entity;
+public import serpent.ecs.entity;
 public import serpent.graphics.sprite.renderer;
 public import serpent.graphics.texture;
 public import serpent.graphics : FlipMode;

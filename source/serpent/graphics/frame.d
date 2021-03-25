@@ -1,7 +1,7 @@
 module serpent.graphics.frame;
 
-public import serpent.core.entity : EntityID;
-public import serpent.core.lockingringbuffer;
+public import serpent.ecs.entity : EntityID;
+public import serpent.ecs.lockingringbuffer;
 
 import serpent.graphics.renderer;
 
