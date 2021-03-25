@@ -265,7 +265,7 @@ public:
             return;
         }
 
-        bgfx_alloc_transient_index_buffer(&tib, cast(uint) queue.indicesCount());
+        bgfx_alloc_transient_index_buffer(&tib, cast(uint) queue.indicesCount(), false);
         bgfx_alloc_transient_vertex_buffer(&tvb,
                 cast(uint) queue.verticesCount(), &PosUVVertex.layout);
 
@@ -285,8 +285,8 @@ public:
         model = trans * scale;
         bgfx_encoder_set_transform(encoder, model.ptr, 1);
 
-        bgfx_encoder_set_transient_vertex_buffer(encoder, 0, &tvb, 0,
-                cast(uint) queue.verticesCount(), tvb.layoutHandle);
+        bgfx_encoder_set_transient_vertex_buffer_with_layout(encoder, 0, &tvb,
+                0, cast(uint) queue.verticesCount(), tvb.layoutHandle);
         bgfx_encoder_set_transient_index_buffer(encoder, &tib, 0, cast(uint) queue.indicesCount());
         bgfx_encoder_set_texture(encoder, 0, cast(bgfx_uniform_handle_t) 0,
                 texture.handle, uint32_t.max);
