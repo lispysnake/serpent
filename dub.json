@@ -18,6 +18,9 @@
 		},
 		"gfm": {
 			"path": "external/gfm",
+		},
+		"serpent-ecs": {
+			"path": "external/serpent-ecs",
 		}
 	},
 	"description": "Serpent Core Game Framework",

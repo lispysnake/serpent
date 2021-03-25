@@ -13,3 +13,6 @@
 [submodule "external/intel-intrinsics"]
 	path = external/intel-intrinsics
 	url = https://github.com/AuburnSounds/intel-intrinsics.git
+[submodule "external/serpent-ecs"]
+	path = external/serpent-ecs
+	url = git@github.com:lispysnake/serpent-ecs.git
