@@ -66,7 +66,7 @@ bool compileShader(string outputPath, string shaderPath, string varyingPath,
     }
 
     string[] args = [
-        shaderc, "-f", shaderPath, "--type", vertex ? "vertex" : "fragment", "-i",
+        shaderc, "-f", shaderPath, "--type", vertex ? "vertex": "fragment", "-i",
         includedir, "--platform", platform, "-o", outputFileName, "--varyingdef",
         varyingPath,
     ];
