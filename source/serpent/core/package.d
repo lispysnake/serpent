@@ -22,12 +22,12 @@
 
 module serpent.core;
 
-public import serpent.core.component;
+public import serpent.ecs.component;
 public import serpent.core.context;
-public import serpent.core.entity;
-public import serpent.core.greedyarray;
+public import serpent.ecs.entity;
+public import serpent.ecs.greedyarray;
 public import serpent.core.group;
-public import serpent.core.policy;
+public import serpent.ecs.policy;
 public import serpent.core.processor;
 public import serpent.core.transform;
-public import serpent.core.view;
+public import serpent.ecs.view;

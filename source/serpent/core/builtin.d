@@ -22,9 +22,9 @@
 
 module serpent.core.builtin;
 
-import serpent.core.policy;
+import serpent.ecs.policy;
 import serpent.core.processor;
-import serpent.core.view;
+import serpent.ecs.view;
 import bindbc.sdl;
 
 /**

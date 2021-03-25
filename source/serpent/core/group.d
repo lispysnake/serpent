@@ -23,7 +23,7 @@
 module serpent.core.group;
 
 public import serpent.core.context;
-public import serpent.core.policy;
+public import serpent.ecs.policy;
 public import serpent.core.processor;
 
 import std.parallelism;

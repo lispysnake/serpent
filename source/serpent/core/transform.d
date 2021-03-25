@@ -23,7 +23,7 @@
 module serpent.core.transform;
 
 public import gfm.math;
-public import serpent.core.component : serpentComponent;
+public import serpent.ecs.component : serpentComponent;
 
 /**
  * A TransformComponent is used to provide position, scale and rotation

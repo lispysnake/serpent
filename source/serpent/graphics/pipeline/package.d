@@ -26,7 +26,7 @@ import std.exception : enforce;
 
 public import serpent.core.context;
 public import serpent.graphics.display;
-public import serpent.core.policy;
+public import serpent.ecs.policy;
 public import serpent.graphics.pipeline.info;
 
 enum PipelineType

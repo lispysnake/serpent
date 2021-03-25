@@ -24,8 +24,8 @@ module serpent.core.app;
 
 import serpent.core.context;
 
-public import serpent.core.policy;
-public import serpent.core.view;
+public import serpent.ecs.policy;
+public import serpent.ecs.view;
 
 import std.exception : enforce;
 

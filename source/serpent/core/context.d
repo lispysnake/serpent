@@ -30,9 +30,9 @@ import std.path;
 import std.parallelism;
 
 import serpent.core.builtin;
-import serpent.core.entity;
+import serpent.ecs.entity;
 import serpent.core.group;
-import serpent.core.policy;
+import serpent.ecs.policy;
 import serpent.core.transform;
 import core.time : MonoTime;
 

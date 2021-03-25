@@ -23,8 +23,8 @@
 module serpent.core.processor;
 
 public import serpent.core.context;
-public import serpent.core.policy;
-public import serpent.core.view;
+public import serpent.ecs.policy;
+public import serpent.ecs.view;
 
 /**
  * The virtual base class for any Processor (System) within the Serpent
